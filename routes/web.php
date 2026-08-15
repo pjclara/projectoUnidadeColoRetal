@@ -18,3 +18,34 @@ Route::middleware(['auth'])->group(function () {
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
+
+// Doente Module
+Route::middleware('auth')->group(function () {
+    Route::get('/doentes', [\App\Http\Controllers\DoenteController::class, 'index'])
+        ->middleware('permission:doente.view')
+        ->name('doentes.index');
+
+    Route::get('/doentes/create', [\App\Http\Controllers\DoenteController::class, 'create'])
+        ->middleware('permission:doente.create')
+        ->name('doentes.create');
+
+    Route::post('/doentes', [\App\Http\Controllers\DoenteController::class, 'store'])
+        ->middleware('permission:doente.create')
+        ->name('doentes.store');
+
+    Route::get('/doentes/{doente}', [\App\Http\Controllers\DoenteController::class, 'show'])
+        ->middleware('permission:doente.view')
+        ->name('doentes.show');
+
+    Route::get('/doentes/{doente}/edit', [\App\Http\Controllers\DoenteController::class, 'edit'])
+        ->middleware('permission:doente.update')
+        ->name('doentes.edit');
+
+    Route::put('/doentes/{doente}', [\App\Http\Controllers\DoenteController::class, 'update'])
+        ->middleware('permission:doente.update')
+        ->name('doentes.update');
+
+    Route::delete('/doentes/{doente}', [\App\Http\Controllers\DoenteController::class, 'destroy'])
+        ->middleware('permission:doente.delete')
+        ->name('doentes.destroy');
+});

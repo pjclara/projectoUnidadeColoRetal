@@ -12,14 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('doente', function (Blueprint $table) {
-            $table->char('doente_id', 36)->primary();
+            $table->id();
             $table->binary('pu_cifrado');
             $table->char('pu_hash', 64)->index('idx_doente_pu_hash');
-            $table->binary('nome_cifrado')->nullable();
+            $table->binary('nome')->nullable();
             $table->date('data_nascimento')->nullable()->index('idx_doente_data_nascimento');
-            $table->string('sexo', 30)->nullable()->index('idx_doente_sexo');
-            $table->dateTime('criado_em')->useCurrent();
-            $table->dateTime('atualizado_em')->useCurrentOnUpdate()->useCurrent();
+            $table->string('sexo', 1)->nullable()->index('idx_doente_sexo');
 
             $table->unique(['pu_hash'], 'pu_hash');
         });
