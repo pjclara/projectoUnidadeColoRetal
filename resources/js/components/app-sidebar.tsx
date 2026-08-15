@@ -13,6 +13,16 @@ const mainNavItems: NavItem[] = [
         url: '/dashboard',
         icon: LayoutGrid,
     },
+    {
+        title: 'Doentes',
+        url: '/doentes',
+        icon: Folder,
+    },
+    {
+        title: 'Roles & Permissões',
+        url: '/access-control',
+        icon: BookOpen,
+    },
 ];
 
 const footerNavItems: NavItem[] = [

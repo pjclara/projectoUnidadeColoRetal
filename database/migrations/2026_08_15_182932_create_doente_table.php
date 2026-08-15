@@ -13,11 +13,21 @@ return new class extends Migration
     {
         Schema::create('doente', function (Blueprint $table) {
             $table->id();
-            $table->binary('pu_cifrado');
+
+            // Campos encriptados (reversíveis)
+            $table->binary('nome_cipher');
+            $table->binary('nome_tag');
+
+
+            // Campos pesquisáveis (hash determinístico)
             $table->char('pu_hash', 64)->index('idx_doente_pu_hash');
-            $table->binary('nome')->nullable();
+            $table->binary('pu_salt');
+
+            // Outros dados
             $table->date('data_nascimento')->nullable()->index('idx_doente_data_nascimento');
             $table->string('sexo', 1)->nullable()->index('idx_doente_sexo');
+
+            $table->timestamps();
 
             $table->unique(['pu_hash'], 'pu_hash');
         });
