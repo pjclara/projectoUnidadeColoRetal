@@ -45,6 +45,9 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        // by default, assign the "user" role to the newly registered user
+        $user->assignRole('user');
+
         Auth::login($user);
 
         return to_route('dashboard');

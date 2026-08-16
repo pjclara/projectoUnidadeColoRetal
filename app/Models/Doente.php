@@ -11,11 +11,16 @@ class Doente extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nome',
+        'nome_cipher',
+        'nome_iv',
+        'nome_tag',
+        'pu_cipher',
+        'pu_iv',
+        'pu_tag',
+        'pu_hash',
         'data_nascimento',
-        'sexo',
-        'morada',
-        'telefone',
-        'email',
+        'sexo'
     ];
+
+    
 }
