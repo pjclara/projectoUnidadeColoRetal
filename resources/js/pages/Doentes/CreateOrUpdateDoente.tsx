@@ -1,4 +1,5 @@
 import { useForm } from '@inertiajs/react';
+import toast from 'react-hot-toast';
 
 type Props = {
     doente?: {
@@ -24,11 +25,19 @@ export default function CreateOrUpdateDoente({ doente, onClose }: Props) {
     const submit = () => {
         if (isEdit) {
             form.put(`/doentes/${doente!.id}`, {
-                onSuccess: onClose,
+                onSuccess: () => {
+                    onClose();
+                    toast.success('Doente atualizado com sucesso!');
+                }
+                
             });
         } else {
             form.post('/doentes', {
-                onSuccess: onClose,
+                onSuccess: () => {
+                    onClose();
+                    toast.success('Doente criado com sucesso!');
+                }
+
             });
         }
     };
