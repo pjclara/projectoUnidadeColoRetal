@@ -25,8 +25,8 @@ class StoreDoenteRequest extends FormRequest
         return [
             'nome' => ['required', 'string', 'max:255'],
             'pu' => ['required', 'string', 'max:255'],
-            'data_nascimento' => ['nullable', 'date'],
-            'sexo' => ['nullable', 'string', 'in:M,F,O'],
+            'data_nascimento' => ['required', 'date'],
+            'sexo' => ['required', 'string', 'in:M,F,O'],
         ];
     }
 }

@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -36,10 +37,13 @@ export default function Index({ doentes }: Props) {
             <Head title="Dashboard" />
 
             <div className="p-6">
-                <h1 className="text-2xl font-semibold">Doentes</h1>
-                <button className="rounded bg-blue-600 px-4 py-2 text-white" onClick={() => setShowModal(true)}>
-                    Criar Doente
-                </button>
+                <div className="flex items-center justify-between mb-6">
+                    <h1 className="text-2xl font-semibold">Doentes</h1>
+                    <Button className="rounded bg-blue-600 px-4 py-2 text-white" onClick={() => setShowModal(true)}>
+                        Criar Doente
+                    </Button>
+                </div>
+
                 <div className="mt-6">
                     {doentes.data.length === 0 ? (
                         <p>Nenhum registo encontrado.</p>
@@ -68,9 +72,9 @@ export default function Index({ doentes }: Props) {
                                         <td className="border px-4 py-2">{doente.updated_at ? new Date(doente.updated_at).toLocaleString() : '-'}</td>
 
                                         <td className="border px-4 py-2">
-                                            <button className="rounded bg-blue-600 px-3 py-1 text-white" onClick={() => setEditing(doente)}>
+                                            <Button className="rounded bg-green-600 px-3 py-1 text-white" onClick={() => setEditing(doente)}>
                                                 Editar
-                                            </button>
+                                            </Button>
                                         </td>
                                     </tr>
                                 ))}
@@ -79,7 +83,10 @@ export default function Index({ doentes }: Props) {
                     )}
                 </div>
             </div>
-            {editing && <CreateOrUpdateDoente doente={editing} onClose={() => setEditing(null)} />}
+            {editing || showModal ? <CreateOrUpdateDoente doente={editing || null} onClose={() => {
+                setEditing(null);
+                setShowModal(false);
+            }} /> : null}
         </AppLayout>
     );
 }

@@ -1,4 +1,6 @@
+import { Button } from '@/components/ui/button';
 import { useForm } from '@inertiajs/react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 type Props = {
@@ -22,12 +24,17 @@ export default function CreateOrUpdateDoente({ doente, onClose }: Props) {
         sexo: doente?.sexo ?? '',
     });
 
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
     const submit = () => {
         if (isEdit) {
             form.put(`/doentes/${doente!.id}`, {
                 onSuccess: () => {
                     onClose();
                     toast.success('Doente atualizado com sucesso!');
+                },
+                onError: () => {
+                    toast.error('Erro ao atualizar o doente.');
                 }
                 
             });
@@ -36,11 +43,17 @@ export default function CreateOrUpdateDoente({ doente, onClose }: Props) {
                 onSuccess: () => {
                     onClose();
                     toast.success('Doente criado com sucesso!');
+                },
+                onError: () => {
+                    toast.error('Erro ao atualizar o doente.');
+                    setErrors(form.errors);
                 }
 
             });
         }
     };
+
+    console.log('Form errors:', form.errors);
 
     return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
@@ -58,6 +71,9 @@ export default function CreateOrUpdateDoente({ doente, onClose }: Props) {
                             value={form.data.nome}
                             onChange={(e) => form.setData('nome', e.target.value)}
                         />
+                        {form.errors.nome && (
+                            <p className="text-red-500 text-sm mt-1">{form.errors.nome}</p>
+                        )}
                     </div>
                     <div>
                         <label className="block text-sm font-medium mb-1">PU</label>
@@ -67,6 +83,9 @@ export default function CreateOrUpdateDoente({ doente, onClose }: Props) {
                             value={form.data.pu}
                             onChange={(e) => form.setData('pu', e.target.value)}
                         />
+                        {form.errors.pu && (
+                            <p className="text-red-500 text-sm mt-1">{form.errors.pu}</p>
+                        )}
                     </div>
 
                     <div>
@@ -77,6 +96,9 @@ export default function CreateOrUpdateDoente({ doente, onClose }: Props) {
                             value={form.data.data_nascimento}
                             onChange={(e) => form.setData('data_nascimento', e.target.value)}
                         />
+                        {form.errors.data_nascimento && (
+                            <p className="text-red-500 text-sm mt-1">{form.errors.data_nascimento}</p>
+                        )}
                     </div>
 
                     <div>
@@ -91,23 +113,26 @@ export default function CreateOrUpdateDoente({ doente, onClose }: Props) {
                             <option value="F">Feminino</option>
                             <option value="O">Outro</option>
                         </select>
+                        {form.errors.sexo && (
+                            <p className="text-red-500 text-sm mt-1">{form.errors.sexo}</p>
+                        )}
                     </div>
                 </div>
 
                 <div className="mt-6 flex justify-end gap-3">
-                    <button
-                        className="px-4 py-2 rounded bg-neutral-300 dark:bg-neutral-700"
+                    <Button
+                        className="px-4 py-2 rounded bg-gray-600 dark:bg-neutral-700"
                         onClick={onClose}
                     >
                         Cancelar
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
                         className="px-4 py-2 rounded bg-blue-600 text-white"
                         onClick={submit}
                     >
                         {isEdit ? 'Guardar' : 'Criar'}
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>
