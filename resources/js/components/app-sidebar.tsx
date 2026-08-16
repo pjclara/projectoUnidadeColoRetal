@@ -23,6 +23,11 @@ const mainNavItems: NavItem[] = [
         url: '/access-control',
         icon: BookOpen,
     },
+    {
+        title: 'Utilizadores',
+        url: '/users',
+        icon: BookOpen,
+    }
 ];
 
 const footerNavItems: NavItem[] = [

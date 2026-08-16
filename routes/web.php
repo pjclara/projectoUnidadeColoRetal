@@ -67,4 +67,7 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:users.manage');
     Route::delete('/access-control/permissions/{permission}', [RolePermissionController::class, 'destroyPermission'])
         ->middleware('can:users.manage');
+
+    // users resource routes
+    Route::resource('users', UserController::class)->only(['index', 'store']);
 });

@@ -5,10 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
     use AuthorizesRequests;
+
+    public function index()
+    {
+        // $this->authorize('users.viewAny');
+
+        $users = User::paginate(15);
+
+        return Inertia::render('Users/Index', [
+            'users' => $users,
+        ]);
+    }
 
     public function store(Request $request)
     {
@@ -18,10 +30,14 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'numero_mecanografico' => 'nullable|string|max:20|unique:users',
+            'categoria' => 'nullable|string|max:80',
+            'especialidade' => 'nullable|string|max:100',
+            'ativo' => 'nullable|boolean',
         ]);
 
         $user = User::create($validatedData);
 
-        return response()->json($user, 201);
+        return redirect()->route('Users.Index', $user)->with('success', 'User created successfully.');
     }
 }

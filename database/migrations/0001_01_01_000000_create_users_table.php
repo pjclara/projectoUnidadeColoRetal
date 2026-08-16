@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('numero_mecanografico', 20)->nullable()->unique('numero_mecanografico');
+            $table->string('categoria', 80)->nullable();
+            $table->string('especialidade', 100)->nullable()->index('idx_profissional_especialidade');
+            $table->boolean('ativo')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });
