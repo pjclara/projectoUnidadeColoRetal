@@ -14,7 +14,6 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::resource('users', UserController::class)->only(['store']);
 });
 
 require __DIR__ . '/settings.php';
@@ -69,5 +68,5 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:users.manage');
 
     // users resource routes
-    Route::resource('users', UserController::class)->only(['index', 'store']);
+    Route::resource('users', UserController::class)->only(['index', 'store','update']);
 });

@@ -11,6 +11,7 @@ type Props = {
         data: {
             id: number;
             name: string;
+            abreviatura?: string | null;
             email: string;
             numero_mecanografico?: string | null;
             categoria?: string | null;
@@ -28,10 +29,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 
-export default function UsersIndex(users: Props) {
+export default function UsersIndex({ users }: Props) {
     const [openModal, setOpenModal] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
-console.log('UsersIndex props:', selectedUser);
+    const [selectedUser, setSelectedUser] = useState<{ id: number; name: string; abreviatura?: string | null; email: string; numero_mecanografico?: string | null; categoria?: string | null; especialidade?: string | null; ativo: boolean } | null>(null);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -54,25 +54,28 @@ console.log('UsersIndex props:', selectedUser);
                         <tr className="bg-gray-200 dark:bg-gray-800">
                             <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">ID</th>
                             <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Nome</th>
+                            <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Abreviatura</th>
                             <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Email</th>
                             <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Número Mecanográfico</th>
                             <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Categoria</th>
                             <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Especialidade</th>
                             <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Ativo</th>
+                            <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {users.users.data.length === 0 ? (
+                        {users.data.length === 0 ? (
                             <tr>
                                 <td colSpan={7} className="border border-gray-300 px-4 py-2 text-center dark:border-gray-700">
                                     <PlaceholderPattern className="h-8 w-full" />
                                 </td>
                             </tr>
                         ) : (
-                            users.users.data.map((user) => (
+                            users.data.map((user) => (
                                 <tr key={user.id} className="hover:bg-gray-100 dark:hover:bg-gray-700">
                                     <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.id}</td>
                                     <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.name}</td>
+                                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.abreviatura}</td>
                                     <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.email}</td>
                                     <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.numero_mecanografico}</td>
                                     <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.categoria}</td>

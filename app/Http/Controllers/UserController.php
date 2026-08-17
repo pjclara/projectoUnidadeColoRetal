@@ -28,6 +28,7 @@ class UserController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'abreviatura' => 'required|string|max:10',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'numero_mecanografico' => 'nullable|string|max:20|unique:users',
@@ -38,6 +39,23 @@ class UserController extends Controller
 
         $user = User::create($validatedData);
 
-        return redirect()->route('Users.Index', $user)->with('success', 'User created successfully.');
+        return redirect()->route('users.index', $user)->with('success', 'User created successfully.');
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'abreviatura' => 'required|string|max:10',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'numero_mecanografico' => 'nullable|string|max:20|unique:users,numero_mecanografico,' . $user->id,
+            'categoria' => 'nullable|string|max:80',
+            'especialidade' => 'nullable|string|max:100',
+            'ativo' => 'nullable|boolean',
+        ]);
+
+        $user->update($validatedData);
+
+        return redirect()->route('users.index', $user)->with('success', 'User updated successfully.');
     }
 }
