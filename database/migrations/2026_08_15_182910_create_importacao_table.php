@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('importacao', function (Blueprint $table) {
-            $table->bigInteger('importacao_id', true);
+            $table->id();
             $table->string('ficheiro_nome');
             $table->char('sha256', 64)->index('idx_importacao_sha');
             $table->dateTime('importado_em')->useCurrent();

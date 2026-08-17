@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('caso_equipa', function (Blueprint $table) {
-            $table->bigInteger('caso_planeado_id');
-            $table->bigInteger('profissional_id')->index('idx_equipa_profissional');
+        Schema::create('caso_equipas', function (Blueprint $table) {
+            $table->foreignId('caso_planeado_id')->constrained('caso_planeado')->onDelete('cascade')->index('idx_equipa_caso');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->index('idx_equipa_profissional');
             $table->string('funcao', 30);
 
-            $table->primary(['caso_planeado_id', 'profissional_id', 'funcao']);
+            $table->primary(['caso_planeado_id', 'user_id', 'funcao']);
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('caso_equipa');
+        Schema::dropIfExists('caso_equipas');
     }
 };

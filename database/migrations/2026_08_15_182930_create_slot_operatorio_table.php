@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('slot_operatorio', function (Blueprint $table) {
-            $table->bigInteger('slot_id', true);
+        Schema::create('slots', function (Blueprint $table) {
+            $table->id();
             $table->bigInteger('semana_id')->index('idx_slot_semana');
             $table->date('data')->index('idx_slot_data');
             $table->string('polo', 30);
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('slot_operatorio');
+        Schema::dropIfExists('slots');
     }
 };

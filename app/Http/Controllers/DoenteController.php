@@ -11,6 +11,8 @@ use App\Models\Doente;
 use App\Services\EncryptionService;
 use App\ViewModels\DoenteViewModel;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+
 
 class DoenteController extends Controller
 {
@@ -18,28 +20,74 @@ class DoenteController extends Controller
         private EncryptionService $encryptionService
     ) {}
 
-  public function index()
-    {
-        $doentes = Doente::query()
-            ->latest()
-            ->paginate(15)
-            ->through(
-                fn (Doente $doente) =>
-                    (new DoenteViewModel(
-                        $doente,
-                        $this->encryptionService
-                    ))->toArray()
-            );
 
-        return Inertia::render('Doentes/Index', [
+    public function index(Request $request)
+    {
+        $search = $request
+            ->string('search')
+            ->trim()
+            ->toString();
+
+        $sexo = $request
+            ->string('sexo')
+            ->trim()
+            ->toString();
+
+        $doentes = Doente::query()
+            ->when($search, function ($query) use ($search) {
+                $searchHash = $this->encryptionService
+                    ->searchableHashNormalized($search);
+
+                $query->where(function ($query) use ($searchHash) {
+                    $query->where('nome_hash', $searchHash)
+                        ->orWhere('pu_hash', $searchHash);
+                });
+            })
+            ->when($sexo, function ($query) use ($sexo) {
+                $query->where('sexo', $sexo);
+            })
+            ->paginate(15)
+            ->withQueryString()
+            ->through(function (Doente $doente) {
+                return [
+                    'id' => $doente->id,
+
+                    'nome' => $this->encryptionService->decrypt(
+                        $doente->nome_cipher,
+                        $doente->nome_iv,
+                        $doente->nome_tag,
+                    ),
+
+                    'pu' => $this->encryptionService->decrypt(
+                        $doente->pu_cipher,
+                        $doente->pu_iv,
+                        $doente->pu_tag,
+                    ),
+
+                    'data_nascimento' => $doente->data_nascimento,
+                    'sexo' => $doente->sexo,
+                    'created_at' => $doente->created_at,
+                    'updated_at' => $doente->updated_at,
+                ];
+            });
+
+        return Inertia('Doentes/Index', [
             'doentes' => $doentes,
+
+            'filters' => [
+                'search' => $search,
+                'sexo' => $sexo,
+            ],
+
+            'sexos' => [
+                ['id' => 'M', 'nome' => 'Masculino'],
+                ['id' => 'F', 'nome' => 'Feminino'],
+                ['id' => 'O', 'nome' => 'Outro'],
+            ],
         ]);
     }
 
-    public function create()
-    {
-        return Inertia::render('Doentes/Create');
-    }
+
 
     public function store(
         StoreDoenteRequest $request,
@@ -64,15 +112,6 @@ class DoenteController extends Controller
         ]);
     }
 
-    public function edit(Doente $doente)
-    {
-        return Inertia::render('Doentes/Edit', [
-            'doente' => (new DoenteViewModel(
-                $doente,
-                $this->encryptionService
-            ))->toArray(),
-        ]);
-    }
 
     public function update(
         UpdateDoenteRequest $request,

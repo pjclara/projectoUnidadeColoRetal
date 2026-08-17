@@ -9,8 +9,7 @@ class CreateDoenteAction
 {
     public function __construct(
         private EncryptionService $encryption
-    ) {
-    }
+    ) {}
 
     public function execute(array $data): Doente
     {
@@ -18,27 +17,29 @@ class CreateDoenteAction
             $data['nome']
         );
 
-        $pu = $this->encryption->encrypt(
-            $data['pu']
+        $nomeHash = $this->encryption->searchableHashNormalized(
+            $data['nome']
         );
 
-        $puHash = $this->encryption->searchableHash(
-            $data['pu']
-        );
+        $pu =  $data['pu'];
+
+        $puEncrypted = $this->encryption->encrypt($pu);
+
+        $puHash = $this->encryption->searchableHashNormalized($pu);
 
         return Doente::create([
             'nome_cipher' => $nome['cipher'],
             'nome_iv' => $nome['iv'],
             'nome_tag' => $nome['tag'],
+            'nome_hash' => $nomeHash,
 
-            'pu_cipher' => $pu['cipher'],
-            'pu_iv' => $pu['iv'],
-            'pu_tag' => $pu['tag'],
-
+            'pu_cipher' => $puEncrypted['cipher'],
+            'pu_iv' => $puEncrypted['iv'],
+            'pu_tag' => $puEncrypted['tag'],
             'pu_hash' => $puHash,
 
-            'data_nascimento' => $data['data_nascimento'] ?? null,
-            'sexo' => $data['sexo'] ?? null,
+            'data_nascimento' =>$data['data_nascimento'],
+            'sexo' => $data['sexo'],
         ]);
     }
 }

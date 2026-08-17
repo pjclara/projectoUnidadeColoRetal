@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cdt', function (Blueprint $table) {
-            $table->bigInteger('cdt_id', true);
-            $table->char('episodio_id', 36)->index('idx_cdt_ep');
+        Schema::create('cdts', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('episodio_id')->constrained('episodios')->onDelete('cascade');
             $table->date('data_pedido')->nullable();
             $table->date('data_discussao')->nullable()->index('idx_cdt_data_disc');
             $table->text('decisao')->nullable();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cdt');
+        Schema::dropIfExists('cdts');
     }
 };

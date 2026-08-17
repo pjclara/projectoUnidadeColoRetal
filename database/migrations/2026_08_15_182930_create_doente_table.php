@@ -14,19 +14,21 @@ return new class extends Migration
         Schema::create('doentes', function (Blueprint $table) {
             $table->id();
 
-            // PU cifrado (AES‑256‑GCM)
-            $table->binary('pu_cipher');   // ciphertext
-            $table->binary('pu_iv');       // 12 bytes
-            $table->binary('pu_tag');      // 16 bytes
-
-            // Hash pesquisável (irreversível)
-            $table->char('pu_hash', 64)
-                ->unique('uq_doentes_pu_hash');
-
-            // Nome cifrado
             $table->binary('nome_cipher');
             $table->binary('nome_iv');
             $table->binary('nome_tag');
+
+            $table->char('nome_hash', 64)
+                ->nullable()
+                ->index();
+
+            $table->binary('pu_cipher');
+            $table->binary('pu_iv');
+            $table->binary('pu_tag');
+
+            $table->char('pu_hash', 64)
+                ->nullable()
+                ->unique();
 
             // Outros campos
             $table->date('data_nascimento')

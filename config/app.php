@@ -126,4 +126,6 @@ return [
 
     'hash_key' => env('APP_HASH_KEY'),
 
+    'search_key' => env('APP_SEARCH_KEY'),
+
 ];

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('episodio', function (Blueprint $table) {
-            $table->char('episodio_id', 36)->index('idx_ep_uuid_prefix');
-            $table->char('doente_id', 36)->index('idx_episodio_doente');
+        Schema::create('episodios', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('doente_id')->constrained('doentes')->onDelete('cascade')->index('idx_episodio_doente');
             $table->enum('tipo', ['ONCOLOGICO', 'BENIGNO', 'DII', 'FUNCIONAL', 'OUTRO'])->index('idx_episodio_tipo');
             $table->string('diagnostico', 300)->nullable();
             $table->string('cid10', 20)->nullable();
@@ -22,11 +22,10 @@ return new class extends Migration
             $table->date('pai_entrada')->nullable();
             $table->date('pai_saida')->nullable();
             $table->string('motivo_saida', 120)->nullable();
-            $table->bigInteger('cirurgiao_responsavel_id')->nullable()->index('idx_episodio_cirurgiao');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('estado', 30)->default('ATIVO')->index('idx_episodio_estado');
             $table->text('observacoes')->nullable();
 
-            $table->primary(['episodio_id']);
         });
     }
 
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('episodio');
+        Schema::dropIfExists('episodios');
     }
 };

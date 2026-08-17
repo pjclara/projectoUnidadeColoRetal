@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('caso_planeado', function (Blueprint $table) {
-            $table->bigInteger('caso_planeado_id', true);
-            $table->bigInteger('slot_id')->index('idx_caso_slot');
-            $table->char('episodio_id', 36)->nullable()->index('idx_caso_ep');
+            $table->id();
+            $table->foreignId('slot_id')->constrained('slots')->onDelete('cascade')->index('idx_caso_slot');
+            $table->foreignId('episodio_id')->constrained('episodios')->onDelete('cascade')->index('idx_caso_ep');
             $table->smallInteger('ordem');
             $table->string('procedimento_previsto', 300);
             $table->integer('duracao_prevista_min')->nullable();
             $table->boolean('anestesia_apto')->nullable();
             $table->string('cama_destino', 40)->nullable();
             $table->dateTime('internamento_em')->nullable();
-            $table->bigInteger('cirurgiao_id')->nullable()->index('idx_caso_cirurgiao');
+            $table->foreignId('cirurgiao_id')->nullable()->constrained('users')->onDelete('set null');
             $table->text('observacoes')->nullable();
 
             $table->unique(['slot_id', 'ordem'], 'slot_id');

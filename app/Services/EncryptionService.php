@@ -2,51 +2,56 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Str;
 use RuntimeException;
 
 class EncryptionService
 {
-    private string $encryptionKey;
-
-    private string $hashKey;
+    private string $key;
+    private string $searchKey;
 
     public function __construct()
     {
-        $this->encryptionKey = $this->resolveKey(
+        $this->key = $this->decodeKey(
             config('app.key')
         );
 
-        $this->hashKey = $this->resolveKey(
-            config('app.hash_key')
+        $this->searchKey = $this->decodeKey(
+            config('app.search_key')
         );
     }
 
-    /**
-     * AES-256-GCM.
-     *
-     * Retorna ciphertext, IV e authentication tag.
-     */
+    private function decodeKey(string $key): string
+    {
+        if (str_starts_with($key, 'base64:')) {
+            $key = substr($key, 7);
+            $key = base64_decode($key, true);
+        }
+
+        if (!is_string($key) || strlen($key) !== 32) {
+            throw new RuntimeException(
+                'A chave de encriptação deve ter 32 bytes.'
+            );
+        }
+
+        return $key;
+    }
+
     public function encrypt(string $value): array
     {
         $iv = random_bytes(12);
 
-        $tag = '';
-
         $cipher = openssl_encrypt(
             $value,
             'aes-256-gcm',
-            $this->encryptionKey,
+            $this->key,
             OPENSSL_RAW_DATA,
             $iv,
-            $tag,
-            '',
-            16,
+            $tag
         );
 
         if ($cipher === false) {
             throw new RuntimeException(
-                'Não foi possível cifrar o valor.'
+                'Não foi possível encriptar o valor.'
             );
         }
 
@@ -57,9 +62,6 @@ class EncryptionService
         ];
     }
 
-    /**
-     * Desencripta um valor AES-256-GCM.
-     */
     public function decrypt(
         string $cipher,
         string $iv,
@@ -68,11 +70,10 @@ class EncryptionService
         $value = openssl_decrypt(
             $cipher,
             'aes-256-gcm',
-            $this->encryptionKey,
+            $this->key,
             OPENSSL_RAW_DATA,
             $iv,
-            $tag,
-            '',
+            $tag
         );
 
         if ($value === false) {
@@ -84,69 +85,27 @@ class EncryptionService
         return $value;
     }
 
-    /**
-     * Gera um blind index determinístico.
-     *
-     * O mesmo valor normalizado produz sempre
-     * o mesmo hash, permitindo pesquisa.
-     */
     public function searchableHash(string $value): string
     {
-        $normalized = $this->normalize($value);
-
         return hash_hmac(
             'sha256',
-            $normalized,
-            $this->hashKey,
+            $value,
+            $this->searchKey
         );
     }
 
-    /**
-     * Desencripta um blind index.
-     *
-     * Apenas para fins de demonstração.
-     */
-
-    public function decryptSearchableHash(string $hash): string
+    public function normalize(string $value): string
     {
-        throw new RuntimeException(
-            'Blind index não pode ser desencriptado.'
-        );
-    }
-    /**
-     * Normalização básica antes do blind index.
-     */
-    private function normalize(string $value): string
-    {
-        return Str::lower(
-            trim($value)
+        return mb_strtolower(
+            trim($value),
+            'UTF-8'
         );
     }
 
-    /**
-     * Resolve uma chave Laravel em base64 ou texto.
-     */
-    private function resolveKey(?string $key): string
+    public function searchableHashNormalized(string $value): string
     {
-        if (! $key) {
-            throw new RuntimeException(
-                'Chave criptográfica não configurada.'
-            );
-        }
-
-        if (str_starts_with($key, 'base64:')) {
-            $key = base64_decode(
-                substr($key, 7),
-                true
-            );
-        }
-
-        if ($key === false || strlen($key) !== 32) {
-            throw new RuntimeException(
-                'A chave deve ter exactamente 32 bytes.'
-            );
-        }
-
-        return $key;
+        return $this->searchableHash(
+            $this->normalize($value)
+        );
     }
 }
