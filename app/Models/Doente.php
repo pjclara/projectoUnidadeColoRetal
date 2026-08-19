@@ -22,5 +22,10 @@ class Doente extends Model
         'sexo'
     ];
 
+    public function episodios()
+    {
+        return $this->hasMany(Episodio::class);
+    }
+
     
 }

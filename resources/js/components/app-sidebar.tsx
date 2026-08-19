@@ -18,6 +18,11 @@ const mainNavItems: NavItem[] = [
         url: '/doentes',
         icon: Folder,
     },
+        {
+        title: 'Episodios',
+        url: '/episodios',
+        icon: Folder,
+    },
     {
         title: 'Roles & Permissões',
         url: '/access-control',

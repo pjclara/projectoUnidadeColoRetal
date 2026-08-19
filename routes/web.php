@@ -74,123 +74,123 @@ Route::middleware('auth')->group(function () {
 // CDT Module
 Route::middleware('auth')->group(function () {
     Route::get('/c-d-t-s', [\App\Http\Controllers\CDTController::class, 'index'])
-        ->middleware('permission:c-d-t.view')
+        ->middleware('can:c-d-t.view')
         ->name('c-d-t-s.index');
 
     Route::get('/c-d-t-s/create', [\App\Http\Controllers\CDTController::class, 'create'])
-        ->middleware('permission:c-d-t.create')
+        ->middleware('can:c-d-t.create')
         ->name('c-d-t-s.create');
 
     Route::post('/c-d-t-s', [\App\Http\Controllers\CDTController::class, 'store'])
-        ->middleware('permission:c-d-t.create')
+        ->middleware('can:c-d-t.create')
         ->name('c-d-t-s.store');
 
     Route::get('/c-d-t-s/{cDT}', [\App\Http\Controllers\CDTController::class, 'show'])
-        ->middleware('permission:c-d-t.view')
+        ->middleware('can:c-d-t.view')
         ->name('c-d-t-s.show');
 
     Route::get('/c-d-t-s/{cDT}/edit', [\App\Http\Controllers\CDTController::class, 'edit'])
-        ->middleware('permission:c-d-t.update')
+        ->middleware('can:c-d-t.update')
         ->name('c-d-t-s.edit');
 
     Route::put('/c-d-t-s/{cDT}', [\App\Http\Controllers\CDTController::class, 'update'])
-        ->middleware('permission:c-d-t.update')
+        ->middleware('can:c-d-t.update')
         ->name('c-d-t-s.update');
 
     Route::delete('/c-d-t-s/{cDT}', [\App\Http\Controllers\CDTController::class, 'destroy'])
-        ->middleware('permission:c-d-t.delete')
+        ->middleware('can:c-d-t.delete')
         ->name('c-d-t-s.destroy');
 });
 
 // CasoPlaneado Module
 Route::middleware('auth')->group(function () {
     Route::get('/caso-planeados', [\App\Http\Controllers\CasoPlaneadoController::class, 'index'])
-        ->middleware('permission:caso-planeado.view')
+        ->middleware('can:caso-planeado.view')
         ->name('caso-planeados.index');
 
     Route::get('/caso-planeados/create', [\App\Http\Controllers\CasoPlaneadoController::class, 'create'])
-        ->middleware('permission:caso-planeado.create')
+        ->middleware('can:caso-planeado.create')
         ->name('caso-planeados.create');
 
     Route::post('/caso-planeados', [\App\Http\Controllers\CasoPlaneadoController::class, 'store'])
-        ->middleware('permission:caso-planeado.create')
+        ->middleware('can:caso-planeado.create')
         ->name('caso-planeados.store');
 
     Route::get('/caso-planeados/{casoPlaneado}', [\App\Http\Controllers\CasoPlaneadoController::class, 'show'])
-        ->middleware('permission:caso-planeado.view')
+        ->middleware('can:caso-planeado.view')
         ->name('caso-planeados.show');
 
     Route::get('/caso-planeados/{casoPlaneado}/edit', [\App\Http\Controllers\CasoPlaneadoController::class, 'edit'])
-        ->middleware('permission:caso-planeado.update')
+        ->middleware('can:caso-planeado.update')
         ->name('caso-planeados.edit');
 
     Route::put('/caso-planeados/{casoPlaneado}', [\App\Http\Controllers\CasoPlaneadoController::class, 'update'])
-        ->middleware('permission:caso-planeado.update')
+        ->middleware('can:caso-planeado.update')
         ->name('caso-planeados.update');
 
     Route::delete('/caso-planeados/{casoPlaneado}', [\App\Http\Controllers\CasoPlaneadoController::class, 'destroy'])
-        ->middleware('permission:caso-planeado.delete')
+        ->middleware('can:caso-planeado.delete')
         ->name('caso-planeados.destroy');
 });
 
 // CasoEquipa Module
 Route::middleware('auth')->group(function () {
     Route::get('/caso-equipas', [\App\Http\Controllers\CasoEquipaController::class, 'index'])
-        ->middleware('permission:caso-equipa.view')
+        ->middleware('can:caso-equipa.view')
         ->name('caso-equipas.index');
 
     Route::get('/caso-equipas/create', [\App\Http\Controllers\CasoEquipaController::class, 'create'])
-        ->middleware('permission:caso-equipa.create')
+        ->middleware('can:caso-equipa.create')
         ->name('caso-equipas.create');
 
     Route::post('/caso-equipas', [\App\Http\Controllers\CasoEquipaController::class, 'store'])
-        ->middleware('permission:caso-equipa.create')
+        ->middleware('can:caso-equipa.create')
         ->name('caso-equipas.store');
 
     Route::get('/caso-equipas/{casoEquipa}', [\App\Http\Controllers\CasoEquipaController::class, 'show'])
-        ->middleware('permission:caso-equipa.view')
+        ->middleware('can:caso-equipa.view')
         ->name('caso-equipas.show');
 
     Route::get('/caso-equipas/{casoEquipa}/edit', [\App\Http\Controllers\CasoEquipaController::class, 'edit'])
-        ->middleware('permission:caso-equipa.update')
+        ->middleware('can:caso-equipa.update')
         ->name('caso-equipas.edit');
 
     Route::put('/caso-equipas/{casoEquipa}', [\App\Http\Controllers\CasoEquipaController::class, 'update'])
-        ->middleware('permission:caso-equipa.update')
+        ->middleware('can:caso-equipa.update')
         ->name('caso-equipas.update');
 
     Route::delete('/caso-equipas/{casoEquipa}', [\App\Http\Controllers\CasoEquipaController::class, 'destroy'])
-        ->middleware('permission:caso-equipa.delete')
+        ->middleware('can:caso-equipa.delete')
         ->name('caso-equipas.destroy');
 });
 
 // Episodio Module
 Route::middleware('auth')->group(function () {
     Route::get('/episodios', [\App\Http\Controllers\EpisodioController::class, 'index'])
-        ->middleware('permission:episodio.view')
+        ->middleware('can:episodio.view')
         ->name('episodios.index');
 
     Route::get('/episodios/create', [\App\Http\Controllers\EpisodioController::class, 'create'])
-        ->middleware('permission:episodio.create')
+        ->middleware('can:episodio.create')
         ->name('episodios.create');
 
     Route::post('/episodios', [\App\Http\Controllers\EpisodioController::class, 'store'])
-        ->middleware('permission:episodio.create')
+        ->middleware('can:episodio.create')
         ->name('episodios.store');
 
     Route::get('/episodios/{episodio}', [\App\Http\Controllers\EpisodioController::class, 'show'])
-        ->middleware('permission:episodio.view')
+        ->middleware('can:episodio.view')
         ->name('episodios.show');
 
     Route::get('/episodios/{episodio}/edit', [\App\Http\Controllers\EpisodioController::class, 'edit'])
-        ->middleware('permission:episodio.update')
+        ->middleware('can:episodio.update')
         ->name('episodios.edit');
 
     Route::put('/episodios/{episodio}', [\App\Http\Controllers\EpisodioController::class, 'update'])
-        ->middleware('permission:episodio.update')
+        ->middleware('can:episodio.update')
         ->name('episodios.update');
 
     Route::delete('/episodios/{episodio}', [\App\Http\Controllers\EpisodioController::class, 'destroy'])
-        ->middleware('permission:episodio.delete')
+        ->middleware('can:episodio.delete')
         ->name('episodios.destroy');
 });

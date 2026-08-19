@@ -18,6 +18,12 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesAndPermissionsSeeder::class);
         $this->call(DoentePermissionsSeeder::class);
 
+        // all files from Permissions folder will be executed automatically
+        foreach (glob(database_path('seeders/Permissions/*.php')) as $file) {
+            $className = pathinfo($file, PATHINFO_FILENAME);
+            $this->call("Database\\Seeders\\Permissions\\$className");
+        }
+
         $admin = User::factory()->create([
             'name' => 'Admin',
             'email' => 'pjclara@gmail.com',

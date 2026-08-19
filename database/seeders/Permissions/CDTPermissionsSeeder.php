@@ -19,5 +19,9 @@ class CDTPermissionsSeeder extends Seeder
         foreach ($permissions as $permission) {
             Permission::findOrCreate($permission);
         }
+
+                // assign the permissions to a role (e.g., 'admin')
+        $adminRole = \Spatie\Permission\Models\Role::findByName('admin');
+        $adminRole->givePermissionTo($permissions);
     }
 }

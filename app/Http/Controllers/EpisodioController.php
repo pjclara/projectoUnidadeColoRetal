@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Episodio;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class EpisodioController extends Controller
 {
@@ -12,16 +13,13 @@ class EpisodioController extends Controller
      */
     public function index()
     {
-        //
+        $episodios = Episodio::paginate(10);
+        return Inertia::render('Episodios/Index', [
+            'episodios' => $episodios
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.

@@ -1,3 +1,4 @@
+import { AppConfirmDialog } from '@/components/app/app-confirm-dialog';
 import { AppFilters } from '@/components/app/app-filters';
 import { AppFormField } from '@/components/app/app-form-field';
 import { AppPageHeader } from '@/components/app/app-page-header';
@@ -65,6 +66,7 @@ export default function Index({ doentes, filters: initialFilters, sexos }: Props
     const [showModal, setShowModal] = useState(false);
     const [editing, setEditing] = useState<Doente | null>(null);
     const [deleting, setDeleting] = useState<Doente | null>(null);
+    const [deletingLoading, setDeletingLoading] = useState(false);
 
     const [filters, setFilters] = useState<Filters>({
         search: initialFilters?.search ?? '',
@@ -125,6 +127,9 @@ export default function Index({ doentes, filters: initialFilters, sexos }: Props
                 <div className="flex justify-end gap-2">
                     <Button size="sm" onClick={() => setEditing(doente)}>
                         Editar
+                    </Button>
+                    <Button className="bg-green-500" size="sm" onClick={() => router.get(`/doentes/${doente.id}`)}>
+                        Ver
                     </Button>
 
                     <Button size="sm" variant="destructive" onClick={() => setDeleting(doente)}>
@@ -206,6 +211,42 @@ export default function Index({ doentes, filters: initialFilters, sexos }: Props
                     }}
                 />
             )}
+
+            <AppConfirmDialog
+                open={deleting !== null}
+                title="Eliminar doente"
+                description="Esta operação não pode ser anulada."
+                onClose={() => setDeleting(null)}
+                onConfirm={() => {
+                    if (!deleting) {
+                        return;
+                    }
+
+                    setDeletingLoading(true);
+
+                    router.delete(`/doentes/${deleting.id}`, {
+                        preserveScroll: true,
+
+                        onSuccess: () => {
+                            toast.success('Doente eliminado com sucesso!');
+                            setDeleting(null);
+                        },
+
+                        onError: () => {
+                            toast.error('Não foi possível eliminar o doente.');
+                        },
+
+                        onFinish: () => {
+                            setDeletingLoading(false);
+                        },
+                    });
+                }}
+                loading={deletingLoading}
+                confirmLabel="Eliminar"
+                loadingLabel="A eliminar..."
+            >
+                Tem a certeza de que pretende eliminar o doente <strong>{deleting?.nome}</strong>?
+            </AppConfirmDialog>
         </AppLayout>
     );
 }

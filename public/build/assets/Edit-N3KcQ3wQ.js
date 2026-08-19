@@ -1,0 +1,1 @@
+import{j as s,L as e}from"./app-CUg2X19i.js";function r({cDT:t}){return s.jsxs(s.Fragment,{children:[s.jsx(e,{title:"Editar CDT"}),s.jsx("div",{className:"p-6",children:s.jsxs("h1",{className:"text-2xl font-semibold",children:["Editar CDT #",t.id]})})]})}export{r as default};

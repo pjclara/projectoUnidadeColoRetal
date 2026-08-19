@@ -1,1 +1,0 @@
-import{j as e,L as t}from"./app-CBbT_6vn.js";function i({doente:s}){return e.jsxs(e.Fragment,{children:[e.jsx(t,{title:"Doente"}),e.jsx("div",{className:"p-6",children:e.jsxs("h1",{className:"text-2xl font-semibold",children:["Doente #",s.id]})})]})}export{i as default};
