@@ -1,6 +1,6 @@
 <?php
-
 namespace App\Http\Controllers;
+use Inertia\Inertia;
 
 use App\Models\CDT;
 use Illuminate\Http\Request;
@@ -12,7 +12,10 @@ class CDTController extends Controller
      */
     public function index()
     {
-        //
+        $cdts = CDT::paginate(10); // Adjust the number of items per page as needed
+        return Inertia::render('CDTS/Index', [
+            'cdts' => $cdts,
+        ]);
     }
 
     /**

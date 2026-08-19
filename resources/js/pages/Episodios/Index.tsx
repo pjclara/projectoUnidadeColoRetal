@@ -1,14 +1,12 @@
-import { AppFilters } from '@/components/app/app-filters';
-import { AppFormField } from '@/components/app/app-form-field';
 import { AppPageHeader } from '@/components/app/app-page-header';
 import { AppPagination } from '@/components/app/app-pagination';
 import { AppTable, AppTableColumn } from '@/components/app/app-table';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
-import { FormEvent, useState } from 'react';
+import { Link } from 'lucide-react';
+import { useState } from 'react';
 import CreateOrUpdateEpisodio from './CreateOrUpdateEpisodio';
 
 type Episodio = {
@@ -80,32 +78,6 @@ export default function Index({ episodios, filters: initialFilters, sexos, tipos
         tipo: initialFilters?.tipo ?? '',
     });
 
-    const handleSearch = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        router.get('/episodios', filters, {
-            preserveState: true,
-            preserveScroll: true,
-            replace: true,
-        });
-    };
-
-    const handleReset = () => {
-        const emptyFilters: Filters = {
-            search: '',
-            sexo: '',
-            tipo: '',
-        };
-
-        setFilters(emptyFilters);
-
-        router.get('/episodios', {}, {
-            preserveState: true,
-            preserveScroll: true,
-            replace: true,
-        });
-    };
-
     const columns: AppTableColumn<Episodio>[] = [
         {
             key: 'doente_nome',
@@ -137,19 +109,11 @@ export default function Index({ episodios, filters: initialFilters, sexos, tipos
                         Editar
                     </Button>
 
-                    <Button
-                        className="bg-green-500"
-                        size="sm"
-                        onClick={() => router.get(`/episodios/${episodio.id}`)}
-                    >
+                    <Button className="bg-green-500" size="sm" onClick={() => router.get(`/episodios/${episodio.id}`)}>
                         Ver
                     </Button>
 
-                    <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() => setDeleting(episodio)}
-                    >
+                    <Button size="sm" variant="destructive" onClick={() => setDeleting(episodio)}>
                         Eliminar
                     </Button>
                 </div>
@@ -162,6 +126,8 @@ export default function Index({ episodios, filters: initialFilters, sexos, tipos
             <Head title="Episódios" />
 
             <div className="p-6">
+        
+
                 <AppPageHeader
                     title="Episódios"
                     description="Gestão e consulta de episódios clínicos"
@@ -176,20 +142,12 @@ export default function Index({ episodios, filters: initialFilters, sexos, tipos
                         </Button>
                     }
                 />
-
-
-
-                <AppTable
-                    columns={columns}
-                    data={episodios.data}
-                    rowKey={(episodio) => episodio.id}
-                />
-
+                <AppTable columns={columns} data={episodios.data} rowKey={(episodio) => episodio.id} />
                 <AppPagination
                     links={episodios.links}
-                    from={episodios.from}
-                    to={episodios.to}
-                    total={episodios.total}
+                    from={episodios.from ?? undefined}
+                    to={episodios.to ?? undefined}
+                    total={episodios.total ?? undefined}
                 />
             </div>
 

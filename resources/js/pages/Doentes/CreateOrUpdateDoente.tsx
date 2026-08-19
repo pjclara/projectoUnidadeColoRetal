@@ -1,6 +1,7 @@
 import { AppFormField } from '@/components/app/app-form-field';
+import { AppInputField } from '@/components/app/app-input-field';
+import { AppSelectField } from '@/components/app/app-input-select';
 import { AppModalForm } from '@/components/app/app-modal-form';
-import { Input } from '@/components/ui/input';
 import { router } from '@inertiajs/react';
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -32,11 +33,7 @@ const emptyForm: FormData = {
     sexo: '',
 };
 
-
-export default function CreateOrUpdateDoente({
-    doente,
-    onClose,
-}: Props) {
+export default function CreateOrUpdateDoente({ doente, onClose }: Props) {
     const isEdit = !!doente;
 
     const [form, setForm] = useState<FormData>(emptyForm);
@@ -58,10 +55,7 @@ export default function CreateOrUpdateDoente({
         setErrors({});
     }, [doente]);
 
-    const updateField = <K extends keyof FormData>(
-        field: K,
-        value: FormData[K],
-    ) => {
+    const updateField = <K extends keyof FormData>(field: K, value: FormData[K]) => {
         setForm((current) => ({
             ...current,
             [field]: value,
@@ -79,7 +73,6 @@ export default function CreateOrUpdateDoente({
         setLoading(true);
         setErrors({});
 
-
         if (isEdit) {
             router.put(`/doentes/${doente.id}`, form, {
                 preserveScroll: true,
@@ -90,9 +83,7 @@ export default function CreateOrUpdateDoente({
                 },
 
                 onSuccess: () => {
-                    toast.success(
-                        'Doente atualizado com sucesso.',
-                    );
+                    toast.success('Doente atualizado com sucesso.');
 
                     onClose();
                 },
@@ -114,9 +105,7 @@ export default function CreateOrUpdateDoente({
             },
 
             onSuccess: () => {
-                toast.success(
-                    'Doente criado com sucesso.',
-                );
+                toast.success('Doente criado com sucesso.');
 
                 onClose();
             },
@@ -131,102 +120,51 @@ export default function CreateOrUpdateDoente({
         <AppModalForm
             open
             title={isEdit ? 'Editar Doente' : 'Novo Doente'}
-            description={
-                isEdit
-                    ? 'Atualize os dados do doente.'
-                    : 'Introduza os dados de identificação do doente.'
-            }
+            description={isEdit ? 'Atualize os dados do doente.' : 'Introduza os dados de identificação do doente.'}
             onClose={onClose}
             onSubmit={submit}
             loading={loading}
             maxWidth="5xl"
-            submitLabel={
-                isEdit
-                    ? 'Guardar alterações'
-                    : 'Criar doente'
-            }
+            submitLabel={isEdit ? 'Guardar alterações' : 'Criar doente'}
         >
             <div className="grid gap-6 md:grid-cols-2">
-                <AppFormField
+                <AppInputField
                     label="Nome"
+                    value={form.nome}
+                    onChange={(value) => updateField('nome', value)}
                     error={errors.nome}
-                >
-                    <Input
-                        value={form.nome}
-                        onChange={(event) =>
-                            updateField(
-                                'nome',
-                                event.target.value,
-                            )
-                        }
-                        placeholder="Nome completo"
-                    />
-                </AppFormField>
+                    placeholder="Nome completo"
+                />
 
-                <AppFormField
+                <AppInputField
                     label="PU"
                     error={errors.pu}
-                >
-                    <Input
-                        type="number"
-                        value={form.pu}
-                        onChange={(event) =>
-                            updateField(
-                                'pu',
-                                event.target.value,
-                            )
-                        }
-                        placeholder="Número PU"
-                    />
-                </AppFormField>
+                    type="number"
+                    value={form.pu}
+                    onChange={(value: string | number) => updateField('pu', String(value))}
+                    placeholder="Número PU"
+                />
 
-                <AppFormField
+                <AppInputField
                     label="Data de nascimento"
                     error={errors.data_nascimento}
-                >
-                    <Input
-                        type="date"
-                        value={form.data_nascimento}
-                        onChange={(event) =>
-                            updateField(
-                                'data_nascimento',
-                                event.target.value,
-                            )
-                        }
-                    />
-                </AppFormField>
+                    type="date"
+                    value={form.data_nascimento}
+                    onChange={(value: string) => updateField('data_nascimento', value)}
+                />
 
-                <AppFormField
+                <AppSelectField
                     label="Sexo"
+                    value={form.sexo}
+                    onChange={(value: string | number) => updateField('sexo', String(value))}
                     error={errors.sexo}
-                >
-                    <select
-                        value={form.sexo}
-                        onChange={(event) =>
-                            updateField(
-                                'sexo',
-                                event.target.value,
-                            )
-                        }
-                        className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"
-                    >
-                        <option value="">
-                            Selecionar
-                        </option>
-
-                        <option value="M">
-                            Masculino
-                        </option>
-
-                        <option value="F">
-                            Feminino
-                        </option>
-
-                        <option value="O">
-                            Outro
-                        </option>
-                    </select>
-                </AppFormField>
+                    options={[
+                        { value: '', label: 'Selecionar' },
+                        { value: 'M', label: 'Masculino' },
+                        { value: 'F', label: 'Feminino' },
+                        { value: 'O', label: 'Outro' },
+                    ]}
+                />
             </div>
         </AppModalForm>
     );

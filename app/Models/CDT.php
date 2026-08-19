@@ -9,4 +9,19 @@ class CDT extends Model
 {
     /** @use HasFactory<\Database\Factories\CDTFactory> */
     use HasFactory;
+
+    protected $table = 'cdts';
+
+    protected $fillable = [
+        'episodio_id',
+        'data_pedido',
+        'data_discussao',
+        'decisao',
+        'estadio_clinico',
+    ];
+
+    public function episodio()
+    {
+        return $this->belongsTo(Episodio::class);
+    }
 }

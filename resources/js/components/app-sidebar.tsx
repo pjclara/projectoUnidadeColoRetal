@@ -23,6 +23,11 @@ const mainNavItems: NavItem[] = [
         url: '/episodios',
         icon: Folder,
     },
+       {
+        title: 'CDTs',
+        url: '/cdts',
+        icon: Folder,
+    },
     {
         title: 'Roles & Permissões',
         url: '/access-control',
