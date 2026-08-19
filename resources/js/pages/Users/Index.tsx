@@ -1,8 +1,10 @@
+import { AppPageHeader } from '@/components/app/app-page-header';
+import { AppPagination } from '@/components/app/app-pagination';
+import { AppTable, AppTableColumn } from '@/components/app/app-table';
 import { Button } from '@/components/ui/button';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 import CreateOrUpdateUserModal from './CreateOrUpdateUserModal';
 
@@ -18,7 +20,22 @@ type Props = {
             especialidade?: string | null;
             ativo: boolean;
         }[];
+        links: any[];
+        from?: number | null;
+        to?: number | null;
+        total?: number | null;
     };
+};
+
+type User = {
+    id: number;
+    name: string;
+    abreviatura?: string | null;
+    email: string;
+    numero_mecanografico?: string | null;
+    categoria?: string | null;
+    especialidade?: string | null;
+    ativo: boolean;
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -28,78 +45,77 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-
 export default function UsersIndex({ users }: Props) {
+    const [showModal, setShowModal] = useState(false);
+    const [editing, setEditing] = useState<User | null>(null);
+    const [deleting, setDeleting] = useState<User | null>(null);
+    const [deletingLoading, setDeletingLoading] = useState(false);
     const [openModal, setOpenModal] = useState(false);
-    const [selectedUser, setSelectedUser] = useState<{ id: number; name: string; abreviatura?: string | null; email: string; numero_mecanografico?: string | null; categoria?: string | null; especialidade?: string | null; ativo: boolean } | null>(null);
 
+    const columns: AppTableColumn<User>[] = [
+        {
+            key: 'name',
+            label: 'Nome',
+        },
+        {
+            key: 'email',
+            label: 'Email',
+        },
+        {
+            key: 'ativo',
+            label: 'Ativo',
+        },
+        {
+            key: 'acoes',
+            label: 'Ações',
+            className: 'text-right',
+            render: (user) => (
+                <div className="flex justify-end gap-2">
+                    <Button
+                        size="sm"
+                        onClick={() => {
+                            setEditing(user);
+                            setOpenModal(true);
+                        }}
+                    >
+                        Editar
+                    </Button>
+                    <Button className="bg-green-500" size="sm" onClick={() => router.get(`/users/${user.id}`)}>
+                        Ver
+                    </Button>
+
+                    <Button size="sm" variant="destructive" onClick={() => setDeleting(user)}>
+                        Eliminar
+                    </Button>
+                </div>
+            ),
+        },
+    ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Utilizadores" />
-            <div className="mb-6 flex items-center justify-between p-4">
-                <h1 className="text-2xl font-semibold">Utilizadores</h1>
-                <Button
-                    onClick={() => {
-                        setSelectedUser(null);
-                        setOpenModal(true);
-                    }}
-                    className="rounded bg-green-600 px-4 py-2 text-white"
-                >
-                    Novo Utilizador
-                </Button>
-            </div>
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <table className="w-full border-collapse border border-gray-300 dark:border-gray-700">
-                    <thead>
-                        <tr className="bg-gray-200 dark:bg-gray-800">
-                            <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">ID</th>
-                            <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Nome</th>
-                            <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Abreviatura</th>
-                            <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Email</th>
-                            <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Número Mecanográfico</th>
-                            <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Categoria</th>
-                            <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Especialidade</th>
-                            <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700">Ativo</th>
-                            <th className="border border-gray-300 px-4 py-2 text-left dark:border-gray-700"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.data.length === 0 ? (
-                            <tr>
-                                <td colSpan={7} className="border border-gray-300 px-4 py-2 text-center dark:border-gray-700">
-                                    <PlaceholderPattern className="h-8 w-full" />
-                                </td>
-                            </tr>
-                        ) : (
-                            users.data.map((user) => (
-                                <tr key={user.id} className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.id}</td>
-                                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.name}</td>
-                                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.abreviatura}</td>
-                                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.email}</td>
-                                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.numero_mecanografico}</td>
-                                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.categoria}</td>
-                                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.especialidade}</td>
-                                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-700">{user.ativo ? 'Sim' : 'Não'}</td>
-                                    <td>
-                                        <Button
-                                            onClick={() => {
-                                                setSelectedUser(user);
-                                                setOpenModal(true);
-                                            }}
-                                            className="rounded bg-blue-600 px-3 py-1 text-white"
-                                        >
-                                            Editar
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+            <div className="p-6">
+                <AppPageHeader
+                    title="Utilizadores"
+                    description="Gestão e consulta de utilizadores"
+                    action={
+                        <Button
+                            onClick={() => {
+                                setEditing(null);
+                                setOpenModal(true);
+                            }}
+                        >
+                            Novo utilizador
+                        </Button>
+                    }
+                />
+
+                <AppTable columns={columns} data={users.data} rowKey={(user) => user.id} />
+
+                <AppPagination links={users.links} from={users.from ?? undefined} to={users.to ?? undefined} total={users.total ?? undefined} />
             </div>
 
-            <CreateOrUpdateUserModal open={openModal} onClose={() => setOpenModal(false)} user={selectedUser} />
+            <CreateOrUpdateUserModal open={openModal} onClose={() => setOpenModal(false)} user={editing} />
         </AppLayout>
     );
 }

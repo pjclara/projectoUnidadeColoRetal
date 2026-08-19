@@ -11,6 +11,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { FormEvent, useState } from 'react';
 import CreateOrUpdateDoente from './CreateOrUpdateDoente';
+import toast from 'react-hot-toast';
 
 type Doente = {
     id: number;
@@ -199,12 +200,17 @@ export default function Index({ doentes, filters: initialFilters, sexos }: Props
 
                 <AppTable columns={columns} data={doentes.data} rowKey={(doente) => doente.id} />
 
-                <AppPagination links={doentes.links} from={doentes.from} to={doentes.to} total={doentes.total} />
+                <AppPagination
+                    links={doentes.links}
+                    from={doentes.from ?? undefined}
+                    to={doentes.to ?? undefined}
+                    total={doentes.total ?? undefined}
+                />
             </div>
 
             {(editing || showModal) && (
                 <CreateOrUpdateDoente
-                    doente={editing}
+                    doente={editing as unknown as React.ComponentProps<typeof CreateOrUpdateDoente>['doente']}
                     onClose={() => {
                         setEditing(null);
                         setShowModal(false);

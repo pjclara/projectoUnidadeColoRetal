@@ -1,5 +1,6 @@
-import { AppModal } from '@/components/app/app-modal';
-import { Button } from '@/components/ui/button';
+import { AppInputField } from '@/components/app/app-input-field';
+import { AppSelectField } from '@/components/app/app-input-select';
+import { AppModalForm } from '@/components/app/app-modal-form';
 import { router } from '@inertiajs/react';
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -21,7 +22,7 @@ interface Props {
     user?: User | null;
 }
 
-interface FormData {
+interface FormData extends Record<string, string | boolean> {
     abreviatura: string;
     name: string;
     email: string;
@@ -127,148 +128,78 @@ export default function CreateOrUpdateUserModal({ open, onClose, user }: Props) 
     }
 
     return (
-        <AppModal open={open} onClose={onClose} title={isEdit ? 'Editar Utilizador' : 'Criar Utilizador'}>
-            <form onSubmit={submit}>
-                <div className="space-y-4">
-                    <div>
-                        <label htmlFor="name" className="mb-1 block text-sm font-medium">
-                            Nome
-                        </label>
+        <AppModalForm
+            open
+            title={isEdit ? 'Editar Doente' : 'Novo Doente'}
+            description={isEdit ? 'Atualize os dados do doente.' : 'Introduza os dados de identificação do doente.'}
+            onClose={onClose}
+            onSubmit={submit}
+            loading={loading}
+            maxWidth="5xl"
+            submitLabel={isEdit ? 'Guardar alterações' : 'Criar doente'}
+        >
+            <div className="grid gap-6 md:grid-cols-2">
+                <AppInputField
+                    label="Nome"
+                    value={form.name}
+                    onChange={(value) => updateField('name', value)}
+                    error={errors.name}
+                    placeholder="Nome completo"
+                />
 
-                        <input
-                            id="name"
-                            type="text"
-                            value={form.name}
-                            onChange={(e) => updateField('name', e.target.value)}
-                            className="w-full rounded-md border p-2"
-                            autoComplete="name"
-                        />
+                <AppInputField
+                    label="Abreviatura"
+                    value={form.abreviatura}
+                    onChange={(value) => updateField('abreviatura', value)}
+                    error={errors.abreviatura}
+                    placeholder="Abreviatura"
+                />
 
-                        {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
-                    </div>
+                <AppInputField
+                    label="Email"
+                    type="email"
+                    value={form.email}
+                    onChange={(value) => updateField('email', value)}
+                    error={errors.email}
+                    placeholder="Email"
+                />
 
-                    <div>
-                        <label htmlFor="abreviatura" className="mb-1 block text-sm font-medium">
-                            Abreviatura
-                        </label>
+                <AppInputField
+                    label="Número mecanográfico"
+                    type="number"
+                    value={form.numero_mecanografico}
+                    onChange={(value) => updateField('numero_mecanografico', value)}
+                    error={errors.numero_mecanografico}
+                    placeholder="Número mecanográfico"
+                />
 
-                        <input
-                            id="abreviatura"
-                            type="text"
-                            value={form.abreviatura ?? ''}
-                            onChange={(e) => updateField('abreviatura', e.target.value)}
-                            className="w-full rounded-md border p-2"
-                            autoComplete="abreviatura"
-                        />
+                <AppSelectField
+                    label="Categoria"
+                    value={form.categoria}
+                    onChange={(value: string | number) => updateField('categoria', String(value))}
+                    error={errors.categoria}
+                    options={[
+                        { value: '', label: 'Selecionar' },
+                        { value: 'Medico', label: 'Médico' },
+                        { value: 'Enfermeiro', label: 'Enfermeiro' },
+                        { value: 'Administrativo', label: 'Administrativo' },
+                        { value: 'Outro', label: 'Outro' },
+                    ]}
+                />
 
-                        {errors.abreviatura && <p className="mt-1 text-sm text-red-600">{errors.abreviatura}</p>}
-                    </div>
-
-                    <div>
-                        <label htmlFor="email" className="mb-1 block text-sm font-medium">
-                            Email
-                        </label>
-
-                        <input
-                            id="email"
-                            type="email"
-                            value={form.email}
-                            onChange={(e) => updateField('email', e.target.value)}
-                            className="w-full rounded-md border p-2"
-                            autoComplete="email"
-                        />
-
-                        {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
-                    </div>
-
-                    <div>
-                        <label htmlFor="numero_mecanografico" className="mb-1 block text-sm font-medium">
-                            Número Mecanográfico
-                        </label>
-
-                        <input
-                            id="numero_mecanografico"
-                            type="text"
-                            value={form.numero_mecanografico}
-                            onChange={(e) => updateField('numero_mecanografico', e.target.value)}
-                            className="w-full rounded-md border p-2"
-                        />
-
-                        {errors.numero_mecanografico && <p className="mt-1 text-sm text-red-600">{errors.numero_mecanografico}</p>}
-                    </div>
-
-                    <div>
-                        <label htmlFor="categoria" className="mb-1 block text-sm font-medium">
-                            Categoria
-                        </label>
-
-                        <input
-                            id="categoria"
-                            type="text"
-                            value={form.categoria}
-                            onChange={(e) => updateField('categoria', e.target.value)}
-                            className="w-full rounded-md border p-2"
-                        />
-
-                        {errors.categoria && <p className="mt-1 text-sm text-red-600">{errors.categoria}</p>}
-                    </div>
-
-                    <div>
-                        <label htmlFor="especialidade" className="mb-1 block text-sm font-medium">
-                            Especialidade
-                        </label>
-
-                        <input
-                            id="especialidade"
-                            type="text"
-                            value={form.especialidade}
-                            onChange={(e) => updateField('especialidade', e.target.value)}
-                            className="w-full rounded-md border p-2"
-                        />
-
-                        {errors.especialidade && <p className="mt-1 text-sm text-red-600">{errors.especialidade}</p>}
-                    </div>
-
-                    {!isEdit && (
-                        <div>
-                            <label htmlFor="password" className="mb-1 block text-sm font-medium">
-                                Password
-                            </label>
-
-                            <input
-                                id="password"
-                                type="password"
-                                value={form.password}
-                                onChange={(e) => updateField('password', e.target.value)}
-                                className="w-full rounded-md border p-2"
-                                autoComplete="new-password"
-                            />
-
-                            {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
-                        </div>
-                    )}
-
-                    <label className="flex items-center gap-2">
-                        <input type="checkbox" checked={form.ativo} onChange={(e) => updateField('ativo', e.target.checked)} />
-
-                        <span>Utilizador ativo</span>
-                    </label>
-                </div>
-
-                <div className="mt-6 flex justify-end gap-3">
-                    <Button type="button" onClick={onClose} disabled={loading} className="rounded-md border px-4 py-2 disabled:opacity-50">
-                        Cancelar
-                    </Button>
-
-                    <Button
-                        type="submit"
-                        disabled={loading}
-                        className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
-                    >
-                        {loading ? 'A guardar...' : isEdit ? 'Guardar alterações' : 'Criar utilizador'}
-                    </Button>
-                </div>
-            </form>
-        </AppModal>
+                <AppSelectField
+                    label="Especialidade"
+                    value={form.especialidade}
+                    onChange={(value: string | number) => updateField('especialidade', String(value))}
+                    error={errors.especialidade}
+                    options={[
+                        { value: '', label: 'Selecionar' },
+                        { value: 'Cirurgia', label: 'Cirurgia' },
+                        { value: 'Anestesista', label: 'Anestesista' },
+                        { value: 'Outro', label: 'Outro' },
+                    ]}
+                />
+            </div>
+        </AppModalForm>
     );
 }
