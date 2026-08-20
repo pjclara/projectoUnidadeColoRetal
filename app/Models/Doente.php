@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Database\Factories\DoenteFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Doente extends Model
 {
-    /** @use HasFactory<\Database\Factories\DoenteFactory> */
+    /** @use HasFactory<DoenteFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -19,13 +20,18 @@ class Doente extends Model
         'pu_tag',
         'pu_hash',
         'data_nascimento',
-        'sexo'
+        'sexo',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'data_nascimento' => 'date:Y-m-d',
+        ];
+    }
 
     public function episodios()
     {
         return $this->hasMany(Episodio::class);
     }
-
-    
 }

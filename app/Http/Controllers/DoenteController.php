@@ -64,7 +64,9 @@ class DoenteController extends Controller
                         $doente->pu_tag,
                     ),
 
-                    'data_nascimento' => $doente->data_nascimento,
+                    'data_nascimento' => $doente->data_nascimento
+                        ? $doente->data_nascimento->format('Y-m-d')
+                        : null,
                     'sexo' => $doente->sexo,
                     'created_at' => $doente->created_at,
                     'updated_at' => $doente->updated_at,

@@ -21,8 +21,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 });
 
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';
 
 // Doente Module
 Route::middleware('auth')->group(function () {
@@ -53,7 +53,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/doentes/{doente}', [DoenteController::class, 'destroy'])
         ->middleware('can:doente.delete')
         ->name('doentes.destroy');
-
 
     // Gestão de RBAC (roles & permissions)
     Route::get('/access-control', [RolePermissionController::class, 'index']);
@@ -201,14 +200,8 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:episodio.delete')
         ->name('episodios.destroy');
 
+    Route::get('/atendimentos/novo', [AtendimentoController::class, 'create'])
+        ->middleware('can:doente.view')
+        ->name('atendimentos.legacy');
 
-    Route::get(
-        '/atendimentos/novo',
-        [AtendimentoController::class, 'create']
-    )->name('atendimentos.create');
-
-    Route::resource(
-        'episodios',
-        EpisodioController::class
-    );
 });

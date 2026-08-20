@@ -5,13 +5,16 @@ import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
-import { Link } from 'lucide-react';
 import { useState } from 'react';
 import CreateOrUpdateEpisodio from './CreateOrUpdateEpisodio';
 
 type Episodio = {
     id: string;
     doente_nome?: string | null;
+    doente?: {
+        nome?: string | null;
+        pu?: string | null;
+    } | null;
     tipo?: string | null;
     diagnostico?: string | null;
     data_diagnostico?: string | null;
@@ -46,6 +49,7 @@ type Props = {
 
     sexos: Sexo[];
     tipos: TipoEpisodio[];
+    users: { id: number; name: string }[];
 
     filters?: {
         search?: string;
@@ -67,7 +71,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ episodios, filters: initialFilters, sexos, tipos }: Props) {
+export default function Index({ episodios, filters: initialFilters, sexos, tipos, users }: Props) {
     const [showModal, setShowModal] = useState(false);
     const [editing, setEditing] = useState<Episodio | null>(null);
     const [deleting, setDeleting] = useState<Episodio | null>(null);
@@ -80,8 +84,15 @@ export default function Index({ episodios, filters: initialFilters, sexos, tipos
 
     const columns: AppTableColumn<Episodio>[] = [
         {
-            key: 'doente_nome',
+            key: 'doente',
             label: 'Doente',
+            render: (episodio) => (
+                <div>
+                    <div className="font-medium">{episodio.doente?.nome ?? '—'}</div>
+
+                    <div className="text-muted-foreground text-xs">PU: {episodio.doente?.pu ?? '—'}</div>
+                </div>
+            ),
         },
         {
             key: 'tipo',
@@ -94,10 +105,6 @@ export default function Index({ episodios, filters: initialFilters, sexos, tipos
         {
             key: 'data_diagnostico',
             label: 'Diagnóstico em',
-        },
-        {
-            key: 'sexo',
-            label: 'Sexo',
         },
         {
             key: 'acoes',
@@ -126,18 +133,11 @@ export default function Index({ episodios, filters: initialFilters, sexos, tipos
             <Head title="Episódios" />
 
             <div className="p-6">
-        
-
                 <AppPageHeader
                     title="Episódios"
                     description="Gestão e consulta de episódios clínicos"
                     action={
-                        <Button
-                            onClick={() => {
-                                setEditing(null);
-                                setShowModal(true);
-                            }}
-                        >
+                        <Button type="button" size="sm" variant="outline" onClick={() => router.get('/episodios/create')}>
                             Novo episódio
                         </Button>
                     }
@@ -153,6 +153,7 @@ export default function Index({ episodios, filters: initialFilters, sexos, tipos
 
             {(editing || showModal) && (
                 <CreateOrUpdateEpisodio
+                    profissionais={users}
                     episodio={editing}
                     onClose={() => {
                         setEditing(null);

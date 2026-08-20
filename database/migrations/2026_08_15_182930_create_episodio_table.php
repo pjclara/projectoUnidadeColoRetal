@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('estado', 30)->default('ATIVO')->index('idx_episodio_estado');
             $table->text('observacoes')->nullable();
+            $table->timestamps();
 
         });
     }

@@ -1,4 +1,3 @@
-import { AppFormField } from '@/components/app/app-form-field';
 import { AppInputField } from '@/components/app/app-input-field';
 import { AppSelectField } from '@/components/app/app-input-select';
 import { AppModalForm } from '@/components/app/app-modal-form';
@@ -17,6 +16,8 @@ interface Doente {
 interface Props {
     doente?: Doente | null;
     onClose: () => void;
+    endpoint?: string;
+    onCreated?: (doente: Doente) => void;
 }
 
 interface FormData extends Record<string, string> {
@@ -33,7 +34,7 @@ const emptyForm: FormData = {
     sexo: '',
 };
 
-export default function CreateOrUpdateDoente({ doente, onClose }: Props) {
+export default function CreateOrUpdateDoente({ doente, onClose, endpoint = '/doentes', onCreated }: Props) {
     const isEdit = !!doente;
 
     const [form, setForm] = useState<FormData>(emptyForm);
@@ -96,7 +97,7 @@ export default function CreateOrUpdateDoente({ doente, onClose }: Props) {
             return;
         }
 
-        router.post('/doentes', form, {
+        router.post(endpoint, form, {
             preserveScroll: true,
 
             onError: (errors) => {
@@ -104,10 +105,20 @@ export default function CreateOrUpdateDoente({ doente, onClose }: Props) {
                 toast.error('Verifique os dados introduzidos.');
             },
 
-            onSuccess: () => {
+            onSuccess: (page) => {
                 toast.success('Doente criado com sucesso.');
 
-                onClose();
+                const createdDoente = (
+                    page.props as {
+                        flash?: { created_doente?: Doente };
+                    }
+                ).flash?.created_doente;
+
+                if (createdDoente && onCreated) {
+                    onCreated(createdDoente);
+                } else {
+                    onClose();
+                }
             },
 
             onFinish: () => {

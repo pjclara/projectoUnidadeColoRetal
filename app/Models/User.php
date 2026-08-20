@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profile::class);
     }
+
+    public function episodios()
+    {
+        return $this->hasMany(Episodio::class, 'utilizador_id');
+    }
 }
