@@ -1,12 +1,13 @@
-import { AppCheckboxField } from '@/components/app/app-check-box-field';
-import { AppInputField } from '@/components/app/app-input-field';
-import { AppSelectField } from '@/components/app/app-input-select';
 import { AppModal } from '@/components/app/app-modal';
-import { AppTextareaField } from '@/components/app/app-textarea-field';
 import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+
+import {
+    EpisodioForm,
+    type EpisodioFormData,
+} from './EpisodioForm';
 
 type Episodio = {
     id: string | number;
@@ -24,159 +25,229 @@ type Episodio = {
     observacoes?: string | null;
 };
 
-type Option = {
-    id: string | number;
+type Profissional = {
+    id: number;
     name: string;
 };
 
 type Props = {
     episodio?: Episodio | null;
-    doentes?: Option[];
-    profissionais?: Option[];
+    profissionais?: Profissional[];
     onClose: () => void;
+    doenteId?: string | number;
+    endpoint?: string;
+    onCreated?: (episodio: Episodio) => void;
 };
 
-export default function CreateOrUpdateEpisodio({ episodio = null, doentes = [], profissionais = [], onClose }: Props) {
-    const isEdit = !!episodio;
+const emptyForm: EpisodioFormData = {
+    tipo: '',
+    diagnostico: '',
+    cid10: '',
+    data_diagnostico: '',
+    centro_referencia: false,
+    pai_entrada: '',
+    pai_saida: '',
+    motivo_saida: '',
+    user_id: '',
+    estado: 'ATIVO',
+    observacoes: '',
+};
 
-    const [form, setForm] = useState({
-        doente_id: episodio?.doente_id ?? '',
-        tipo: episodio?.tipo ?? '',
-        diagnostico: episodio?.diagnostico ?? '',
-        cid10: episodio?.cid10 ?? '',
-        data_diagnostico: episodio?.data_diagnostico ?? '',
-        centro_referencia: episodio?.centro_referencia ?? false,
-        pai_entrada: episodio?.pai_entrada ?? '',
-        pai_saida: episodio?.pai_saida ?? '',
-        motivo_saida: episodio?.motivo_saida ?? '',
-        user_id: episodio?.user_id ?? '',
-        estado: episodio?.estado ?? 'ATIVO',
-        observacoes: episodio?.observacoes ?? '',
-    });
+export default function CreateOrUpdateEpisodio({
+    episodio = null,
+    profissionais = [],
+    onClose,
+    doenteId,
+    endpoint = '/episodios',
+    onCreated,
+}: Props) {
+    const isEdit = episodio !== null;
 
-    const [loading, setLoading] = useState(false);
+    const [form, setForm] =
+        useState<EpisodioFormData>(emptyForm);
+
+    const [errors, setErrors] =
+        useState<Record<string, string>>({});
+
+    const [loading, setLoading] =
+        useState(false);
+
+    /*
+     * Inicializar formulário quando abrimos
+     * para criar/editar.
+     */
+    useEffect(() => {
+        setForm({
+            tipo: episodio?.tipo ?? '',
+            diagnostico: episodio?.diagnostico ?? '',
+            cid10: episodio?.cid10 ?? '',
+            data_diagnostico:
+                episodio?.data_diagnostico ?? '',
+            centro_referencia:
+                episodio?.centro_referencia ?? false,
+            pai_entrada:
+                episodio?.pai_entrada ?? '',
+            pai_saida:
+                episodio?.pai_saida ?? '',
+            motivo_saida:
+                episodio?.motivo_saida ?? '',
+            user_id:
+                episodio?.user_id ?? '',
+            estado:
+                episodio?.estado ?? 'ATIVO',
+            observacoes:
+                episodio?.observacoes ?? '',
+        });
+
+        setErrors({});
+    }, [episodio]);
+
+    /*
+     * Atualização genérica dos campos.
+     */
+    const updateField = <
+        K extends keyof EpisodioFormData
+    >(
+        field: K,
+        value: EpisodioFormData[K],
+    ) => {
+        setForm((current) => ({
+            ...current,
+            [field]: value,
+        }));
+
+        setErrors((current) => ({
+            ...current,
+            [field]: '',
+        }));
+    };
 
     const submit = () => {
         setLoading(true);
-
-        const url = isEdit ? `/episodios/${episodio.id}` : `/episodios`;
+        setErrors({});
 
         const options = {
-            onFinish: () => setLoading(false),
-            onSuccess: () => {
-                onClose();
-                toast.success(isEdit ? 'Episódio atualizado com sucesso!' : 'Episódio criado com sucesso!');
+            preserveScroll: true,
+
+            onSuccess: (page: any) => {
+                if (isEdit) {
+                    toast.success(
+                        'Episódio atualizado com sucesso!',
+                    );
+
+                    onClose();
+
+                    return;
+                }
+
+                toast.success(
+                    'Episódio criado com sucesso!',
+                );
+
+                const createdEpisodio =
+                    page.props?.flash?.created_episodio;
+
+                if (
+                    createdEpisodio &&
+                    onCreated
+                ) {
+                    onCreated(createdEpisodio);
+                } else {
+                    onClose();
+                }
+            },
+
+            onError: (
+                validationErrors: Record<string, string>,
+            ) => {
+                setErrors(validationErrors);
+
+                toast.error(
+                    'Verifique os dados introduzidos.',
+                );
+            },
+
+            onFinish: () => {
+                setLoading(false);
             },
         };
 
+        /*
+         * IMPORTANTE:
+         * doente_id não está no EpisodioForm porque
+         * normalmente já vem selecionado pelo Wizard.
+         */
+        const payload = {
+            ...form,
+            doente_id:
+                episodio?.doente_id ??
+                doenteId ??
+                null,
+        };
+
         if (isEdit) {
-            router.put(url, form, options);
-        } else {
-            router.post(url, form, options);
+            router.put(
+                `/episodios/${episodio.id}`,
+                payload,
+                options,
+            );
+
+            return;
         }
+
+        router.post(
+            endpoint,
+            payload,
+            options,
+        );
     };
 
     return (
-        (
-            <AppModal open={true} onClose={onClose} title={isEdit ? 'Editar Episódio' : 'Criar Episódio'} maxWidth="5xl">
-                {/* Form */}
-                <div className="space-y-4">
-                    {/* Tipo */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <AppSelectField
-                            label="Tipo"
-                            value={form.tipo}
-                            onChange={(value) => setForm({ ...form, tipo: String(value) })}
-                            options={[
-                                { value: 'ONCOLOGICO', label: 'Oncológico' },
-                                { value: 'BENIGNO', label: 'Benigno' },
-                                { value: 'DII', label: 'DII' },
-                                { value: 'FUNCIONAL', label: 'Funcional' },
-                                { value: 'OUTRO', label: 'Outro' },
-                            ]}
-                        />
+        <AppModal
+            open
+            onClose={onClose}
+            title={
+                isEdit
+                    ? 'Editar Episódio'
+                    : 'Criar Episódio'
+            }
+            maxWidth="5xl"
+        >
+            <div className="space-y-6">
 
-                        {/* Diagnóstico */}
-                        <AppInputField
-                            label="Diagnóstico"
-                            value={form.diagnostico}
-                            onChange={(value) => setForm({ ...form, diagnostico: String(value) })}
-                        />
-                        <AppInputField label="CID-10" value={form.cid10} onChange={(value) => setForm({ ...form, cid10: String(value) })} />
-                        {/* Datas */}
-                        <AppInputField
-                            label="Data Diagnóstico"
-                            type="date"
-                            value={form.data_diagnostico}
-                            onChange={(value) => setForm({ ...form, data_diagnostico: String(value) })}
-                        />
+                <EpisodioForm
+                    form={form}
+                    errors={errors}
+                    profissionais={profissionais}
+                    onChange={updateField}
+                />
 
-                        <AppCheckboxField
-                            label="Centro de Referência"
-                            checked={Boolean(form.centro_referencia)}
-                            onChange={(value: boolean) => setForm({ ...form, centro_referencia: Boolean(value) })}
-                        />
+                <div className="flex justify-end gap-3 border-t pt-6">
 
-                        {/* PAI */}
-                        <AppInputField
-                            label="PAI Entrada"
-                            type="date"
-                            value={form.pai_entrada}
-                            onChange={(value) => setForm({ ...form, pai_entrada: String(value) })}
-                        />
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={onClose}
+                        disabled={loading}
+                    >
+                        Cancelar
+                    </Button>
 
-                        <AppInputField
-                            label="PAI Saída"
-                            type="date"
-                            value={form.pai_saida}
-                            onChange={(value) => setForm({ ...form, pai_saida: String(value) })}
-                        />
+                    <Button
+                        type="button"
+                        onClick={submit}
+                        disabled={loading}
+                        className="bg-blue-600 text-white hover:bg-blue-700"
+                    >
+                        {loading
+                            ? 'A guardar...'
+                            : isEdit
+                              ? 'Guardar alterações'
+                              : 'Criar episódio'}
+                    </Button>
 
-                        {/* Motivo Saída */}
-                        <AppInputField
-                            label="Motivo Saída"
-                            value={form.motivo_saida}
-                            onChange={(e) => setForm({ ...form, motivo_saida: String(e) })}
-                        />
-                        <AppSelectField
-                            label="Profissional"
-                            value={form.user_id}
-                            onChange={(value) => setForm({ ...form, user_id: String(value) })}
-                            options={profissionais.map((profissional) => ({
-                                value: profissional.id,
-                                label: profissional.name,
-                            }))}
-                        />
-
-                        {/* Estado */}
-                        <AppSelectField
-                            label="Estado"
-                            value={form.estado}
-                            onChange={(value) => setForm({ ...form, estado: String(value) })}
-                            options={[
-                                { value: 'ATIVO', label: 'Ativo' },
-                                { value: 'INATIVO', label: 'Inativo' },
-                            ]}
-                        />
-                    </div>
-
-                    <div>
-                        {/* Observações */}
-                        <AppTextareaField
-                            label="Observações"
-                            value={form.observacoes}
-                            onChange={(value) => setForm({ ...form, observacoes: String(value) })}
-                        />
-                    </div>
-
-                    {/* Footer */}
-                    <div className="mt-6 flex justify-end">
-                        <Button onClick={submit} disabled={loading} className="rounded-md bg-blue-600 px-4 py-2 text-white disabled:opacity-50">
-                            {loading ? 'A guardar...' : isEdit ? 'Guardar Alterações' : 'Criar Episódio'}
-                        </Button>
-                    </div>
                 </div>
-            </AppModal>
-        )
+            </div>
+        </AppModal>
     );
 }

@@ -1,1 +1,0 @@
-import{j as s,L as a}from"./app-kk-d1c38.js";function r(){return s.jsxs(s.Fragment,{children:[s.jsx(a,{title:"Criar CasoEquipa"}),s.jsx("div",{className:"p-6",children:s.jsx("h1",{className:"text-2xl font-semibold",children:"Criar CasoEquipa"})})]})}export{r as default};

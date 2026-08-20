@@ -167,6 +167,14 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:caso-equipa.delete')
         ->name('caso-equipas.destroy');
 
+    Route::get('/cdts/create', [CDTController::class, 'create'])
+        ->middleware('can:c-d-t.create')
+        ->name('cdts.create');
+
+    Route::post('/cdts/doentes', [CDTController::class, 'storeDoente'])
+        ->middleware('can:doente.create')
+        ->name('cdts.doentes.store');
+
     Route::resource('cdts', CDTController::class)->only(['index',  'store', 'show',  'update', 'destroy']);
 });
 

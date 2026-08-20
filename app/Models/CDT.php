@@ -12,6 +12,9 @@ class CDT extends Model
 
     protected $table = 'cdts';
 
+    // a tabela cdts não tem colunas created_at/updated_at
+    public $timestamps = false;
+
     protected $fillable = [
         'episodio_id',
         'data_pedido',
@@ -19,6 +22,14 @@ class CDT extends Model
         'decisao',
         'estadio_clinico',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'data_pedido' => 'date:Y-m-d',
+            'data_discussao' => 'date:Y-m-d',
+        ];
+    }
 
     public function episodio()
     {

@@ -48,6 +48,8 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'created_doente' => fn () => $request->session()->get('created_doente'),
+                'created_episodio' => fn () => $request->session()->get('created_episodio'),
+                'created_cdt' => fn () => $request->session()->get('created_cdt'),
             ],
         ]);
     }

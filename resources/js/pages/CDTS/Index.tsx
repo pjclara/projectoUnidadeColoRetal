@@ -43,11 +43,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 export default function Index({ cdts }: Props) {
-        const [showModal, setShowModal] = useState(false);
         const [editing, setEditing] = useState<CDTItem | null>(null);
         const [deleting, setDeleting] = useState<CDTItem | null>(null);
         const [deletingLoading, setDeletingLoading] = useState(false);
-        const [openModal, setOpenModal] = useState(false);
     
         const columns: AppTableColumn<CDTItem>[] = [
             {
@@ -108,10 +106,7 @@ export default function Index({ cdts }: Props) {
                           description="Gestão e consulta de CDTs"
                           action={
                               <Button
-                                  onClick={() => {
-                                      setEditing(null);
-                                      setOpenModal(true);
-                                  }}
+                                  onClick={() => router.get('/cdts/create')}
                               >
                                   Novo CDT
                               </Button>

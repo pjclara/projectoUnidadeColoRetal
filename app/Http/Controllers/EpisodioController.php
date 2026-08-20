@@ -113,7 +113,7 @@ public function index()
                 ->through(fn($episodio) => [
                     'id' => $episodio->id,
                     'doente_id' => $episodio->doente_id,
-                    'data_episodio' => $episodio->data_episodio?->format('Y-m-d'),
+                    'data_diagnostico' => $episodio->data_diagnostico?->format('Y-m-d'),
                     'tipo' => $episodio->tipo,
                     'estado' => $episodio->estado,
                     'motivo' => $episodio->motivo,
@@ -137,9 +137,19 @@ public function index()
     {
         $validated = $request->validated();
 
-        $this->service->create($validated, $request->user()->id);
+        $episodio = $this->service->create($validated, $request->user()->id);
 
-        return back()->with('success', 'Episódio criado com sucesso.');
+        return back()
+            ->with('success', 'Episódio criado com sucesso.')
+            ->with('created_episodio', [
+                'id' => $episodio->id,
+                'doente_id' => $episodio->doente_id,
+                'tipo' => $episodio->tipo,
+                'diagnostico' => $episodio->diagnostico,
+                'cid10' => $episodio->cid10,
+                'data_diagnostico' => $episodio->data_diagnostico?->format('Y-m-d'),
+                'estado' => $episodio->estado,
+            ]);
     }
 
     /**

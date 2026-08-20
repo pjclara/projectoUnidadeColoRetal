@@ -1,9 +1,8 @@
-import { AppInputField } from '@/components/app/app-input-field';
-import { AppSelectField } from '@/components/app/app-input-select';
 import { AppModalForm } from '@/components/app/app-modal-form';
 import { router } from '@inertiajs/react';
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { DoenteForm } from './DoenteForm';
 
 interface Doente {
     id: number;
@@ -131,52 +130,14 @@ export default function CreateOrUpdateDoente({ doente, onClose, endpoint = '/doe
         <AppModalForm
             open
             title={isEdit ? 'Editar Doente' : 'Novo Doente'}
-            description={isEdit ? 'Atualize os dados do doente.' : 'Introduza os dados de identificação do doente.'}
+            description={isEdit ? 'Atualize os dados do doente.' : 'Introduza os dados do doente.'}
             onClose={onClose}
             onSubmit={submit}
             loading={loading}
-            maxWidth="5xl"
+            maxWidth="3xl"
             submitLabel={isEdit ? 'Guardar alterações' : 'Criar doente'}
         >
-            <div className="grid gap-6 md:grid-cols-2">
-                <AppInputField
-                    label="Nome"
-                    value={form.nome}
-                    onChange={(value) => updateField('nome', value)}
-                    error={errors.nome}
-                    placeholder="Nome completo"
-                />
-
-                <AppInputField
-                    label="PU"
-                    error={errors.pu}
-                    type="number"
-                    value={form.pu}
-                    onChange={(value: string | number) => updateField('pu', String(value))}
-                    placeholder="Número PU"
-                />
-
-                <AppInputField
-                    label="Data de nascimento"
-                    error={errors.data_nascimento}
-                    type="date"
-                    value={form.data_nascimento}
-                    onChange={(value: string) => updateField('data_nascimento', value)}
-                />
-
-                <AppSelectField
-                    label="Sexo"
-                    value={form.sexo}
-                    onChange={(value: string | number) => updateField('sexo', String(value))}
-                    error={errors.sexo}
-                    options={[
-                        { value: '', label: 'Selecionar' },
-                        { value: 'M', label: 'Masculino' },
-                        { value: 'F', label: 'Feminino' },
-                        { value: 'O', label: 'Outro' },
-                    ]}
-                />
-            </div>
+            <DoenteForm form={form} errors={errors} onChange={updateField} disabled={loading} />
         </AppModalForm>
     );
 }

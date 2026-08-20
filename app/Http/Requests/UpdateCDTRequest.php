@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCDTRequest extends FormRequest
@@ -12,7 +11,7 @@ class UpdateCDTRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()?->can('c-d-t.update') ?? false;
     }
 
     /**
@@ -23,7 +22,10 @@ class UpdateCDTRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'data_pedido' => ['nullable', 'date'],
+            'data_discussao' => ['nullable', 'date'],
+            'decisao' => ['nullable', 'string'],
+            'estadio_clinico' => ['nullable', 'string', 'max:40'],
         ];
     }
 }

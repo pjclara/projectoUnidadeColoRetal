@@ -17,19 +17,19 @@ class EpisodioService
     public function forDoente(int $doenteId, int $perPage = 10): LengthAwarePaginator
     {
         return Episodio::query()
-            ->with('utilizador:id,name')
+            ->with('user:id,name')
             ->where('doente_id', $doenteId)
-            ->latest('data_episodio')
+            ->latest('data_diagnostico')
             ->latest('id')
             ->paginate($perPage, ['*'], 'episodios_page')
             ->withQueryString();
     }
 
-    public function create(array $data, int $utilizadorId): Episodio
+    public function create(array $data, int $userId): Episodio
     {
         return Episodio::create([
             ...$data,
-            'utilizador_id' => $utilizadorId,
+            'user_id' => $userId,
         ]);
     }
 

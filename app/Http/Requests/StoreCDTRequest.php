@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCDTRequest extends FormRequest
@@ -12,7 +11,7 @@ class StoreCDTRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()?->can('c-d-t.create') ?? false;
     }
 
     /**
@@ -23,7 +22,11 @@ class StoreCDTRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'episodio_id' => ['required', 'integer', 'exists:episodios,id'],
+            'data_pedido' => ['nullable', 'date'],
+            'data_discussao' => ['nullable', 'date'],
+            'decisao' => ['nullable', 'string'],
+            'estadio_clinico' => ['nullable', 'string', 'max:40'],
         ];
     }
 }

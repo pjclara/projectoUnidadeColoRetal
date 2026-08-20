@@ -1,12 +1,10 @@
-import { AppFormField } from '@/components/app/app-form-field';
 import { AppModalForm } from '@/components/app/app-modal-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { DoenteForm } from '@/pages/Doentes/DoenteForm';
 import { router } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
 import type { Doente, Pagination } from '../types';
-import { AppSelectField } from '@/components/app/app-input-select';
-import { AppInputField } from '@/components/app/app-input-field';
 
 type Props = {
     doentes: Doente[] | Pagination<Doente>;
@@ -121,60 +119,7 @@ export function DoenteStep({ doentes, onSelect, onCreate }: Props) {
                 maxWidth="3xl"
                 submitLabel="Criar doente"
             >
-                <div className="grid gap-6 md:grid-cols-2">
-                    <AppFormField label="Nome">
-                        <Input
-                            value={form.nome}
-                            onChange={(event) =>
-                                setForm({
-                                    ...form,
-                                    nome: event.target.value,
-                                })
-                            }
-                        />
-                    </AppFormField>
-
-                    <AppFormField label="PU">
-                        <Input
-                            value={form.pu}
-                            onChange={(event) =>
-                                setForm({
-                                    ...form,
-                                    pu: event.target.value,
-                                })
-                            }
-                        />
-                    </AppFormField>
-
-                    <AppInputField
-                        label="Data de nascimento"
-                        type="date"
-                        value={form.data_nascimento}
-                        onChange={(value) =>
-                            setForm({
-                                ...form,
-                                data_nascimento: value,
-                            })
-                        }
-                    />
-
-                    <AppSelectField
-                        label="Sexo"
-                        value={form.sexo}
-                        onChange={(value) =>
-                            setForm({
-                                ...form,
-                                sexo: String(value),
-                            })
-                        }
-                        options={[
-                            { value: '', label: 'Selecionar' },
-                            { value: 'M', label: 'Masculino' },
-                            { value: 'F', label: 'Feminino' },
-                            { value: 'O', label: 'Outro' },
-                        ]}
-                    />
-                </div>
+                <DoenteForm form={form} errors={{}} onChange={(field, value) => setForm((current) => ({ ...current, [field]: value }))} />
             </AppModalForm>
         </div>
     );
