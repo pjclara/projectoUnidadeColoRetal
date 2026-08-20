@@ -12,14 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tratamento', function (Blueprint $table) {
-            $table->bigInteger('tratamento_id', true);
-            $table->char('episodio_id', 36)->index('idx_tratamento_ep');
+            $table->id();
+            $table->foreignId('episodio_id')->constrained()->index('idx_tratamento_ep');
             $table->string('tipo', 40)->index('idx_tratamento_tipo');
             $table->date('data_proposta')->nullable();
             $table->date('data_inicio')->nullable();
             $table->date('data_fim')->nullable();
             $table->string('intencao', 30)->nullable();
             $table->text('observacoes')->nullable();
+            $table->timestamps();
+
+            $table->index(['episodio_id', 'tipo'], 'idx_tratamento_ep_tipo');
         });
     }
 

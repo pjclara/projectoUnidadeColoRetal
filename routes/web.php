@@ -7,6 +7,7 @@ use App\Http\Controllers\CDTController;
 use App\Http\Controllers\DoenteController;
 use App\Http\Controllers\EpisodioController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\TratamentoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -221,8 +222,35 @@ Route::middleware('auth')->group(function () {
     Route::delete('/episodios/{episodio}', [EpisodioController::class, 'destroy'])
         ->middleware('can:episodio.delete')
         ->name('episodios.destroy');
+});
 
-    Route::get('/atendimentos/novo', [AtendimentoController::class, 'create'])
-        ->middleware('can:doente.view')
-        ->name('atendimentos.legacy');
+// Tratamento Module
+Route::middleware('auth')->group(function () {
+    Route::get('/tratamentos', [TratamentoController::class, 'index'])
+        ->middleware('can:tratamento.view')
+        ->name('tratamentos.index');
+
+    Route::get('/tratamentos/create', [TratamentoController::class, 'create'])
+        ->middleware('can:tratamento.create')
+        ->name('tratamentos.create');
+
+    Route::post('/tratamentos', [TratamentoController::class, 'store'])
+        ->middleware('can:tratamento.create')
+        ->name('tratamentos.store');
+
+    Route::get('/tratamentos/{tratamento}', [TratamentoController::class, 'show'])
+        ->middleware('can:tratamento.view')
+        ->name('tratamentos.show');
+
+    Route::get('/tratamentos/{tratamento}/edit', [TratamentoController::class, 'edit'])
+        ->middleware('can:tratamento.update')
+        ->name('tratamentos.edit');
+
+    Route::put('/tratamentos/{tratamento}', [TratamentoController::class, 'update'])
+        ->middleware('can:tratamento.update')
+        ->name('tratamentos.update');
+
+    Route::delete('/tratamentos/{tratamento}', [TratamentoController::class, 'destroy'])
+        ->middleware('can:tratamento.delete')
+        ->name('tratamentos.destroy');
 });

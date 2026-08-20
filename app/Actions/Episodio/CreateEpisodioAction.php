@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\{Episodio}s;
+namespace App\Actions\Episodio;
 
 use App\Models\Episodio;
 

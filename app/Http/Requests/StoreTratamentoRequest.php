@@ -2,16 +2,17 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCDTRequest extends FormRequest
+class StoreTratamentoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->user()?->can('c-d-t.create') ?? false;
+        return false;
     }
 
     /**
@@ -22,11 +23,7 @@ class StoreCDTRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'episodio_id' => ['required', 'integer', 'exists:episodios,id'],
-            'data_pedido' => ['required', 'date'],
-            'data_discussao' => ['required','after_or_equal:data_pedido', 'date'],
-            'decisao' => ['required', 'string'],
-            'estadio_clinico' => ['required', 'string', 'max:40'],
+            //
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\{CDT}s;
+namespace App\Actions\CDT;
 
 use App\Models\CDT;
 

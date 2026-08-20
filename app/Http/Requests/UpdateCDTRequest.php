@@ -22,10 +22,10 @@ class UpdateCDTRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'data_pedido' => ['nullable', 'date'],
-            'data_discussao' => ['nullable', 'date'],
-            'decisao' => ['nullable', 'string'],
-            'estadio_clinico' => ['nullable', 'string', 'max:40'],
+            'data_pedido' => ['required', 'date'],
+            'data_discussao' => ['required','after_or_equal:data_pedido', 'date'],
+            'decisao' => ['required', 'string'],
+            'estadio_clinico' => ['required', 'string', 'max:40'],
         ];
     }
 }

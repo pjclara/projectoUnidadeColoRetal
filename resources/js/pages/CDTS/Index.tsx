@@ -13,9 +13,8 @@ type FormData = {
     id: number;
     data_pedido: string;
     data_discussao: string;
-    estadio_clinico: string;
+    estadio_clinico: string | number;
     decisao: string;
-    profissional_id: number | string;
 };
 
 type CDTItem = {
@@ -61,7 +60,6 @@ export default function Index({ cdts }: Props) {
         data_discussao: '',
         estadio_clinico: '',
         decisao: '',
-        profissional_id: '',
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -84,7 +82,6 @@ export default function Index({ cdts }: Props) {
             data_discussao: normalizeDate(cdt.data_discussao),
             estadio_clinico: cdt.estadio_clinico ?? '',
             decisao: cdt.decisao ?? '',
-            profissional_id: cdt.doente?.id ?? '',
         });
 
         setErrors({});
@@ -190,6 +187,7 @@ export default function Index({ cdts }: Props) {
                 errors={errors}
                 onFieldChange={updateField}
                 onSubmit={submitEdit}
+                processing={saving}
             />
         </AppLayout>
     );
