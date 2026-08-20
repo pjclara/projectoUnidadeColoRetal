@@ -21,8 +21,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
 
 // Doente Module
 Route::middleware('auth')->group(function () {
@@ -175,7 +175,21 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:doente.create')
         ->name('cdts.doentes.store');
 
-    Route::resource('cdts', CDTController::class)->only(['index',  'store', 'show',  'update', 'destroy']);
+    Route::post('/cdts', [CDTController::class, 'store'])
+        ->middleware('can:c-d-t.create')
+        ->name('cdts.store');
+
+    Route::put('/cdts/{cDT}', [CDTController::class, 'update'])
+        ->middleware('can:c-d-t.update')
+        ->name('cdts.update');
+
+    Route::get('/cdts/{cDT}', [CDTController::class, 'show'])
+        ->middleware('can:c-d-t.view')
+        ->name('cdts.show');
+
+    Route::get('/cdts', [CDTController::class, 'index'])
+        ->middleware('can:c-d-t.view')
+        ->name('cdts.index');
 });
 
 // Episodio Module
@@ -211,5 +225,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/atendimentos/novo', [AtendimentoController::class, 'create'])
         ->middleware('can:doente.view')
         ->name('atendimentos.legacy');
-
 });

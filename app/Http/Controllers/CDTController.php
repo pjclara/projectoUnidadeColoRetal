@@ -140,9 +140,8 @@ class CDTController extends Controller
     {
         $this->service->update($cDT, $request->validated());
 
-        return redirect()
-            ->route('cdts.show', $cDT)
-            ->with('success', 'CDT atualizada com sucesso.');
+        return back()
+            ->with('success', 'CDT atualizada com sucesso.');    
     }
 
     /**

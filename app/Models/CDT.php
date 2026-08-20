@@ -35,4 +35,16 @@ class CDT extends Model
     {
         return $this->belongsTo(Episodio::class);
     }
+
+    public function doente()
+    {
+        return $this->hasOneThrough(
+            Doente::class,
+            Episodio::class,
+            'id', // Foreign key on the Episodio table
+            'id', // Foreign key on the Doente table
+            'episodio_id', // Local key on the CDT table
+            'doente_id' // Local key on the Episodio table
+        );
+    }
 }
