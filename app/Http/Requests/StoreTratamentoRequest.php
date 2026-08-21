@@ -12,7 +12,7 @@ class StoreTratamentoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,13 @@ class StoreTratamentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'episodio_id' => ['required', 'integer', 'exists:episodios,id'],
+            'tipo'=> ['required', 'string'],
+            'data_proposta'=> ['required', 'date'],
+            'data_inicio'=> ['required', 'date'],
+            'data_fim'=> ['required', 'date'],
+            'intencao'=> ['required', 'string'],
+            'observacoes'=> ['required', 'string']
         ];
     }
 }

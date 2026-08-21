@@ -39,4 +39,17 @@ class EpisodioService
 
         return $episodio->refresh();
     }
+    
+    public function serializeEpisodio(Episodio $episodio): array
+    {
+        return [
+            'id' => $episodio->id,
+            'doente_id' => $episodio->doente_id,
+            'tipo' => $episodio->tipo,
+            'diagnostico' => $episodio->diagnostico,
+            'cid10' => $episodio->cid10,
+            'data_diagnostico' => $episodio->data_diagnostico?->format('Y-m-d'),
+            'estado' => $episodio->estado,
+        ];
+    }
 }
