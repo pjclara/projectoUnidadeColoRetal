@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cirurgia', function (Blueprint $table) {
-            $table->char('cirurgia_id', 36)->primary();
-            $table->char('episodio_id', 36)->index('idx_cirurgia_ep');
-            $table->bigInteger('caso_planeado_id')->nullable()->index('idx_cirurgia_caso');
+        Schema::create('cirurgias', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('episodio_id')->constrained('episodios')->onDelete('cascade');
+            $table->foreignId('caso_planeado_id')->nullable()->constrained('casos_planeados')->onDelete('set null');
             $table->date('data_cirurgia')->index('idx_cirurgia_data');
             $table->string('polo', 30)->nullable();
             $table->string('sala', 20)->nullable();
@@ -27,7 +27,8 @@ return new class extends Migration
             $table->boolean('ressecao_curativa')->nullable();
             $table->boolean('colostomia_definitiva')->nullable();
             $table->boolean('anastomose')->nullable();
-            $table->bigInteger('eras_id')->nullable()->unique('eras_id');
+            $table->foreignId('eras_id')->nullable()->constrained('avaliacao_eras')->onDelete('set null');
+            $table->string('observacoes', 500)->nullable();
         });
     }
 
@@ -36,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cirurgia');
+        Schema::dropIfExists('cirurgias');
     }
 };

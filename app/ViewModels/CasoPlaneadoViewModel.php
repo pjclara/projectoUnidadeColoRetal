@@ -4,6 +4,7 @@ namespace App\ViewModels;
 
 use App\Models\CasoPlaneado;
 
+class CasoPlaneadoViewModel
 {
     public function __construct(
         protected CasoPlaneado $model

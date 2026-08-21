@@ -50,6 +50,7 @@ class MakeModule extends Command
         $this->newLine();
 
         $this->createLaravelResources();
+        $this->createModelFillable();
         $this->createRequests();
         $this->createPolicy();
 
@@ -172,17 +173,17 @@ class MakeModule extends Command
         $this->info('→ Actions');
 
         $this->writeFile(
-            app_path("Actions/$this->moduleName + 's'/Create{$this->moduleName}Action.php"),
+            app_path("Actions/{$this->moduleName}/Create{$this->moduleName}Action.php"),
             $this->createActionStub()
         );
 
         $this->writeFile(
-            app_path("Actions/$this->moduleName + 's'/Update{$this->moduleName}Action.php"),
+            app_path("Actions/{$this->moduleName}/Update{$this->moduleName}Action.php"),
             $this->updateActionStub()
         );
 
         $this->writeFile(
-            app_path("Actions/$this->moduleName + 's'/Delete{$this->moduleName}Action.php"),
+            app_path("Actions/{$this->moduleName}/Delete{$this->moduleName}Action.php"),
             $this->deleteActionStub()
         );
     }
@@ -447,6 +448,7 @@ namespace App\ViewModels;
 
 use App\Models\\{$this->moduleName};
 
+class {$this->moduleName}ViewModel
 {
     public function __construct(
         protected {$this->moduleName} \$model
@@ -490,6 +492,9 @@ class {$this->moduleName}PermissionsSeeder extends Seeder
         foreach (\$permissions as \$permission) {
             Permission::findOrCreate(\$permission);
         }
+
+        \$adminRole = \Spatie\Permission\Models\Role::findByName('admin');
+        \$adminRole->givePermissionTo(\$permissions);
     }
 }
 PHP;
@@ -727,6 +732,95 @@ Route::middleware('auth')->group(function () {
 });
 PHP;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Preencher $fillable no Model
+    |--------------------------------------------------------------------------
+    */
+
+    protected function createModelFillable(): void
+    {
+        $this->info('→ A preencher $fillable no Model');
+
+        // 1. Encontrar migration do módulo
+        $migrationPath = database_path('migrations');
+        $files = File::files($migrationPath);
+
+        $migrationFile = null;
+
+        foreach ($files as $file) {
+            if (str_contains($file->getFilename(), strtolower($this->moduleName))) {
+                $migrationFile = $file->getPathname();
+                break;
+            }
+        }
+
+        if (! $migrationFile) {
+            $this->warn("⚠ Não encontrei migration para {$this->moduleName}. Ignorar fillable.");
+            return;
+        }
+
+        // 2. Ler conteúdo da migration
+        $contents = File::get($migrationFile);
+
+        // Captura todos os $table->tipo('campo')
+        preg_match_all('/\$table->\w+\(\'(.*?)\'\)/', $contents, $matches);
+
+        $columns = [];
+
+        foreach ($matches[1] as $column) {
+            if (! in_array($column, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                $columns[] = $column;
+            }
+        }
+
+        if (empty($columns)) {
+            $this->warn("⚠ Migration encontrada, mas sem colunas utilizáveis.");
+            return;
+        }
+
+        // 3. Construir string do fillable
+        $fillableString = "protected \$fillable = [\n        '"
+            . implode("',\n        '", $columns)
+            . "',\n    ];";
+
+        // 4. Caminho do Model
+        $modelPath = app_path("Models/{$this->moduleName}.php");
+
+        if (! File::exists($modelPath)) {
+            $this->warn("⚠ Model {$this->moduleName} ainda não existe. Ignorar fillable.");
+            return;
+        }
+
+        $modelContents = File::get($modelPath);
+
+        // 5. Inserir ou substituir fillable
+        if (str_contains($modelContents, 'protected $fillable')) {
+            // Substituir
+            $modelContents = preg_replace(
+                '/protected \$fillable = 
+
+\[.*?\]
+
+;/s',
+                $fillableString,
+                $modelContents
+            );
+        } else {
+            // Inserir logo após a declaração da classe
+            $modelContents = preg_replace(
+                '/class ' . $this->moduleName . ' extends Model\s*\{/',
+                "class {$this->moduleName} extends Model\n{\n    {$fillableString}\n",
+                $modelContents
+            );
+        }
+
+        File::put($modelPath, $modelContents);
+
+        $this->info('✔ $fillable gerado com sucesso');
+    }
+
 
     /*
     |--------------------------------------------------------------------------

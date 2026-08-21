@@ -254,3 +254,26 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:tratamento.delete')
         ->name('tratamentos.destroy');
 });
+
+// Sala Module
+Route::middleware('auth')->group(function () {
+    Route::get('/salas', [\App\Http\Controllers\SalaController::class, 'index'])
+        ->middleware('can:sala.view')
+        ->name('salas.index');
+
+    Route::post('/salas', [\App\Http\Controllers\SalaController::class, 'store'])
+        ->middleware('can:sala.create')
+        ->name('salas.store');
+
+    Route::get('/salas/{sala}', [\App\Http\Controllers\SalaController::class, 'show'])
+        ->middleware('can:sala.view')
+        ->name('salas.show');
+
+    Route::put('/salas/{sala}', [\App\Http\Controllers\SalaController::class, 'update'])
+        ->middleware('can:sala.update')
+        ->name('salas.update');
+
+    Route::delete('/salas/{sala}', [\App\Http\Controllers\SalaController::class, 'destroy'])
+        ->middleware('can:sala.delete')
+        ->name('salas.destroy');
+});

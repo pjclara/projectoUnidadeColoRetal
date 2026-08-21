@@ -2,12 +2,12 @@
 
 namespace App\ViewModels;
 
-use App\Models\CDT;
+use App\Models\Sala;
 
-class CDTViewModel
+class SalaViewModel
 {
     public function __construct(
-        protected CDT $model
+        protected Sala $model
     ) {}
 
     public function toArray(): array

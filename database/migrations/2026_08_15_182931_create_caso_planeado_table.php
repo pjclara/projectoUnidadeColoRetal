@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('caso_planeado', function (Blueprint $table) {
+        Schema::create('casos_planeados', function (Blueprint $table) {
             $table->id();
             $table->foreignId('slot_id')->constrained('slots')->onDelete('cascade')->index('idx_caso_slot');
             $table->foreignId('episodio_id')->constrained('episodios')->onDelete('cascade')->index('idx_caso_ep');
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('caso_planeado');
+        Schema::dropIfExists('casos_planeados');
     }
 };

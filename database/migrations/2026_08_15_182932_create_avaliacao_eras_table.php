@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('avaliacao_eras', function (Blueprint $table) {
-            $table->bigInteger('avaliacao_id', true);
-            $table->char('episodio_id', 36);
+            $table->id();
+            $table->foreignId('episodio_id')->constrained('episodios')->onDelete('cascade');
             $table->date('data_consulta');
             $table->string('aptidao', 30)->nullable();
             $table->smallInteger('asa')->nullable()->index('idx_eras_asa');

@@ -4,6 +4,7 @@ namespace App\ViewModels;
 
 use App\Models\CasoEquipa;
 
+class CasoEquipaViewModel
 {
     public function __construct(
         protected CasoEquipa $model

@@ -115,8 +115,9 @@ export default function Index({ tratamentos }: Props) {
     }
 
     const columns: AppTableColumn<TratamentoItem>[] = [
-        { label: 'ID', key: 'id' },
-        { label: 'Utente', key: 'utente',             render: (tratamento) => (
+        { label: '#', key: 'id' },
+        { label: 'Utente', key: 'utente',             
+            render: (tratamento) => (
                 <div>
                     {tratamento.doente ? (
                         <div>

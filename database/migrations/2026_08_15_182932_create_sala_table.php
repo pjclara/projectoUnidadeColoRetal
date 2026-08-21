@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sala', function (Blueprint $table) {
-            $table->bigInteger('sala_id', true);
+        Schema::create('salas', function (Blueprint $table) {
+            $table->id();
             $table->string('polo', 30)->index('idx_sala_polo');
             $table->string('codigo', 20);
             $table->string('designacao', 80)->nullable();
             $table->boolean('ativa')->default(true);
+            $table->timestamps();
 
-            $table->unique(['polo', 'codigo'], 'polo');
+            $table->unique(['polo', 'codigo'], 'idx_sala_polo_codigo');
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sala');
+        Schema::dropIfExists('salas');
     }
 };
