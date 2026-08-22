@@ -4,11 +4,11 @@ import { AppFormField } from './app-form-field';
 
 interface AppInputFieldProps {
     label: string;
-    value: string;
+    value: string | number;
     onChange: (value: string) => void;
     error?: string;
     placeholder?: string;
-    type?: 'text' | 'email' | 'password' | 'date' | 'number';
+    type?: 'text' | 'email' | 'password' | 'date'   | 'number' | 'time';
     disabled?: boolean;
     required?: boolean;
     className?: string;

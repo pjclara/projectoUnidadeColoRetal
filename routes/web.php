@@ -277,3 +277,34 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:sala.delete')
         ->name('salas.destroy');
 });
+
+// Slot Module
+Route::middleware('auth')->group(function () {
+    Route::get('/slots', [\App\Http\Controllers\SlotController::class, 'index'])
+        ->middleware('can:slot.view')
+        ->name('slots.index');
+
+    Route::get('/slots/create', [\App\Http\Controllers\SlotController::class, 'create'])
+        ->middleware('can:slot.create')
+        ->name('slots.create');
+
+    Route::post('/slots', [\App\Http\Controllers\SlotController::class, 'store'])
+        ->middleware('can:slot.create')
+        ->name('slots.store');
+
+    Route::get('/slots/{slot}', [\App\Http\Controllers\SlotController::class, 'show'])
+        ->middleware('can:slot.view')
+        ->name('slots.show');
+
+    Route::get('/slots/{slot}/edit', [\App\Http\Controllers\SlotController::class, 'edit'])
+        ->middleware('can:slot.update')
+        ->name('slots.edit');
+
+    Route::put('/slots/{slot}', [\App\Http\Controllers\SlotController::class, 'update'])
+        ->middleware('can:slot.update')
+        ->name('slots.update');
+
+    Route::delete('/slots/{slot}', [\App\Http\Controllers\SlotController::class, 'destroy'])
+        ->middleware('can:slot.delete')
+        ->name('slots.destroy');
+});

@@ -703,31 +703,31 @@ TSX;
 // {$this->moduleName} Module
 Route::middleware('auth')->group(function () {
     Route::get('/{$route}', [\\{$controller}::class, 'index'])
-        ->middleware('permission:{$prefix}.view')
+        ->middleware('can:{$prefix}.view')
         ->name('{$route}.index');
 
     Route::get('/{$route}/create', [\\{$controller}::class, 'create'])
-        ->middleware('permission:{$prefix}.create')
+        ->middleware('can:{$prefix}.create')
         ->name('{$route}.create');
 
     Route::post('/{$route}', [\\{$controller}::class, 'store'])
-        ->middleware('permission:{$prefix}.create')
+        ->middleware('can:{$prefix}.create')
         ->name('{$route}.store');
 
     Route::get('/{$route}/{{$this->variable}}', [\\{$controller}::class, 'show'])
-        ->middleware('permission:{$prefix}.view')
+        ->middleware('can:{$prefix}.view')
         ->name('{$route}.show');
 
     Route::get('/{$route}/{{$this->variable}}/edit', [\\{$controller}::class, 'edit'])
-        ->middleware('permission:{$prefix}.update')
+        ->middleware('can:{$prefix}.update')
         ->name('{$route}.edit');
 
     Route::put('/{$route}/{{$this->variable}}', [\\{$controller}::class, 'update'])
-        ->middleware('permission:{$prefix}.update')
+        ->middleware('can:{$prefix}.update')
         ->name('{$route}.update');
 
     Route::delete('/{$route}/{{$this->variable}}', [\\{$controller}::class, 'destroy'])
-        ->middleware('permission:{$prefix}.delete')
+        ->middleware('can:{$prefix}.delete')
         ->name('{$route}.destroy');
 });
 PHP;

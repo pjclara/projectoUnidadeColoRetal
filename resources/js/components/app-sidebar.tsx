@@ -109,6 +109,11 @@ const planeamentoNavItems: NavItem[] = [
         url: '/salas',
         icon: Folder,
     },
+        {
+        title: 'Slots',
+        url: '/slots',
+        icon: Folder,
+    },
     {
         title: 'Equipa',
         url: '/equipa',
