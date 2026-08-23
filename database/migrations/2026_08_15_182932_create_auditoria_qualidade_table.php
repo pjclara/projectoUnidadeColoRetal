@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('auditoria_qualidade', function (Blueprint $table) {
-            $table->bigInteger('auditoria_id', true);
+            $table->id();
             $table->string('codigo_indicador', 30)->index('idx_auditoria_codigo');
             $table->date('periodo_inicio');
             $table->date('periodo_fim');
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('fonte', 100)->nullable();
             $table->bigInteger('responsavel_id')->nullable()->index('responsavel_id');
             $table->text('notas')->nullable();
+            $table->timestamps();
 
             $table->unique(['codigo_indicador', 'periodo_inicio', 'periodo_fim'], 'codigo_indicador');
             $table->index(['periodo_inicio', 'periodo_fim'], 'idx_auditoria_periodo');

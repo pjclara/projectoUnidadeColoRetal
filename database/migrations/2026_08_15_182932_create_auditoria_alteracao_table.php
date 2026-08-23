@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('auditoria_alteracao', function (Blueprint $table) {
-            $table->bigInteger('auditoria_id', true);
+            $table->id();
             $table->string('tabela', 80)->index('idx_auditoria_tabela');
             $table->text('chave_registo');
             $table->char('operacao', 1);
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->json('antes')->nullable();
             $table->json('depois')->nullable();
             $table->text('motivo')->nullable();
+            $table->timestamps();
         });
     }
 

@@ -130,11 +130,11 @@ export default function Index({ casosPlaneados, users, slots }: Props) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="CasoPlaneados" />
+            <Head title="CasosPlaneados" />
 
             <div className="p-6">
                 <AppPageHeader
-                    title="CasoPlaneados"
+                    title="Casos Planeados"
                     description="Gestão e consulta de casos planeados"
                     action={
                         <Button type="button" size="sm" onClick={() => router.get('/caso-planeados/create')}>

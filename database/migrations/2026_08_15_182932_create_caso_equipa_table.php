@@ -15,6 +15,7 @@ return new class extends Migration
             $table->foreignId('caso_planeado_id')->constrained('casos_planeados')->onDelete('cascade')->index('idx_equipa_caso');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->index('idx_equipa_profissional');
             $table->string('funcao', 30);
+            $table->timestamps();
 
             $table->primary(['caso_planeado_id', 'user_id', 'funcao']);
         });

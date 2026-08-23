@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('seguimento', function (Blueprint $table) {
-            $table->bigInteger('seguimento_id', true);
-            $table->char('episodio_id', 36);
+            $table->id();
+            $table->foreignId('episodio_id')->constrained('episodios')->onDelete('cascade')->index('idx_seg_ep');
             $table->date('data_avaliacao');
             $table->string('estado_vital', 20)->nullable();
             $table->boolean('recidiva_local')->nullable();
             $table->boolean('readmissao')->nullable();
             $table->boolean('reoperacao')->nullable();
             $table->text('observacoes')->nullable();
-
+            $table->timestamps();
             $table->unique(['episodio_id', 'data_avaliacao'], 'episodio_id');
             $table->index(['episodio_id', 'data_avaliacao'], 'idx_seg_ep_data');
         });

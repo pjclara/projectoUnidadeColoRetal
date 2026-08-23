@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('dias_prehabilitacao')->nullable();
             $table->text('notas')->nullable();
             $table->string('fonte', 80)->nullable();
+            $table->timestamps();
 
             $table->unique(['episodio_id', 'data_consulta'], 'episodio_id');
             $table->index(['episodio_id', 'data_consulta'], 'idx_eras_ep_data');

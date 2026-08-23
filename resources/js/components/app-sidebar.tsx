@@ -153,11 +153,6 @@ const administracaoNavItems: NavItem[] = [
         icon: Users,
     },
     {
-        title: 'Profissionais',
-        url: '/profissionais',
-        icon: Stethoscope,
-    },
-    {
         title: 'Importações',
         url: '/importacoes',
         icon: FileInput,

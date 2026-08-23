@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('atividade_diaria', function (Blueprint $table) {
-            $table->bigInteger('atividade_id', true);
+            $table->id('id');
             $table->date('data')->index('idx_atividade_data');
-            $table->bigInteger('profissional_id')->nullable()->index('idx_atividade_profissional');
+            $table->foreignId('profissional_id')->constrained('users')->onDelete('cascade');
             $table->string('tipo', 40);
             $table->string('polo', 30)->nullable();
             $table->string('periodo', 30)->nullable();
             $table->string('detalhe', 200)->nullable();
             $table->string('fonte', 80)->nullable();
-                        $table->timestamps();
+            $table->timestamps();
 
 
             $table->unique(['data', 'profissional_id', 'tipo', 'periodo'], 'data');
