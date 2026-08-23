@@ -16,9 +16,10 @@ type Props = {
     onSelect: (episodio: Episodio) => void;
     onBack: () => void;
     onContinue: () => void;
+    url: string;
 };
 
-export function StepEpisodio({ doente, episodios, profissionais, selectedEpisodio, onSelect, onBack, onContinue }: Props) {
+export function StepEpisodio({ doente, episodios, profissionais, selectedEpisodio, onSelect, onBack, onContinue, url }: Props) {
     const [showCreate, setShowCreate] = useState(false);
 
     const episodiosList = episodios?.data ?? [];
@@ -97,7 +98,6 @@ export function StepEpisodio({ doente, episodios, profissionais, selectedEpisodi
 
             {showCreate && (
                 <CreateOrUpdateEpisodio
-                    doentes={[]}
                     profissionais={profissionais}
                     doenteId={doente.id}
                     onClose={() => setShowCreate(false)}

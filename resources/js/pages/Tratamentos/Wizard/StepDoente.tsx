@@ -19,9 +19,10 @@ type Props = {
     onSelect: (doente: Doente) => void;
     onBack: () => void;
     onContinue: () => void;
+    url: string;
 };
 
-export function StepDoente({ doentes, filters: initialFilters, selectedDoente, onSelect, onContinue }: Props) {
+export function StepDoente({ doentes, filters: initialFilters, selectedDoente, onSelect, onContinue, url }: Props) {
     const [filters, setFilters] = useState(initialFilters);
     const [showCreate, setShowCreate] = useState(false);
     const [searching, setSearching] = useState(false);
@@ -30,7 +31,7 @@ export function StepDoente({ doentes, filters: initialFilters, selectedDoente, o
         event.preventDefault();
         setSearching(true);
 
-        router.get('/cdts/create', filters, {
+        router.get(url, filters, {
             preserveState: true,
             preserveScroll: true,
             replace: true,
@@ -42,7 +43,7 @@ export function StepDoente({ doentes, filters: initialFilters, selectedDoente, o
         const emptyFilters: CDTFilters = { search: '', pu: '', nome: '', data_nascimento: '' };
         setFilters(emptyFilters);
 
-        router.get('/cdts/create', {}, { preserveState: true, preserveScroll: true, replace: true });
+        router.get(url, {}, { preserveState: true, preserveScroll: true, replace: true });
     };
 
     const columns: AppTableColumn<Doente>[] = [

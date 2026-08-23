@@ -20,6 +20,20 @@ export type Doente = {
     sexo: string | null;
 };
 
+export type Slot = {
+    id: number;
+    nome_slot: string;
+    episodio_id?: number | null;
+    ordem?: number | null;
+    procedimento_previsto?: string | null;
+    duracao_prevista_min?: number | null;
+    anestesia_apto?: boolean | null;
+    cama_destino?: string | null;
+    internamento_em?: string | null;
+    cirurgiao_id?: number | null;
+    observacoes?: string | null;
+};
+
 export type Episodio = {
     id: number;
     doente_id: number;
@@ -39,9 +53,10 @@ export type CDT = {
     estadio_clinico?: string | null;
 };
 
-export type Profissional = {
+export type User = {
     id: number;
     name: string;
+    email: string;
 };
 
 export type CDTFilters = {
@@ -66,4 +81,20 @@ export type DoenteFilters = {
     pu: string; 
     nome: string;
     data_nascimento: string;
+};
+
+export type CasoPlaneado = {
+    id: number;
+    slot_id: number;
+    episodio_id: number;
+    ordem: number;
+    procedimento_previsto: string;
+    duracao_prevista_min: number;
+    anestesia_apto: boolean;
+    cama_destino: string;
+    internamento_em?: string | null;
+    cirurgiao_id: number;
+    observacoes: string;
+    created_at?: string | null;
+    updated_at?: string | null;
 };

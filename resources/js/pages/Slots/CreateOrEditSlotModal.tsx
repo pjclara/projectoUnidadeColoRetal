@@ -52,8 +52,6 @@ export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, o
         label: String(label),
     }));
 
-    console.log('origens', origens,"estados", estados);
-
     const submit = () => {
         setLoading(true);
         setErrors({});

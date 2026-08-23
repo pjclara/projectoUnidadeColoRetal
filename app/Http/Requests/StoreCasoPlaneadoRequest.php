@@ -12,7 +12,7 @@ class StoreCasoPlaneadoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,16 @@ class StoreCasoPlaneadoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'slot_id' => ['required', 'integer', 'exists:slots,id'],
+            'episodio_id' => ['nullable', 'integer', 'exists:episodios,id'],
+            'ordem' => ['required', 'integer'],
+            'procedimento_previsto' => ['required', 'string'],
+            'duracao_prevista_min' => ['required', 'integer'],
+            'anestesia_apto' => ['required', 'boolean'],
+            'cama_destino' => ['nullable', 'string'],
+            'internamento_em' => ['nullable', 'date'],
+            'cirurgiao_id' => ['nullable', 'integer', 'exists:users,id'],
+            'observacoes' => ['nullable', 'string'],
         ];
     }
 }

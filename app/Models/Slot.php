@@ -31,6 +31,9 @@ class Slot extends Model
         'hora_fim_prevista' => 'datetime:H:i',
     ];
 
+    // appends the nome_slot attribute to the model's array and JSON representations
+    protected $appends = ['nome_slot'];
+
     public static function boot()
     {
         parent::boot();
@@ -41,6 +44,11 @@ class Slot extends Model
             $slot->semana_id = date('W', strtotime($slot->data));
         });
 
+    }
+
+    public function getNomeSlotAttribute()
+    {
+        return $this->data->format('d/m/Y') . ' - ' . $this->sala_id . ' - ' . $this->periodo;
     }
 
 

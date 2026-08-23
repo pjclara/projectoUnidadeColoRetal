@@ -29,6 +29,8 @@ return new class extends Migration
             $table->boolean('anastomose')->nullable();
             $table->foreignId('eras_id')->nullable()->constrained('avaliacao_eras')->onDelete('set null');
             $table->string('observacoes', 500)->nullable();
+            $table->timestamps();
+
         });
     }
 

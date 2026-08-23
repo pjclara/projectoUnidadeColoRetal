@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('periodo', 30)->nullable();
             $table->string('detalhe', 200)->nullable();
             $table->string('fonte', 80)->nullable();
+                        $table->timestamps();
+
 
             $table->unique(['data', 'profissional_id', 'tipo', 'periodo'], 'data');
         });

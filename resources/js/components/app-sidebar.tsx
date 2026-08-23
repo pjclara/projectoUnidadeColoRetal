@@ -96,7 +96,7 @@ const clinicaNavItems: NavItem[] = [
 const planeamentoNavItems: NavItem[] = [
     {
         title: 'Planeamento operatório',
-        url: '/planeamento',
+        url: '/caso-planeados',
         icon: CalendarDays,
     },
     {

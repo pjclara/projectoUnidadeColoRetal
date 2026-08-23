@@ -27,7 +27,6 @@ class SlotService
                     'estado' => $slot->estado,
                     'origem' => $slot->origem,
                     'observacoes' => $slot->observacoes,
-                    'ori'
                 ];
             });
     }

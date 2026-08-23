@@ -31,7 +31,7 @@ class DoenteViewModel
             ),
 
             'data_nascimento' =>
-                $this->doente->data_nascimento,
+                $this->doente->data_nascimento->format('Y-m-d'),
 
             'sexo' => $this->doente->sexo,
 

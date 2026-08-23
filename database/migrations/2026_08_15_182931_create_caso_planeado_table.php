@@ -23,6 +23,7 @@ return new class extends Migration
             $table->dateTime('internamento_em')->nullable();
             $table->foreignId('cirurgiao_id')->nullable()->constrained('users')->onDelete('set null');
             $table->text('observacoes')->nullable();
+            $table->timestamps();
 
             $table->unique(['slot_id', 'ordem'], 'slot_id');
         });
