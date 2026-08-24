@@ -136,6 +136,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/caso-planeados/{casoPlaneado}', [CasoPlaneadoController::class, 'destroy'])
         ->middleware('can:caso-planeado.delete')
         ->name('caso-planeados.destroy');
+
+    Route::post('/caso-planeados/{casoPlaneado}/equipas', [CasoPlaneadoController::class, 'storeEquipaForCasoPlaneado'])
+        ->middleware('can:caso-equipa.create')
+        ->name('caso-planeados.equipas.store');
 });
 
 // CasoEquipa Module

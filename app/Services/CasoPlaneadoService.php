@@ -9,6 +9,7 @@ use App\Models\CasoPlaneado;
 use App\ViewModels\EpisodioViewModel;
 use App\ViewModels\SlotViewModel;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class CasoPlaneadoService
 {
@@ -33,6 +34,15 @@ class CasoPlaneadoService
                     'slot' => $casoPlaneado->slot ? new SlotViewModel($casoPlaneado->slot) : null,
                     'doente' => $casoPlaneado->doente
                         ? (new DoenteViewModel($casoPlaneado->doente, app(EncryptionService::class)))->toArray()
+                        : null,
+                    'casos_equipas' => $casoPlaneado->casoEquipa
+                        ? $casoPlaneado->casoEquipa->map(function ($casoEquipa) {
+                            return [
+                                'caso_planeado_id' => $casoEquipa->caso_planeado_id,
+                                'user' => $casoEquipa->user->name ?? 'Unknown User',
+                                'funcao' => $casoEquipa->funcao,
+                            ];
+                        })->toArray()
                         : null,
                 ];
             });
@@ -76,5 +86,56 @@ class CasoPlaneadoService
     {
         $casoPlaneado->update($data);
         return $casoPlaneado;
+    }
+
+    public function delete(CasoPlaneado $casoPlaneado): void
+    {
+        $casoPlaneado->delete();
+    }
+
+    public function syncEquipaCasoPlaneado(
+        CasoPlaneado $casoPlaneado,
+        array $equipas
+    ): void {
+        DB::transaction(function () use ($casoPlaneado, $equipas) {
+
+            $userIds = collect($equipas)
+                ->pluck('user_id')
+                ->filter()
+                ->map(fn($id) => (int) $id)
+                ->values();
+
+            /*
+         * 1. Eliminar os membros que já não estão
+         *    na lista enviada pelo frontend.
+         */
+            $casoPlaneado
+                ->casoEquipa()
+                ->when(
+                    $userIds->isNotEmpty(),
+                    fn($query) => $query->whereNotIn('user_id', $userIds),
+                    fn($query) => $query
+                )
+                ->delete();
+
+            /*
+         * 2. Adicionar novos membros
+         *    ou atualizar os existentes.
+         */
+            foreach ($equipas as $equipa) {
+                if (empty($equipa['user_id'])) {
+                    continue;
+                }
+
+                $casoPlaneado->casoEquipa()->updateOrCreate(
+                    [
+                        'user_id' => $equipa['user_id'],
+                    ],
+                    [
+                        'funcao' => $equipa['funcao'] ?? null,
+                    ]
+                );
+            }
+        });
     }
 }

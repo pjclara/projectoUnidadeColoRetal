@@ -134,4 +134,37 @@ class CasoPlaneadoController extends Controller
     {
         //
     }
+
+    public function storeEquipaForCasoPlaneado(
+        Request $request,
+        CasoPlaneado $casoPlaneado
+    ) {
+        $data = $request->validate([
+            'equipas' => ['array'],
+
+            'equipas.*.user_id' => [
+                'required',
+                'integer',
+                'exists:users,id',
+            ],
+
+            'equipas.*.funcao' => [
+                'required',
+                'string',
+                'max:120',
+            ],
+        ]);
+
+        $this->service->syncEquipaCasoPlaneado(
+            $casoPlaneado,
+            $data['equipas'] ?? []
+        );
+
+        return redirect()
+            ->route('caso-planeados.index')
+            ->with(
+                'success',
+                'Equipa do caso atualizada com sucesso.'
+            );
+    }
 }

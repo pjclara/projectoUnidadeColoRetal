@@ -30,12 +30,19 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'abreviatura' => 'required|string|max:10',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => 'nullable|string|min:8',
             'numero_mecanografico' => 'nullable|string|max:20|unique:users',
             'categoria' => 'nullable|string|max:80',
             'especialidade' => 'nullable|string|max:100',
             'ativo' => 'nullable|boolean',
         ]);
+
+        // password is optional, if not provided, set a default password
+        if (empty($validatedData['password'])) {
+            $validatedData['password'] = bcrypt('defaultpassword'); // set a default password
+        } else {
+            $validatedData['password'] = bcrypt($validatedData['password']);
+        }
 
         $user = User::create($validatedData);
 

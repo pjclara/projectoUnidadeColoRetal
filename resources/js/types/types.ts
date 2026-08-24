@@ -59,6 +59,12 @@ export type User = {
     email: string;
 };
 
+export type CasoEquipa = {
+    user: number;
+    funcao: string;
+    caso_planeado_id: number;
+};
+
 export type CDTFilters = {
     search: string;
     pu: string;

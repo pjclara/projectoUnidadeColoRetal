@@ -60,4 +60,10 @@ class CasoPlaneado extends Model
             'doente_id' // Local key on the Episodio table
         );
     }
+
+    // caso equipa relationship
+    public function casoEquipa()
+    {
+        return $this->hasMany(CasoEquipa::class);   
+    }
 }
