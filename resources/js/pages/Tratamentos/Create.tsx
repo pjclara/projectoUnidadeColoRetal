@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
-import type { Doente, Episodio, Pagination, Profissional, Tratamento, DoenteFilters } from '../../types/types';
+import type { Doente, Episodio, Pagination, User, Tratamento, DoenteFilters } from '../../types/types';
 
 import { AppPageHeader } from '@/components/app/app-page-header';
 import { AppWizard, type AppWizardStep } from '@/components/app/app-wizard';
@@ -15,7 +15,7 @@ type Props = {
     doentes: Pagination<Doente>;
     selectedDoente: Doente | null;
     episodios: Pagination<Episodio> | null;
-    users: Profissional[];
+    users: User[];
     filters:DoenteFilters
 };
 
@@ -78,6 +78,7 @@ export default function CreateTratamentoWizard({ doentes, selectedDoente: initia
                             onSelect={selectDoente}
                             onBack={() => {}}
                             onContinue={goToEpisodio}
+                            url="/tratamentos/create"
                         />
                     )}
 
@@ -90,6 +91,7 @@ export default function CreateTratamentoWizard({ doentes, selectedDoente: initia
                             onSelect={setEpisodio}
                             onBack={backToDoente}
                             onContinue={goToTratamento}
+                            url="/tratamentos/create"
                         />
                     )}
 

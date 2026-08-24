@@ -12,7 +12,7 @@ class UpdateAvaliacaoErasRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,15 @@ class UpdateAvaliacaoErasRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'episodio_id' => ['required', 'integer', 'exists:episodios,id'],
+            'data_consulta' => ['required', 'date'],
+            'aptidao' => ['required', 'string'],
+            'asa' => ['required', 'string'],
+            'polo_recomendado' => ['required', 'string'],
+            'mfr' => ['nullable', 'boolean'],
+            'dias_prehabilitacao' => ['nullable', 'integer'],
+            'notas' => ['nullable', 'string'],
+            'fonte' => ['nullable', 'string'],
         ];
     }
 }

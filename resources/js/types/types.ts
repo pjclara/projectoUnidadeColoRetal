@@ -42,6 +42,8 @@ export type Episodio = {
     cid10?: string | null;
     data_diagnostico?: string | null;
     estado: string;
+    pai_entrada?: string | null;
+    pai_saida?: string | null;
 };
 
 export type CDT = {
@@ -84,7 +86,7 @@ export type Tratamento = {
 
 export type DoenteFilters = {
     search: string;
-    pu: string; 
+    pu: string;
     nome: string;
     data_nascimento: string;
 };
@@ -103,4 +105,17 @@ export type CasoPlaneado = {
     observacoes: string;
     created_at?: string | null;
     updated_at?: string | null;
+};
+
+export type AvaliacaoEras = {
+    id: number;
+    episodio_id: number;
+    data_consulta: string;
+    aptidao: string;
+    asa: string;
+    polo_recomendado: string;
+    mfr: string;
+    dias_prehabilitacao: number;
+    notas: string;
+    fonte: string;
 };

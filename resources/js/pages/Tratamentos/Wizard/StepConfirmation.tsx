@@ -8,7 +8,7 @@ import type { Tratamento, Doente, Episodio } from '../../../types/types';
 type Props = {
     doente: Doente;
     episodio: Episodio;
-    tratamento: Tratamento;
+    tratamento?: Tratamento;
 };
 
 export function StepConfirmation({ doente, episodio, tratamento }: Props) {
@@ -38,9 +38,9 @@ export function StepConfirmation({ doente, episodio, tratamento }: Props) {
             <AppEntitySummary
                 title="Tratamento"
                 fields={[
-                    { label: 'Data do pedido', value: tratamento.data_pedido },
-                    { label: 'Data da discussão', value: tratamento.data_discussao },
-                    { label: 'Estádio clínico', value: tratamento.estadio_clinico },
+                    { label: 'Data do pedido', value: tratamento?.data_pedido },
+                    { label: 'Data da discussão', value: tratamento?.data_discussao },
+                    { label: 'Estádio clínico', value: tratamento?.estadio_clinico },
                 ]}
             />
 
@@ -49,9 +49,11 @@ export function StepConfirmation({ doente, episodio, tratamento }: Props) {
                     Voltar aos Tratamentos
                 </Button>
 
-                <Button type="button" onClick={() => router.get(`/tratamentos/${tratamento.id}`)}>
-                    Ver Tratamento
-                </Button>
+                {tratamento && (
+                    <Button type="button" onClick={() => router.get(`/tratamentos/${tratamento.id}`)}>
+                        Ver Tratamento
+                    </Button>
+                )}
             </div>
         </div>
     );

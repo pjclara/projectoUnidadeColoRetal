@@ -6,12 +6,13 @@ import { AppTable, AppTableColumn } from '@/components/app/app-table';
 import { Button } from '@/components/ui/button';
 import CreateOrUpdateEpisodio from '@/pages/Episodios/CreateOrUpdateEpisodio';
 
-import type { Doente, Episodio, Pagination, Profissional } from './types';
+import type { AvaliacaoEras, Doente, Episodio, Pagination, User } from '../../../types/types';
+
 
 type Props = {
     doente: Doente;
     episodios: Pagination<Episodio> | null;
-    profissionais: Profissional[];
+    profissionais: User[];
     selectedEpisodio: Episodio | null;
     onSelect: (episodio: Episodio) => void;
     onBack: () => void;
