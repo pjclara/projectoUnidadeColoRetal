@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum SlotEstado: string
+enum SlotEstadoEnum: string
 {
     case RASCUNHO = 'rascunho';
     case DISPONIVEL = 'disponivel';

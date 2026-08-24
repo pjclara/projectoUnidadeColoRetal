@@ -1,5 +1,6 @@
 import { AppCheckboxField } from '@/components/app/app-check-box-field';
 import { AppInputField } from '@/components/app/app-input-field';
+import { AppSelectField } from '@/components/app/app-input-select';
 import { AppModal } from '@/components/app/app-modal';
 import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/react';
@@ -16,10 +17,11 @@ type Sala = {
 
 type Props = {
     sala?: Sala | null; // null para criar, objeto para editar
+    poloOptions: { value: string; label: string }[];
     onClose: () => void;
 };
 
-export function CreateOrEditSalaModal({ sala, onClose }: Props) {
+export function CreateOrEditSalaModal({ sala, poloOptions, onClose }: Props) {
     const editing = !!sala;
 
     const [loading, setLoading] = useState(false);
@@ -71,10 +73,11 @@ export function CreateOrEditSalaModal({ sala, onClose }: Props) {
             maxWidth="lg"
         >
             <div className="space-y-4">
-                <AppInputField
+                <AppSelectField
                     label="Polo"
                     value={form.polo}
                     error={errors.polo}
+                    options={poloOptions}
                     onChange={(value) => setForm({ ...form, polo: String(value) })}
                 />
 

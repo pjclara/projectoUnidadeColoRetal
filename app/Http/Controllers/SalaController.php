@@ -21,6 +21,7 @@ class SalaController extends Controller
 
         return inertia('Salas/Index', [
             'salas' => $salas,
+            'poloOptions' => \App\Enums\PoloEnum::options(),
         ]);
     }
 
@@ -34,22 +35,6 @@ class SalaController extends Controller
 
         return redirect()->route('salas.index')
             ->with('success', 'Sala criada com sucesso.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Sala $sala)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Sala $sala)
-    {
-        //
     }
 
     /**

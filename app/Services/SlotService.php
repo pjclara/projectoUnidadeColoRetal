@@ -33,7 +33,14 @@ class SlotService
 
     public function getSalas()
     {
-        return Sala::pluck('designacao', 'id')->toArray();
+        return Sala::query()
+            ->get()
+            ->map(fn(Sala $sala) => [
+                'value' => $sala->id,
+                'label' => $sala->nome_sala,
+            ])
+            ->values()
+            ->toArray();
     }
 
     public function create(array $data): Slot
@@ -51,7 +58,4 @@ class SlotService
     {
         return $slot->delete();
     }
-
-
-
 }

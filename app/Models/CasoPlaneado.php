@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Slot;
 use App\Models\Episodio;
 use App\Models\User;
+use App\Models\Doente;
 
 class CasoPlaneado extends Model
 {
@@ -14,7 +15,7 @@ class CasoPlaneado extends Model
     use HasFactory;
 
     protected $table = 'casos_planeados';
-    
+
     protected $fillable = [
         'slot_id',
         'episodio_id',
@@ -46,5 +47,17 @@ class CasoPlaneado extends Model
     public function cirurgiao()
     {
         return $this->belongsTo(User::class, 'cirurgiao_id');
+    }
+
+    public function doente()
+    {
+        return $this->hasOneThrough(
+            Doente::class,
+            Episodio::class,
+            'id', // Foreign key on the Episodio table
+            'id', // Foreign key on the Doente table
+            'episodio_id', // Local key on the CDT table
+            'doente_id' // Local key on the Episodio table
+        );
     }
 }

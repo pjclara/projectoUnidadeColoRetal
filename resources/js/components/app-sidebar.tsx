@@ -1,15 +1,7 @@
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-} from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 
@@ -19,13 +11,10 @@ import {
     CalendarDays,
     ClipboardCheck,
     ClipboardList,
-    FileClock,
-    FileInput,
     FileText,
     Folder,
     HeartPulse,
     LayoutGrid,
-    Settings,
     ShieldCheck,
     Stethoscope,
     UserCog,
@@ -100,25 +89,15 @@ const planeamentoNavItems: NavItem[] = [
         icon: CalendarDays,
     },
     {
-        title: 'Casos',
-        url: '/casos',
-        icon: ClipboardList,
-    },
-    {
         title: 'Salas',
         url: '/salas',
         icon: Folder,
     },
-        {
+    {
         title: 'Slots',
         url: '/slots',
         icon: Folder,
-    },
-    {
-        title: 'Equipa',
-        url: '/equipa',
-        icon: Users,
-    },
+    }
 ];
 
 /*
@@ -153,33 +132,9 @@ const administracaoNavItems: NavItem[] = [
         icon: Users,
     },
     {
-        title: 'Importações',
-        url: '/importacoes',
-        icon: FileInput,
-    },
-    {
         title: 'Roles & Permissões',
         url: '/access-control',
         icon: UserCog,
-    },
-];
-
-/*
-|--------------------------------------------------------------------------
-| Sistema
-|--------------------------------------------------------------------------
-*/
-
-const sistemaNavItems: NavItem[] = [
-    {
-        title: 'Auditoria',
-        url: '/auditoria',
-        icon: FileClock,
-    },
-    {
-        title: 'Configurações',
-        url: '/configuracoes',
-        icon: Settings,
     },
 ];
 
@@ -188,19 +143,12 @@ const footerNavItems: NavItem[] = [];
 export function AppSidebar() {
     return (
         <Sidebar collapsible="icon" variant="inset">
-
             {/* LOGO */}
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton
-                            size="lg"
-                            asChild
-                        >
-                            <Link
-                                href="/dashboard"
-                                prefetch
-                            >
+                        <SidebarMenuButton size="lg" asChild>
+                            <Link href="/dashboard" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -210,49 +158,28 @@ export function AppSidebar() {
 
             {/* MENU */}
             <SidebarContent>
-
                 {/* Dashboard */}
-                <NavMain
-                    items={dashboardNavItems}
-                />
+                <NavMain title="Dashboard" items={dashboardNavItems} />
 
                 {/* Clínica */}
-                <NavMain
-                    items={clinicaNavItems}
-                />
+                <NavMain title="Clínica" items={clinicaNavItems} />
 
                 {/* Planeamento */}
-                <NavMain
-                    items={planeamentoNavItems}
-                />
+                <NavMain title="Planeamento" items={planeamentoNavItems} />
 
                 {/* Qualidade */}
-                <NavMain
-                    items={qualidadeNavItems}
-                />
+                <NavMain title="Qualidade" items={qualidadeNavItems} />
 
                 {/* Administração */}
-                <NavMain
-                    items={administracaoNavItems}
-                />
-
-                {/* Sistema */}
-                <NavMain
-                    items={sistemaNavItems}
-                />
-
+                <NavMain title="Administração" items={administracaoNavItems} />
             </SidebarContent>
 
             {/* FOOTER */}
             <SidebarFooter>
-                <NavFooter
-                    items={footerNavItems}
-                    className="mt-auto"
-                />
+                <NavFooter items={footerNavItems} className="mt-auto" />
 
                 <NavUser />
             </SidebarFooter>
-
         </Sidebar>
     );
 }

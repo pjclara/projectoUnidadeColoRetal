@@ -18,11 +18,12 @@ type Props = {
     salas: {
         data: SalaItem[];
     };
+    poloOptions: { value: string; label: string }[];
 };
 
 const breadcrumbs = [{ title: 'Salas', href: '/salas' }];
 
-export default function Index({ salas }: Props) {
+export default function Index({ salas, poloOptions }: Props) {
     const [showSalaModal, setShowSalaModal] = useState(false);
     const [editingSala, setEditingSala] = useState<SalaItem | null>(null);
 
@@ -85,6 +86,7 @@ export default function Index({ salas }: Props) {
             {showSalaModal && (
                 <CreateOrEditSalaModal
                     sala={editingSala}
+                    poloOptions={poloOptions}
                     onClose={() => {
                         setEditingSala(null);
                         setShowSalaModal(false);

@@ -25,14 +25,16 @@ type Props = {
     slots: {
         data: SlotItem[];
     }
-    salas: { id: number; designacao: string }[];
-    estados: { value: string; label: string }[];
-    origens: { value: string; label: string }[];
+    salas: { value: number; label: string }[];
+    estadoOptions: { value: string; label: string }[];
+    origemOptions: { value: string; label: string }[];
+    periodoOptions: { value: string; label: string }[];
+    modalidadeOptions: { value: string; label: string }[];
 };
 
 const breadcrumbs = [{ title: 'Slots', href: '/Slots' }];
 
-export default function Index({ slots, salas, estados, origens }: Props) {
+export default function Index({ slots, salas, estadoOptions, origemOptions, periodoOptions, modalidadeOptions }: Props) {
     const [showSlotModal, setShowSlotModal] = useState(false);
     const [editingSlot, setEditingSlot] = useState<SlotItem | null>(null);
 
@@ -119,9 +121,11 @@ export default function Index({ slots, salas, estados, origens }: Props) {
                         setEditingSlot(null);
                         setShowSlotModal(false);
                     }}
-                    estados={estados}
+                    estados={estadoOptions}
                     salas={salas}
-                    origens={origens}
+                    origems={origemOptions}
+                    periodos={periodoOptions}
+                    modalidades={modalidadeOptions}
                 />
             )}
         </AppLayout>

@@ -16,4 +16,16 @@ class Sala extends Model
         'designacao',
         'ativa',
     ];
+
+    protected $casts = [
+        'polo' => \App\Enums\PoloEnum::class,
+        'ativa' => 'boolean',
+    ];
+
+    public $appends = ['nome_sala'];
+
+    public function getNomeSalaAttribute()
+    {
+        return $this->polo->label() . ' - ' . $this->codigo;
+    }
 }

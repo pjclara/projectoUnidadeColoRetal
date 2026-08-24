@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
-use App\Enums\SlotEstado;
+use App\Enums\ModalidadeEnum;
+use App\Enums\PeriodoEnum;
+use App\Enums\SlotEstadoEnum;
+use App\Enums\SlotOrigemEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,7 +28,10 @@ class Slot extends Model
     ];
 
     protected $casts = [
-        'estado' => SlotEstado::class,
+        'estado' => SlotEstadoEnum::class,
+        'origem' => SlotOrigemEnum::class,
+        'periodo' => PeriodoEnum::class,
+        'modalidade' => ModalidadeEnum::class,
         'data' => 'date',
         'hora_inicio' => 'datetime:H:i',
         'hora_fim_prevista' => 'datetime:H:i',
@@ -39,16 +45,23 @@ class Slot extends Model
         parent::boot();
         static::creating(function ($slot) {
             $slot->semana_id = date('W', strtotime($slot->data));
+            $slot->polo = $slot->sala->polo;
         });
         static::updating(function ($slot) {
             $slot->semana_id = date('W', strtotime($slot->data));
+            $slot->polo = $slot->sala->polo;
         });
 
     }
 
     public function getNomeSlotAttribute()
     {
-        return $this->data->format('d/m/Y') . ' - ' . $this->sala_id . ' - ' . $this->periodo;
+        return $this->data->format('d/m/Y') . ' - ' . $this->sala_id . ' - ' . $this->periodo->label() . ' - ' . $this->modalidade->label();
+    }
+
+    public function sala()
+    {
+        return $this->belongsTo(Sala::class);
     }
 
 

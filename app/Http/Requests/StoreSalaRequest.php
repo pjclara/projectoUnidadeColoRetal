@@ -4,7 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rules\Enum;
+use App\Enums\PoloEnum;
 class StoreSalaRequest extends FormRequest
 {
     /**
@@ -23,7 +24,7 @@ class StoreSalaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'polo' => ['required', 'string', 'max:255'],
+            'polo' => ['required', 'string', new Enum(PoloEnum::class)],
             'codigo' => ['required', 'string', 'max:255'],
             'designacao' => ['required', 'string', 'max:255'],
             'ativa' => ['required', 'boolean'],

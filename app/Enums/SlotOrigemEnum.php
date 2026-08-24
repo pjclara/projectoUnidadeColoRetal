@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum SlotOrigem:string
+enum SlotOrigemEnum:string
 {
     case ERAS = 'eras';
     case EXTRA = 'extra';

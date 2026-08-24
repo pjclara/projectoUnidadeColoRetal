@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Enums\SlotEstado;
-use App\Enums\SlotOrigem;
+use App\Enums\PeriodoEnum;
+use App\Enums\ModalidadeEnum;
+use App\Enums\PoloEnum;
+use App\Enums\SlotEstadoEnum;
+use App\Enums\SlotOrigemEnum;
 use App\Http\Requests\StoreSlotRequest;
 use App\Models\Slot;
 use App\Services\SlotService;
@@ -28,8 +30,10 @@ class SlotController extends Controller
             [
                 'slots' => $slots,
                 'salas' => $salas, 
-                'estados' => SlotEstado::options(),
-                'origens' => SlotOrigem::options(),
+                'estadoOptions' => SlotEstadoEnum::options(),
+                'origemOptions' => SlotOrigemEnum::options(),
+                'periodoOptions' => PeriodoEnum::options(),
+                'modalidadeOptions' => ModalidadeEnum::options(),
             ]
         );
     }

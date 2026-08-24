@@ -25,11 +25,13 @@ type Props = {
     slot?: Slot | null;
     onClose: () => void;
     estados: { value: string; label: string }[];
-    origens: { value: string; label: string }[];
-    salas: { designacao: string; id: number }[];
+    origems: { value: string; label: string }[];
+    periodos: { value: string; label: string }[];
+    modalidades: { value: string; label: string }[];
+    salas: { value: number; label: string }[];
 };
 
-export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, origens }: Props) {
+export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, origems, periodos, modalidades }: Props) {
     const editing = !!slot;
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -46,11 +48,6 @@ export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, o
         origem: slot?.origem || '',
         observacoes: slot?.observacoes || '',
     });
-
-    const salaOptions = Object.entries(salas).map(([id, label]) => ({
-        value: Number(id),
-        label: String(label),
-    }));
 
     const submit = () => {
         setLoading(true);
@@ -84,27 +81,23 @@ export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, o
     };
 
     return (
-        <AppModal open onClose={onClose} title={editing ? 'Editar Slot' : 'Criar Slot'} maxWidth="lg">
+        <AppModal open onClose={onClose} title={editing ? 'Editar Slot' : 'Criar Slot'} >
             <div className="space-y-6">
-                <div className="grid gap-6 md:grid-cols-2">
-                    <AppInputField
+                <div className="grid gap-6 md:grid-cols-3">
+                    <AppSelectField
                         label="Período"
                         value={form.periodo}
                         onChange={(value) => setForm({ ...form, periodo: String(value) })}
                         error={errors.periodo}
+                        options={periodos}
                     />
-                    <AppInputField
+                    <AppSelectField
                         label="Modalidade"
                         value={form.modalidade}
                         onChange={(value) => setForm({ ...form, modalidade: String(value) })}
                         error={errors.modalidade}
-                    />
-                    <AppInputField
-                        label="Polo"
-                        value={form.polo}
-                        onChange={(value) => setForm({ ...form, polo: String(value) })}
-                        error={errors.polo}
-                    />
+                        options={modalidades}
+                    />                  
                     <AppInputField
                         label="Data"
                         type="date"
@@ -117,7 +110,7 @@ export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, o
                         value={form.sala_id}
                         onChange={(value) => setForm({ ...form, sala_id: Number(value) })}
                         error={errors.sala_id}
-                        options={salaOptions}
+                        options={salas}
                     />
                     <AppInputField
                         label="Hora Início"
@@ -145,8 +138,17 @@ export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, o
                         value={form.origem}
                         onChange={(value) => setForm({ ...form, origem: String(value) })}
                         error={errors.origem}
-                        options={origens}
+                        options={origems}
                     />
+                    <AppSelectField
+                        label="Período"
+                        value={form.periodo}
+                        onChange={(value) => setForm({ ...form, periodo: String(value) })}
+                        error={errors.periodo}
+                        options={periodos}
+                    />
+                </div>
+                <div>
                     <AppTextareaField
                         label="Observações"
                         value={form.observacoes}

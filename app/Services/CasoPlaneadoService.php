@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Services\EncryptionService;
+use App\ViewModels\DoenteViewModel;
 
 use App\Models\CasoPlaneado;
 use App\ViewModels\EpisodioViewModel;
@@ -30,6 +31,9 @@ class CasoPlaneadoService
                     'observacoes' => $casoPlaneado->observacoes,
                     'episodio' => $casoPlaneado->episodio ? new EpisodioViewModel($casoPlaneado->episodio, app(EncryptionService::class)) : null,
                     'slot' => $casoPlaneado->slot ? new SlotViewModel($casoPlaneado->slot) : null,
+                    'doente' => $casoPlaneado->doente
+                        ? (new DoenteViewModel($casoPlaneado->doente, app(EncryptionService::class)))->toArray()
+                        : null,
                 ];
             });
     }
