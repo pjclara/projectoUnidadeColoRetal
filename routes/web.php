@@ -312,3 +312,65 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:slot.delete')
         ->name('slots.destroy');
 });
+
+// Cirurgia Module
+Route::middleware('auth')->group(function () {
+    Route::get('/cirurgias', [\App\Http\Controllers\CirurgiaController::class, 'index'])
+        ->middleware('can:cirurgium.view')
+        ->name('cirurgias.index');
+
+    Route::get('/cirurgias/create', [\App\Http\Controllers\CirurgiaController::class, 'create'])
+        ->middleware('can:cirurgium.create')
+        ->name('cirurgias.create');
+
+    Route::post('/cirurgias', [\App\Http\Controllers\CirurgiaController::class, 'store'])
+        ->middleware('can:cirurgium.create')
+        ->name('cirurgias.store');
+
+    Route::get('/cirurgias/{cirurgia}', [\App\Http\Controllers\CirurgiaController::class, 'show'])
+        ->middleware('can:cirurgium.view')
+        ->name('cirurgias.show');
+
+    Route::get('/cirurgias/{cirurgia}/edit', [\App\Http\Controllers\CirurgiaController::class, 'edit'])
+        ->middleware('can:cirurgium.update')
+        ->name('cirurgias.edit');
+
+    Route::put('/cirurgias/{cirurgia}', [\App\Http\Controllers\CirurgiaController::class, 'update'])
+        ->middleware('can:cirurgium.update')
+        ->name('cirurgias.update');
+
+    Route::delete('/cirurgias/{cirurgia}', [\App\Http\Controllers\CirurgiaController::class, 'destroy'])
+        ->middleware('can:cirurgium.delete')
+        ->name('cirurgias.destroy');
+});
+
+// AvaliacaoEras Module
+Route::middleware('auth')->group(function () {
+    Route::get('/avaliacao-eras', [\App\Http\Controllers\AvaliacaoErasController::class, 'index'])
+        ->middleware('can:avaliacao-era.view')
+        ->name('avaliacao-eras.index');
+
+    Route::get('/avaliacao-eras/create', [\App\Http\Controllers\AvaliacaoErasController::class, 'create'])
+        ->middleware('can:avaliacao-era.create')
+        ->name('avaliacao-eras.create');
+
+    Route::post('/avaliacao-eras', [\App\Http\Controllers\AvaliacaoErasController::class, 'store'])
+        ->middleware('can:avaliacao-era.create')
+        ->name('avaliacao-eras.store');
+
+    Route::get('/avaliacao-eras/{avaliacaoEras}', [\App\Http\Controllers\AvaliacaoErasController::class, 'show'])
+        ->middleware('can:avaliacao-era.view')
+        ->name('avaliacao-eras.show');
+
+    Route::get('/avaliacao-eras/{avaliacaoEras}/edit', [\App\Http\Controllers\AvaliacaoErasController::class, 'edit'])
+        ->middleware('can:avaliacao-era.update')
+        ->name('avaliacao-eras.edit');
+
+    Route::put('/avaliacao-eras/{avaliacaoEras}', [\App\Http\Controllers\AvaliacaoErasController::class, 'update'])
+        ->middleware('can:avaliacao-era.update')
+        ->name('avaliacao-eras.update');
+
+    Route::delete('/avaliacao-eras/{avaliacaoEras}', [\App\Http\Controllers\AvaliacaoErasController::class, 'destroy'])
+        ->middleware('can:avaliacao-era.delete')
+        ->name('avaliacao-eras.destroy');
+});

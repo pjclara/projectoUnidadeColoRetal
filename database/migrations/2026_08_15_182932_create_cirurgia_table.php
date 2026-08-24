@@ -13,11 +13,7 @@ return new class extends Migration
     {
         Schema::create('cirurgias', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('episodio_id')->constrained('episodios')->onDelete('cascade');
             $table->foreignId('caso_planeado_id')->nullable()->constrained('casos_planeados')->onDelete('set null');
-            $table->date('data_cirurgia')->index('idx_cirurgia_data');
-            $table->string('polo', 30)->nullable();
-            $table->string('sala', 20)->nullable();
             $table->string('procedimento', 300)->nullable();
             $table->string('abordagem', 50)->nullable();
             $table->boolean('urgencia')->nullable()->default(false);

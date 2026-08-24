@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('funcao', 30);
             $table->timestamps();
 
-            $table->primary(['caso_planeado_id', 'user_id', 'funcao']);
+            $table->unique(['caso_planeado_id', 'user_id'], 'unique_caso_profissional');
+
         });
     }
 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('episodio_id')->constrained('episodios')->onDelete('cascade');
             $table->date('data_consulta');
             $table->string('aptidao', 30)->nullable();
-            $table->smallInteger('asa')->nullable()->index('idx_eras_asa');
+            $table->string('asa', 10)->nullable()->index('idx_eras_asa');
             $table->string('polo_recomendado', 30)->nullable();
             $table->boolean('mfr')->nullable();
             $table->integer('dias_prehabilitacao')->nullable();

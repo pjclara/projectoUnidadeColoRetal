@@ -74,6 +74,11 @@ const clinicaNavItems: NavItem[] = [
         url: '/seguimentos',
         icon: HeartPulse,
     },
+    {
+        title: 'Avaliação ERAS',
+        url: '/avaliacao-eras',
+        icon: ClipboardList,
+    }
 ];
 
 /*
