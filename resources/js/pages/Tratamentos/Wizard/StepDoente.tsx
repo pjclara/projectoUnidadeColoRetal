@@ -79,8 +79,10 @@ export function StepDoente({ doentes, filters: initialFilters, selectedDoente, o
             </AppFilters>
 
             {selectedDoente && (
-                <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm">
-                    Doente selecionado: <strong>{selectedDoente.nome}</strong> (PU: {selectedDoente.pu})
+                <div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950">
+                    <p className="text-sm text-green-800 dark:text-green-200">
+                        Doente selecionado: <strong>{selectedDoente.nome}</strong> (PU: {selectedDoente.pu})
+                    </p>
                 </div>
             )}
 

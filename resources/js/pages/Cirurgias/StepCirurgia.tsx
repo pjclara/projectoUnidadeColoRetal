@@ -92,16 +92,7 @@ export default function StepCirurgia({ doente, episodio, cirurgias, onBack, onCo
                 </Button>
             </div>
             {showCreate && (
-                <CreateOrUpdateCirurgia
-                    casoPlaneado={casoPlaneado}
-                    avaliacaoEras={null}
-                    cirurgia={null}
-                    onClose={() => setShowCreate(false)}
-                    onSuccess={(cirurgia) => {
-                        setShowCreate(false);
-                        // atualizar lista
-                    }}
-                />
+                <div></div>
             )}
         </div>
     );

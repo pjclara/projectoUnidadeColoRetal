@@ -6,8 +6,7 @@ import { AppTable, AppTableColumn } from '@/components/app/app-table';
 import { Button } from '@/components/ui/button';
 import CreateOrUpdateEpisodio from '@/pages/Episodios/CreateOrUpdateEpisodio';
 
-import type { AvaliacaoEras, Doente, Episodio, Pagination, User } from '../../../types/types';
-
+import type { Doente, Episodio, Pagination, User } from '../../../types/types';
 
 type Props = {
     doente: Doente;
@@ -78,6 +77,14 @@ export function StepEpisodio({ doente, episodios, profissionais, selectedEpisodi
                 </Button>
             </div>
 
+            {/* Episódio selecionado */}
+            {selectedEpisodio && (
+                <div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950">
+                    <p className="text-sm text-green-800 dark:text-green-200">
+                        <strong>Episódio selecionado:</strong> {selectedEpisodio.tipo}
+                    </p>
+                </div>
+            )}
             {episodiosList.length === 0 ? (
                 <AppEmptyState
                     title="Este doente ainda não possui episódios."

@@ -82,6 +82,7 @@ class CasoPlaneadoController extends Controller
                     'id' => $slot->id,
                     'nome_slot' => $slot->nome_slot,
                 ]),
+            'salas' => fn() => $this->service->getSalas(),
 
             'users' => User::query()->select('id', 'name')->orderBy('name')->get(),
 

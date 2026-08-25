@@ -138,4 +138,20 @@ class CasoPlaneadoService
             }
         });
     }
+
+    public function getSalas(): array
+    {
+        return \App\Models\Sala::query()
+            ->where('ativa', true)
+            ->orderBy('polo')
+            ->orderBy('codigo')
+            ->get()
+            ->map(function ($sala) {
+                return [
+                    'id' => $sala->id,
+                    'nome_sala' => $sala->nome_sala,
+                ];
+            })
+            ->toArray();
+    }
 }

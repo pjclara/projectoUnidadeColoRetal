@@ -1,14 +1,16 @@
 import { Head, router } from '@inertiajs/react';
-import type { Doente, DoenteFilters, Episodio, Pagination, User } from '../../types/types';
+import type { Doente, DoenteFilters, Episodio, Pagination, Sala, Slot, User } from '../../types/types';
 
 import { AppPageHeader } from '@/components/app/app-page-header';
 import { AppWizard, type AppWizardStep } from '@/components/app/app-wizard';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { useState } from 'react';
+import StepSala from '../Salas/StepSala';
 import { StepDoente } from '../Tratamentos/Wizard/StepDoente';
 import { StepEpisodio } from '../Tratamentos/Wizard/StepEpisodio';
 import { StepCasoPlaneado } from './StepCasoPlaneado';
+import StepSlot from '../Slots/StepSLot';
 
 type CasoPlaneadoItem = {
     id: number;
@@ -46,6 +48,7 @@ type Props = {
     episodios: Pagination<Episodio> | null;
     slots: { id: number; nome_slot: string }[];
     users: User[];
+    salas: Pagination<Sala> | Sala[];
     filters: DoenteFilters;
 };
 
@@ -57,14 +60,18 @@ const breadcrumbs: BreadcrumbItem[] = [
 const steps: AppWizardStep[] = [
     { id: 'doente', title: 'Doente', description: 'Procurar ou criar' },
     { id: 'episodio', title: 'Episódio', description: 'Selecionar ou criar' },
+    { id: 'sala', title: 'Sala', description: 'Selecionar ou criar' },
+    { id: 'slot', title: 'Slot', description: 'Selecionar ou criar' },
     { id: 'caso-planeado', title: 'Caso Planeado', description: 'Registo clínico' },
     { id: 'confirmacao', title: 'Confirmação', description: 'Concluído' },
 ];
 
-export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: initialDoente, episodios, slots, users, filters }: Props) {
+export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: initialDoente, episodios, slots, users, filters, salas }: Props) {
     const [currentStep, setCurrentStep] = useState(initialDoente ? 1 : 0);
     const [doente, setDoente] = useState<Doente | null>(initialDoente);
     const [episodio, setEpisodio] = useState<Episodio | null>(null);
+    const [sala, setSala] = useState<Sala | null>(null);
+    const [slot, setSlot] = useState<Slot | null>(null);
     const [casoPlaneado, setCasoPlaneado] = useState<CasoPlaneadoItem | null>(null);
 
     const selectDoente = (selected: Doente) => {
@@ -81,13 +88,24 @@ export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: init
         setCurrentStep(0);
     };
 
-    const goToCasoPlaneado = () => setCurrentStep(2);
+    const goToSala = () => setCurrentStep(2);
 
     const backToEpisodio = () => setCurrentStep(1);
 
+    const goToCasoPlaneado = () => setCurrentStep(4);
     const finishCasoPlaneado = () => {
-        setCurrentStep(3);
+        setCurrentStep(5);
     };
+    function backToSala(): void {
+        setSlot(null);
+        setCurrentStep(2);
+    }
+
+    function goToSlot(): void {
+        setSlot(null);
+        setCurrentStep(3);
+    }
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Novo Caso Planeado" />
@@ -118,11 +136,36 @@ export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: init
                             selectedEpisodio={episodio}
                             onSelect={setEpisodio}
                             onBack={backToDoente}
-                            onContinue={goToCasoPlaneado}
+                            onContinue={goToSala}
                             url="/caso-planeados/create"
                         />
                     )}
-                    {currentStep === 2 && doente && (
+                    {currentStep === 2 && doente && episodio && (
+                        <StepSala
+                            doente={doente}
+                            episodio={episodio}
+                            salas={salas}
+                            selectedSala={sala}
+                            onSelect={setSala}
+                            onBack={backToEpisodio}
+                            onContinue={goToSlot}
+                        />
+                    )}
+
+                    {currentStep === 3 && doente && episodio && sala && (
+                        <StepSlot
+                            doente={doente}
+                            episodio={episodio}
+                            sala={sala}
+                            slots={slots}
+                            selectedSlot={slot}
+                            onSelect={setSlot}
+                            onBack={backToSala}
+                            onContinue={goToCasoPlaneado}
+                        />
+                    )}
+
+                    {currentStep === 4 && doente && (
                         <StepCasoPlaneado
                             doente={doente}
                             episodio={episodio}

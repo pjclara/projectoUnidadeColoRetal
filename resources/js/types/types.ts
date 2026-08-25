@@ -136,3 +136,12 @@ export type Cirurgia = {
     eras_id: number;
     observacoes?: string | null;
 };
+
+export type Sala = {
+    id: number;
+    nome_sala: string;
+    polo: string;
+    codigo: string;
+    designacao: string;
+    ativa: boolean;
+};
