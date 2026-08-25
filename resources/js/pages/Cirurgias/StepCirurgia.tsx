@@ -4,32 +4,30 @@ import { AppEmptyState } from '@/components/app/app-empty-state';
 import { AppEntitySummary } from '@/components/app/app-entity-summary';
 import { AppTable, AppTableColumn } from '@/components/app/app-table';
 import { Button } from '@/components/ui/button';
-import type { AvaliacaoEras, Doente, Episodio, Pagination } from '../../types/types';
-import { CreateOrUpdateAvaliacaoEras } from './CreateOrUpdateAvaliacaoEras';
+import type { Cirurgia, Doente, Episodio, Pagination } from '../../types/types';
+import CreateOrUpdateCirurgia from './CreateOrUpdateCirurgia';
 
-type Props = {
+type StepCirurgiaProps = {
     doente: Doente;
     episodio: Episodio;
-    avaliacaoEras: Pagination<AvaliacaoEras> | null;
+    cirurgias: Pagination<Cirurgia> | null;
     onBack: () => void;
     onContinue: () => void;
     url: string;
-    onSuccess: (avaliacaoEras: AvaliacaoEras) => void;
+    onSuccess: (cirurgias: Cirurgia) => void;
     poloOptions: { value: string; label: string }[];
 };
 
-export default function StepAvaliacaoEras({ doente, episodio, avaliacaoEras, onBack, onSuccess, onContinue, url, poloOptions }: Props) {
+export default function StepCirurgia({ doente, episodio, cirurgias, onBack, onContinue, url, onSuccess, poloOptions }: StepCirurgiaProps) {
     const [showCreate, setShowCreate] = useState(false);
 
-    const avaliacaoErasList = avaliacaoEras?.data ?? [];
+    const [cirurgia, setCirurgia] = useState<Cirurgia | null>(null);
 
-    const columns: AppTableColumn<AvaliacaoEras>[] = [
-        { key: 'data_consulta', label: 'Data' },
-        { key: 'aptidao', label: 'Aptidão' },
-        { key: 'asa', label: 'ASA' },
-        { key: 'polo_recomendado', label: 'Polo recomendado' },
-        { key: 'mfr', label: 'MFR' },
-        { key: 'dias_prehabilitacao', label: 'Dias de pré-habilitação' },
+    const cirurgiasList = cirurgias?.data ?? [];
+
+    const columns: AppTableColumn<Cirurgia>[] = [
+        { key: 'procedimento', label: 'Procedimento' },
+        { key: 'abordagem', label: 'Abordagem' },
     ];
 
     return (
@@ -75,13 +73,13 @@ export default function StepAvaliacaoEras({ doente, episodio, avaliacaoEras, onB
                 </Button>
             </div>
 
-            {avaliacaoErasList.length === 0 ? (
+            {cirurgiasList.length === 0 ? (
                 <AppEmptyState
                     title="Este doente ainda não possui avaliações ERAS."
                     action={{ label: 'Criar nova avaliação ERAS', onClick: () => setShowCreate(true) }}
                 />
             ) : (
-                <AppTable columns={columns} data={avaliacaoErasList} rowKey={(avaliacao) => avaliacao.id} />
+                <AppTable columns={columns} data={cirurgiasList} rowKey={(cirurgia) => cirurgia.id} />
             )}
 
             <div className="flex justify-between border-t border-neutral-200 pt-5 dark:border-neutral-800">
@@ -89,20 +87,19 @@ export default function StepAvaliacaoEras({ doente, episodio, avaliacaoEras, onB
                     Voltar
                 </Button>
 
-                <Button type="button" disabled={!episodio} onClick={onContinue}>
+                <Button type="button" disabled={!cirurgia} onClick={onContinue}>
                     Continuar
                 </Button>
             </div>
-
             {showCreate && (
-                <CreateOrUpdateAvaliacaoEras
-                    doente={doente}
-                    episodio={episodio}
-                    onBack={() => setShowCreate(false)}
-                    poloOptions={poloOptions}
-                    onSuccess={(createdAvaliacaoEras) => {
+                <CreateOrUpdateCirurgia
+                    casoPlaneado={casoPlaneado}
+                    avaliacaoEras={null}
+                    cirurgia={null}
+                    onClose={() => setShowCreate(false)}
+                    onSuccess={(cirurgia) => {
                         setShowCreate(false);
-                        onSuccess(createdAvaliacaoEras);
+                        // atualizar lista
                     }}
                 />
             )}

@@ -80,7 +80,6 @@ export default function Index({ casosPlaneados, users, slots, equipas }: Props) 
 
     const [editingCasoPlaneado, setEditingCasoPlaneado] = useState<CasoPlaneadoItem | null>(null);
 
-    const [selectedCasoEquipa, setSelectedCasoEquipa] = useState<CasoPlaneadoItem | null>(null);
 
     const [casoEquipaCaso, setCasoEquipaCaso] = useState<CasoPlaneadoItem | null>(null);
 
@@ -91,25 +90,6 @@ export default function Index({ casosPlaneados, users, slots, equipas }: Props) 
         setEditingCasoPlaneado(casoPlaneado);
 
         setShowCasoPlaneadoModal(true);
-    };
-
-    /**
-     * Abre o modal para gerir as equipas
-     * associadas ao Caso Planeado.
-     */
-    const gerirEquipas = (casoPlaneado: CasoPlaneadoItem) => {
-        setSelectedCasoEquipa(casoPlaneado);
-
-        setShowEquipaModal(true);
-    };
-
-    /**
-     * Fecha o modal de equipas.
-     */
-    const fecharEquipas = () => {
-        setShowEquipaModal(false);
-
-        setSelectedCasoEquipa(null);
     };
 
     const columns: AppTableColumn<CasoPlaneadoItem>[] = [

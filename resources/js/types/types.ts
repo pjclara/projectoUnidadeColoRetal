@@ -119,3 +119,20 @@ export type AvaliacaoEras = {
     notas: string;
     fonte: string;
 };
+
+export type Cirurgia = {
+    id: number;
+    episodio_id: number;
+    caso_planeado_id: number;
+    procedimento: string;
+    abordagem: string;
+    urgencia: string;
+    reto: boolean;
+    terc_inferior_reto: boolean;
+    excisao_mesorrecto: boolean;
+    ressecao_curativa: boolean;
+    colostomia_definitiva: boolean;
+    anastomose: boolean;
+    eras_id: number;
+    observacoes?: string | null;
+};
