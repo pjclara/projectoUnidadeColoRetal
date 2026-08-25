@@ -6,30 +6,17 @@ import { AppTextareaField } from '@/components/app/app-textarea-field';
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import type { CasoPlaneado, Slot, User } from './../../types/types';
+import type { CasoPlaneado, Pagination, Slot, User } from './../../types/types';
 
 type Props = {
     episodio?: { id: number } | null;
     users: User[];
-    slots: Pick<Slot, 'id' | 'nome_slot'>[];
+    slots: Pagination<Slot> | Slot[];
     casoPlaneado?: CasoPlaneado | null;
     onClose: () => void;
     onCreated: (casoPlaneado: CasoPlaneado) => void;
 };
 
-type FormData = {
-    id?: number;
-    slot_id: number;
-    episodio_id?: number;
-    origem: string;
-    procedimento_previsto: string;
-    duracao_prevista_min: string;
-    anestesia_apto: boolean;
-    cama_destino: string;
-    internamento_em: string;
-    cirurgiao_id: number;
-    observacoes: string;
-};
 
 export default function CreateOrUpdateCasoPlaneado({ casoPlaneado, users, onClose, onCreated, slots, episodio }: Props) {
     const [loading, setLoading] = useState(false);
@@ -105,7 +92,7 @@ export default function CreateOrUpdateCasoPlaneado({ casoPlaneado, users, onClos
                         value={form.slot_id}
                         onChange={(value) => setForm({ ...form, slot_id: Number(value) })}
                         error={errors.slot_id}
-                        options={slots.map((slot) => ({ value: slot.id, label: slot.nome_slot }))}
+                        options={(Array.isArray(slots) ? slots : slots.data).map((slot) => ({ value: slot.id, label: slot.nome_slot }))}
                     />
                     <AppInputField
                         label="Procedimento Previsto"

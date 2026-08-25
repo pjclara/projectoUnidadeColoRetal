@@ -4,13 +4,13 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 import CreateOrUpdateEpisodio from '../Episodios/CreateOrUpdateEpisodio';
-import type { CasoPlaneado, Doente, Episodio, Pagination, User } from './../../types/types';
+import type { CasoPlaneado, Doente, Episodio, Pagination, Slot, User } from './../../types/types';
 import CreateOrUpdateCasoPlaneado from './CreateOrUpdateCasoPlaneado';
 
 type Props = {
     doente: Doente;
     episodio: Episodio | null;
-    slots: { id: number; nome_slot: string }[];
+    slots: Pagination<Slot> | Slot[];
     users: User[];
     casoPlaneado?: CasoPlaneado | null;
     casosPlaneados?: Pagination<CasoPlaneado> | null;

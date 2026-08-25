@@ -22,17 +22,17 @@ export type Doente = {
 
 export type Slot = {
     id: number;
-    nome_slot: string;
-    episodio_id?: number | null;
-    ordem?: number | null;
-    procedimento_previsto?: string | null;
-    duracao_prevista_min?: number | null;
-    anestesia_apto?: boolean | null;
-    cama_destino?: string | null;
-    internamento_em?: string | null;
-    cirurgiao_id?: number | null;
-    observacoes?: string | null;
+    polo: string;
+    periodo: string;
+    modalidade: string;
+    data: string;
+    hora_inicio: string;
+    hora_fim_prevista: string;
     sala_id: number;
+    estado: string;
+    origem: string;
+    observacoes?: string | null;
+    nome_slot: string;
 };
 
 export type Episodio = {

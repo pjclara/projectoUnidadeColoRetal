@@ -28,26 +28,12 @@ type CasoPlaneadoItem = {
     updated_at?: string | null;
 };
 
-type FormData = {
-    id: number;
-    slot_id: number;
-    episodio_id: number;
-    ordem: number;
-    procedimento_previsto: string;
-    duracao_prevista_min: number;
-    anestesia_apto: boolean;
-    cama_destino: string;
-    internamento_em?: string | null;
-    cirurgiao_id: number;
-    observacoes: string;
-};
-
 type Props = {
     doentes: Pagination<Doente>;
     selectedDoente: Doente | null;
     episodios: Pagination<Episodio> | null;
-    slots: { id: number; nome_slot: string }[];
-    poloOptions: { id: number; nome_polo: string }[];
+    slots: Pagination<Slot> | Slot[];
+    poloOptions: { value: string; label: string }[];
     users: User[];
     salas: Pagination<Sala> | Sala[];
     filters: DoenteFilters;
@@ -73,7 +59,6 @@ export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: init
     const [episodio, setEpisodio] = useState<Episodio | null>(null);
     const [sala, setSala] = useState<Sala | null>(null);
     const [slot, setSlot] = useState<Slot | null>(null);
-    const [casoPlaneado, setCasoPlaneado] = useState<CasoPlaneadoItem | null>(null);
 
     const selectDoente = (selected: Doente) => {
         setDoente(selected);
@@ -159,11 +144,16 @@ export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: init
                             doente={doente}
                             episodio={episodio}
                             sala={sala}
+                            salas={salas}
                             slots={slots}
                             selectedSlot={slot}
                             onSelect={setSlot}
                             onBack={backToSala}
                             onContinue={goToCasoPlaneado}
+                            estadoOptions={[]}
+                            origemOptions={[]}
+                            periodoOptions={[]}
+                            modalidadeOptions={[]}
                         />
                     )}
 

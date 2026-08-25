@@ -3,13 +3,9 @@ import { AppEntitySummary } from '@/components/app/app-entity-summary';
 import { AppTable, AppTableColumn } from '@/components/app/app-table';
 import { Button } from '@/components/ui/button';
 
-import type {
-    Doente,
-    Episodio,
-    Pagination,
-    Sala,
-    Slot,
-} from '../../types/types';
+import { useState } from 'react';
+import type { Doente, Episodio, Pagination, Sala, Slot } from '../../types/types';
+import CreateOrEditSlotModal from './CreateOrEditSlotModal';
 
 type StepSlotProps = {
     doente: Doente;
@@ -17,8 +13,12 @@ type StepSlotProps = {
     sala: Sala;
     slots: Pagination<Slot> | Slot[];
     selectedSlot: Slot | null;
+    salas: Pagination<Sala> | Sala[];
+    estadoOptions: { value: string; label: string }[];
+    origemOptions: { value: string; label: string }[];
+    periodoOptions: { value: string; label: string }[];
+    modalidadeOptions: { value: string; label: string }[];
     onSelect: (slot: Slot) => void;
-
     onBack: () => void;
     onContinue: () => void;
 };
@@ -29,12 +29,19 @@ export default function StepSlot({
     sala,
     slots,
     selectedSlot,
+    salas,
+    estadoOptions,
+    origemOptions,
+    periodoOptions,
+    modalidadeOptions,
     onSelect,
     onBack,
     onContinue,
 }: StepSlotProps) {
     const slotsList = Array.isArray(slots) ? slots : slots.data;
     const slotsFilterBySala = slotsList.filter((slot) => slot.sala_id === sala.id);
+    const [editingSlot, setEditingSlot] = useState<Slot | null>(null);
+    const [showSlotModal, setShowSlotModal] = useState(false);
 
     const columns: AppTableColumn<Slot>[] = [
         {
@@ -49,12 +56,7 @@ export default function StepSlot({
                 const selecionado = selectedSlot?.id === slot.id;
 
                 return (
-                    <Button
-                        type="button"
-                        size="sm"
-                        variant={selecionado ? 'default' : 'outline'}
-                        onClick={() => onSelect(slot)}
-                    >
+                    <Button type="button" size="sm" variant={selecionado ? 'default' : 'outline'} onClick={() => onSelect(slot)}>
                         {selecionado ? 'Selecionado' : 'Selecionar'}
                     </Button>
                 );
@@ -124,70 +126,70 @@ export default function StepSlot({
                     },
                 ]}
                 action={
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={onBack}
-                    >
+                    <Button type="button" variant="outline" onClick={onBack}>
                         Alterar sala
                     </Button>
                 }
             />
 
-            {/* Slots */}
-            <div>
-                <div className="mb-4">
-                    <h2 className="text-xl font-semibold">
-                        Selecionar slot
-                    </h2>
-
-                    <p className="mt-1 text-sm text-neutral-500">
-                        Selecione o slot pretendido para a cirurgia.
+            {/* Slot selecionado */}
+            {selectedSlot && (
+                <div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950">
+                    <p className="text-sm text-green-800 dark:text-green-200">
+                        <strong>Slot selecionado:</strong> {selectedSlot.nome_slot}
                     </p>
+                </div>
+            )}
+            {/* Slots */}
+            <div className="mb-4">
+                <div className="flex justify-between">
+                    <div className="mb-4">
+                        <h2 className="text-xl font-semibold">Selecionar slot</h2>
+
+                        <p className="mt-1 text-sm text-neutral-500">Selecione o slot pretendido para a cirurgia.</p>
+                    </div>
+                    <div className="mt-2">
+                        <Button type="button" onClick={() => setShowSlotModal(true)}>
+                            Criar novo Slot
+                        </Button>
+                    </div>
                 </div>
 
                 {slotsFilterBySala.length === 0 ? (
                     <AppEmptyState
                         title="Nenhum slot encontrado"
                         description="Não existem slots disponíveis para a sala selecionada."
+                        action={{ label: 'Criar novo Slot', onClick: () => setShowSlotModal(true) }}
                     />
                 ) : (
-                    <AppTable
-                        columns={columns}
-                        data={slotsFilterBySala}
-                        rowKey={(slot) => slot.id}
-                    />
+                    <AppTable columns={columns} data={slotsFilterBySala} rowKey={(slot) => slot.id} />
                 )}
             </div>
 
-            {/* Slot selecionado */}
-            {selectedSlot && (
-                <div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950">
-                    <p className="text-sm text-green-800 dark:text-green-200">
-                        <strong>Slot selecionado:</strong>{' '}
-                        {selectedSlot.nome_slot}
-                    </p>
-                </div>
-            )}
-
             {/* Navegação */}
             <div className="flex justify-between border-t border-neutral-200 pt-5 dark:border-neutral-800">
-                <Button
-                    type="button"
-                    variant="outline"
-                    onClick={onBack}
-                >
+                <Button type="button" variant="outline" onClick={onBack}>
                     Voltar
                 </Button>
 
-                <Button
-                    type="button"
-                    disabled={!selectedSlot}
-                    onClick={onContinue}
-                >
+                <Button type="button" disabled={!selectedSlot} onClick={onContinue}>
                     Continuar
                 </Button>
             </div>
+            {showSlotModal && editingSlot && (
+                <CreateOrEditSlotModal
+                    slot={editingSlot}
+                    onClose={() => {
+                        setEditingSlot(null);
+                        setShowSlotModal(false);
+                    }}
+                    estados={estadoOptions}
+                    salas={salas}
+                    origems={origemOptions}
+                    periodos={periodoOptions}
+                    modalidades={modalidadeOptions}
+                />
+            )}
         </div>
     );
 }

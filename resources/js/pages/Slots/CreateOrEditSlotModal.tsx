@@ -3,23 +3,11 @@ import { AppSelectField } from '@/components/app/app-input-select';
 import { AppModal } from '@/components/app/app-modal';
 import { AppTextareaField } from '@/components/app/app-textarea-field';
 import { Button } from '@/components/ui/button';
+import { Pagination, Slot } from '@/types/types';
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-type Slot = {
-    id: number;
-    polo?: string;
-    periodo?: string;
-    modalidade?: string;
-    data: string;
-    sala_id: number;
-    hora_inicio: string;
-    hora_fim_prevista: string;
-    estado: string;
-    origem: string;
-    observacoes: string;
-};
 
 type Props = {
     slot?: Slot | null;
@@ -28,7 +16,7 @@ type Props = {
     origems: { value: string; label: string }[];
     periodos: { value: string; label: string }[];
     modalidades: { value: string; label: string }[];
-    salas: { value: number; label: string }[];
+    salas: Pagination<{ value: number; label: string }> | { value: number; label: string }[];
 };
 
 export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, origems, periodos, modalidades }: Props) {
@@ -37,15 +25,14 @@ export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, o
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const [form, setForm] = useState({
-        polo: slot?.polo || '',
+        origem: slot?.origem || '',
         periodo: slot?.periodo || '',
         modalidade: slot?.modalidade || '',
         data: slot?.data || '',
-        sala_id: slot?.sala_id || 0,
         hora_inicio: slot?.hora_inicio || '',
         hora_fim_prevista: slot?.hora_fim_prevista || '',
+        sala_id: slot?.sala_id || '',
         estado: slot?.estado || '',
-        origem: slot?.origem || '',
         observacoes: slot?.observacoes || '',
     });
 
@@ -131,7 +118,7 @@ export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, o
                         value={form.sala_id}
                         onChange={(value) => setForm({ ...form, sala_id: Number(value) })}
                         error={errors.sala_id}
-                        options={salas}
+                        options={Array.isArray(salas) ? salas.map((sala) => ({ value: sala.value, label: sala.label })) : salas.data.map((sala) => ({ value: sala.value, label: sala.label }))}
                     />
                     <AppSelectField
                         label="Estado"
