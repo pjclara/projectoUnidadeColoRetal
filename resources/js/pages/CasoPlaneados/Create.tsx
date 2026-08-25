@@ -47,6 +47,7 @@ type Props = {
     selectedDoente: Doente | null;
     episodios: Pagination<Episodio> | null;
     slots: { id: number; nome_slot: string }[];
+    poloOptions: { id: number; nome_polo: string }[];
     users: User[];
     salas: Pagination<Sala> | Sala[];
     filters: DoenteFilters;
@@ -66,7 +67,7 @@ const steps: AppWizardStep[] = [
     { id: 'confirmacao', title: 'Confirmação', description: 'Concluído' },
 ];
 
-export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: initialDoente, episodios, slots, users, filters, salas }: Props) {
+export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: initialDoente, episodios, slots, users, filters, salas, poloOptions }: Props) {
     const [currentStep, setCurrentStep] = useState(initialDoente ? 1 : 0);
     const [doente, setDoente] = useState<Doente | null>(initialDoente);
     const [episodio, setEpisodio] = useState<Episodio | null>(null);
@@ -144,6 +145,7 @@ export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: init
                         <StepSala
                             doente={doente}
                             episodio={episodio}
+                            poloOptions={poloOptions}
                             salas={salas}
                             selectedSala={sala}
                             onSelect={setSala}

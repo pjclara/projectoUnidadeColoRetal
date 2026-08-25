@@ -81,8 +81,11 @@ class CasoPlaneadoController extends Controller
                 ->map(fn(Slot $slot) => [
                     'id' => $slot->id,
                     'nome_slot' => $slot->nome_slot,
+                    'sala_id' => $slot->sala_id,
                 ]),
             'salas' => fn() => $this->service->getSalas(),
+
+            'poloOptions' => fn() => $this->service->getPoloOptions(),
 
             'users' => User::query()->select('id', 'name')->orderBy('name')->get(),
 

@@ -15,9 +15,7 @@ type StepSlotProps = {
     doente: Doente;
     episodio: Episodio;
     sala: Sala;
-
     slots: Pagination<Slot> | Slot[];
-
     selectedSlot: Slot | null;
     onSelect: (slot: Slot) => void;
 
@@ -36,6 +34,7 @@ export default function StepSlot({
     onContinue,
 }: StepSlotProps) {
     const slotsList = Array.isArray(slots) ? slots : slots.data;
+    const slotsFilterBySala = slotsList.filter((slot) => slot.sala_id === sala.id);
 
     const columns: AppTableColumn<Slot>[] = [
         {
@@ -147,7 +146,7 @@ export default function StepSlot({
                     </p>
                 </div>
 
-                {slotsList.length === 0 ? (
+                {slotsFilterBySala.length === 0 ? (
                     <AppEmptyState
                         title="Nenhum slot encontrado"
                         description="Não existem slots disponíveis para a sala selecionada."
@@ -155,7 +154,7 @@ export default function StepSlot({
                 ) : (
                     <AppTable
                         columns={columns}
-                        data={slotsList}
+                        data={slotsFilterBySala}
                         rowKey={(slot) => slot.id}
                     />
                 )}

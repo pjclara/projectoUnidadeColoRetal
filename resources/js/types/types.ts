@@ -32,6 +32,7 @@ export type Slot = {
     internamento_em?: string | null;
     cirurgiao_id?: number | null;
     observacoes?: string | null;
+    sala_id: number;
 };
 
 export type Episodio = {

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\PoloEnum;
 use App\Services\EncryptionService;
 use App\ViewModels\DoenteViewModel;
 
@@ -150,8 +151,14 @@ class CasoPlaneadoService
                 return [
                     'id' => $sala->id,
                     'nome_sala' => $sala->nome_sala,
+                    'polo' => $sala->polo,
                 ];
             })
             ->toArray();
     }
+
+    public function getPoloOptions(): array
+    {
+        return PoloEnum::options();
+    }   
 }

@@ -81,9 +81,16 @@ export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, o
     };
 
     return (
-        <AppModal open onClose={onClose} title={editing ? 'Editar Slot' : 'Criar Slot'} >
+        <AppModal open onClose={onClose} title={editing ? 'Editar Slot' : 'Criar Slot'}>
             <div className="space-y-6">
                 <div className="grid gap-6 md:grid-cols-3">
+                    <AppSelectField
+                        label="Origem"
+                        value={form.origem}
+                        onChange={(value) => setForm({ ...form, origem: String(value) })}
+                        error={errors.origem}
+                        options={origems}
+                    />
                     <AppSelectField
                         label="Período"
                         value={form.periodo}
@@ -97,20 +104,13 @@ export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, o
                         onChange={(value) => setForm({ ...form, modalidade: String(value) })}
                         error={errors.modalidade}
                         options={modalidades}
-                    />                  
+                    />
                     <AppInputField
                         label="Data"
                         type="date"
                         value={form.data}
                         onChange={(value) => setForm({ ...form, data: String(value) })}
                         error={errors.data}
-                    />
-                    <AppSelectField
-                        label="Sala"
-                        value={form.sala_id}
-                        onChange={(value) => setForm({ ...form, sala_id: Number(value) })}
-                        error={errors.sala_id}
-                        options={salas}
                     />
                     <AppInputField
                         label="Hora Início"
@@ -127,25 +127,18 @@ export default function CreateOrEditSlotModal({ slot, onClose, estados, salas, o
                         error={errors.hora_fim_prevista}
                     />
                     <AppSelectField
+                        label="Sala"
+                        value={form.sala_id}
+                        onChange={(value) => setForm({ ...form, sala_id: Number(value) })}
+                        error={errors.sala_id}
+                        options={salas}
+                    />
+                    <AppSelectField
                         label="Estado"
                         value={form.estado}
                         onChange={(value) => setForm({ ...form, estado: String(value) })}
                         error={errors.estado}
                         options={estados}
-                    />
-                    <AppSelectField
-                        label="Origem"
-                        value={form.origem}
-                        onChange={(value) => setForm({ ...form, origem: String(value) })}
-                        error={errors.origem}
-                        options={origems}
-                    />
-                    <AppSelectField
-                        label="Período"
-                        value={form.periodo}
-                        onChange={(value) => setForm({ ...form, periodo: String(value) })}
-                        error={errors.periodo}
-                        options={periodos}
                     />
                 </div>
                 <div>
