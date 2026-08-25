@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-use App\Services\EncryptionService;
-use App\Services\CasoPlaneadoService;
-use App\Services\DoenteService;
-use App\Models\Doente;
-use App\ViewModels\DoenteViewModel;
-use Illuminate\Http\Request;
+use App\Enums\ModalidadeEnum;
+use App\Enums\PeriodoEnum;
+use App\Enums\SlotEstadoEnum;
+use App\Enums\SlotOrigemEnum;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCasoPlaneadoRequest;
 use App\Http\Requests\UpdateCasoPlaneadoRequest;
-use App\Services\EpisodioService;
-use App\Models\Episodio;
-use App\Models\User;
 use App\Models\CasoPlaneado;
+use App\Models\Doente;
+use App\Models\Episodio;
 use App\Models\Slot;
+use App\Models\User;
+use App\Services\CasoPlaneadoService;
+use App\Services\DoenteService;
+use App\Services\EncryptionService;
+use App\Services\EpisodioService;
+use App\ViewModels\DoenteViewModel;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CasoPlaneadoController extends Controller
 {
@@ -90,6 +95,10 @@ class CasoPlaneadoController extends Controller
             'users' => User::query()->select('id', 'name')->orderBy('name')->get(),
 
             'filters' => $request->only(['search', 'pu', 'nome', 'data_nascimento']),
+            'estadoOptions' => SlotEstadoEnum::options(),
+            'origemOptions' => SlotOrigemEnum::options(),
+            'periodoOptions' => PeriodoEnum::options(),
+            'modalidadeOptions' => ModalidadeEnum::options(),
         ]);
     }
 

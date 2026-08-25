@@ -159,7 +159,9 @@ export default function StepSlot({
                     <AppEmptyState
                         title="Nenhum slot encontrado"
                         description="Não existem slots disponíveis para a sala selecionada."
-                        action={{ label: 'Criar novo Slot', onClick: () => setShowSlotModal(true) }}
+                        action={{ label: 'Criar novo Slot', onClick: () => {
+                            setEditingSlot(null);
+                            setShowSlotModal(true)} }}
                     />
                 ) : (
                     <AppTable columns={columns} data={slotsFilterBySala} rowKey={(slot) => slot.id} />
@@ -176,7 +178,7 @@ export default function StepSlot({
                     Continuar
                 </Button>
             </div>
-            {showSlotModal && editingSlot && (
+            {showSlotModal && (
                 <CreateOrEditSlotModal
                     slot={editingSlot}
                     onClose={() => {
@@ -184,6 +186,7 @@ export default function StepSlot({
                         setShowSlotModal(false);
                     }}
                     estados={estadoOptions}
+                    sala={sala}
                     salas={salas}
                     origems={origemOptions}
                     periodos={periodoOptions}

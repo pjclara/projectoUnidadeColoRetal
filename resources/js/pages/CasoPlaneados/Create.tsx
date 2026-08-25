@@ -11,22 +11,8 @@ import { StepDoente } from '../Tratamentos/Wizard/StepDoente';
 import { StepEpisodio } from '../Tratamentos/Wizard/StepEpisodio';
 import { StepCasoPlaneado } from './StepCasoPlaneado';
 import StepSlot from '../Slots/StepSLot';
+import { StepConfirmation } from '../Tratamentos/Wizard/StepConfirmation';
 
-type CasoPlaneadoItem = {
-    id: number;
-    slot_id: number;
-    episodio_id: number;
-    ordem: number;
-    procedimento_previsto: string;
-    duracao_prevista_min: number;
-    anestesia_apto: boolean;
-    cama_destino: string;
-    internamento_em?: string | null;
-    cirurgiao_id: number;
-    observacoes: string;
-    created_at?: string | null;
-    updated_at?: string | null;
-};
 
 type Props = {
     doentes: Pagination<Doente>;
@@ -37,6 +23,10 @@ type Props = {
     users: User[];
     salas: Pagination<Sala> | Sala[];
     filters: DoenteFilters;
+    estadoOptions: { value: string; label: string }[];
+    origemOptions: { value: string; label: string }[];
+    periodoOptions: { value: string; label: string }[];
+    modalidadeOptions: { value: string; label: string }[];
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -53,7 +43,7 @@ const steps: AppWizardStep[] = [
     { id: 'confirmacao', title: 'Confirmação', description: 'Concluído' },
 ];
 
-export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: initialDoente, episodios, slots, users, filters, salas, poloOptions }: Props) {
+export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: initialDoente, episodios, slots, users, filters, salas, poloOptions, estadoOptions, origemOptions, periodoOptions, modalidadeOptions }: Props) {
     const [currentStep, setCurrentStep] = useState(initialDoente ? 1 : 0);
     const [doente, setDoente] = useState<Doente | null>(initialDoente);
     const [episodio, setEpisodio] = useState<Episodio | null>(null);
@@ -150,10 +140,10 @@ export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: init
                             onSelect={setSlot}
                             onBack={backToSala}
                             onContinue={goToCasoPlaneado}
-                            estadoOptions={[]}
-                            origemOptions={[]}
-                            periodoOptions={[]}
-                            modalidadeOptions={[]}
+                            estadoOptions={estadoOptions}
+                            origemOptions={origemOptions}
+                            periodoOptions={periodoOptions}
+                            modalidadeOptions={modalidadeOptions}
                         />
                     )}
 
@@ -167,6 +157,10 @@ export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: init
                             onBack={backToEpisodio}
                             onSuccess={finishCasoPlaneado}
                         />
+                    )}
+
+                    {currentStep === 5 && doente && episodio && sala && slot && (
+                        <StepConfirmation doente={doente} episodio={episodio}  />
                     )}
                 </div>
             </div>

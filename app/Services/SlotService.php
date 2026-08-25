@@ -34,13 +34,9 @@ class SlotService
     public function getSalas()
     {
         return Sala::query()
-            ->get()
-            ->map(fn(Sala $sala) => [
-                'value' => $sala->id,
-                'label' => $sala->nome_sala,
-            ])
-            ->values()
-            ->toArray();
+            ->select('id', 'polo', 'codigo')
+            ->orderBy('polo')
+            ->get();
     }
 
     public function create(array $data): Slot

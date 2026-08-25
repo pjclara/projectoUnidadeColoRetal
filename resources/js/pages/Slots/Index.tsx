@@ -5,6 +5,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import CreateOrEditSlotModal from './CreateOrEditSlotModal';
+import { Sala } from '@/types/types';
 
 type SlotItem = {
     id: number;
@@ -25,7 +26,7 @@ type Props = {
     slots: {
         data: SlotItem[];
     }
-    salas: { value: number; label: string }[];
+    salas: Sala[];
     estadoOptions: { value: string; label: string }[];
     origemOptions: { value: string; label: string }[];
     periodoOptions: { value: string; label: string }[];
@@ -116,7 +117,7 @@ export default function Index({ slots, salas, estadoOptions, origemOptions, peri
 
             {showSlotModal && (
                 <CreateOrEditSlotModal
-                    slot={editingSlot}
+                    slot={editingSlot ?? null}
                     onClose={() => {
                         setEditingSlot(null);
                         setShowSlotModal(false);
