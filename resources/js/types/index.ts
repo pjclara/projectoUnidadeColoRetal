@@ -38,3 +38,17 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Doente {
+    id: number;
+    pu: string;
+    nome: string;
+    data_nascimento?: string;
+    sexo?: string;
+}
+
+export interface Episodio {
+    id: number;
+    title: string;
+    [key: string]: unknown;
+}

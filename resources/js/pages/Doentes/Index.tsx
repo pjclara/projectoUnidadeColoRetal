@@ -12,27 +12,7 @@ import { Head, router } from '@inertiajs/react';
 import { FormEvent, useState } from 'react';
 import CreateOrUpdateDoente from './CreateOrUpdateDoente';
 import toast from 'react-hot-toast';
-
-type Doente = {
-    id: number;
-    nome?: string | null;
-    pu?: string | null;
-    data_nascimento?: string | null;
-    sexo?: string | null;
-    created_at?: string | null;
-    updated_at?: string | null;
-};
-
-type PaginationLink = {
-    url: string | null;
-    label: string;
-    active: boolean;
-};
-
-type Sexo = {
-    id: number;
-    nome: string;
-};
+import type { Doente, PaginationLink, Sexo, Filters } from '@/types/types';
 
 type Props = {
     doentes: {
@@ -51,10 +31,6 @@ type Props = {
     };
 };
 
-type Filters = {
-    search: string;
-    sexo: string;
-};
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

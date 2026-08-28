@@ -1,26 +1,130 @@
-import { Head } from '@inertiajs/react';
-
 import { AppPageHeader } from '@/components/app/app-page-header';
+import { AppWizard } from '@/components/app/app-wizard';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-
-import { EpisodioWizard } from './EpisodioWizard';
-import type { Doente, Episodio } from './types';
+import { type BreadcrumbItem } from '@/types';
+import { Head, router } from '@inertiajs/react';
+import { useState } from 'react';
+import { StepDoente } from '../Doentes/StepDoente';
+import type { Doente, Episodio, Pagination, User } from '../../types/types';
+import CreateOrUpdateEpisodio from './CreateOrUpdateEpisodio';
+import { EpisodiosStep } from './StepEpisodio';
 
 type Props = {
-    doentes: Doente[];
-    episodios: Episodio[];
+    doentes: Pagination<Doente>;
+    selectedDoente?: Doente | null;
+    episodios?: Pagination<Episodio> | null;
+    users?: User[];
 };
 
-export default function Novo({ doentes, episodios }: Props) {
+export default function CreateEpisodioWizard({
+    doentes,
+    selectedDoente: initialDoente = null,
+    episodios = null,
+    users = [],
+}: Props) {
+    const [currentStep, setCurrentStep] = useState(initialDoente ? 1 : 0);
+    const [selectedDoente, setSelectedDoente] = useState<Doente | null>(initialDoente);
+    const [selectedEpisodio, setSelectedEpisodio] = useState<Episodio | null>(null);
+
+    const steps = [
+        {
+            id: 'doente',
+            title: 'Doente',
+            description: 'Procurar ou criar',
+        },
+        {
+            id: 'episodios',
+            title: 'Episódios',
+            description: 'Histórico',
+        },
+     
+    ];
+
+    const selectDoente = (doente: Doente) => {
+        setSelectedDoente(doente);
+        setSelectedEpisodio(null);
+        setCurrentStep(1);
+
+        router.get('/episodios/create', { doente_id: doente.id }, { preserveState: true, preserveScroll: true, replace: true });
+    };
+
+    const createDoente = (doente: Doente) => {
+        router.get('/episodios/create', { doente_id: doente.id }, { preserveState: true, preserveScroll: true, replace: true });
+        setSelectedDoente(doente);
+        setCurrentStep(1);
+    };
+
+    const createEpisodio = () => {
+        setSelectedEpisodio(null);
+        setCurrentStep(2);
+    };
+
+    const editEpisodio = (episodio: Episodio) => {
+        setSelectedEpisodio(episodio);
+        setCurrentStep(2);
+    };
+
+    const backToDoente = () => {
+        setSelectedEpisodio(null);
+        setCurrentStep(0);
+    };
+
+    const backToEpisodios = () => {
+        setSelectedEpisodio(null);
+        setCurrentStep(1);
+    };
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Home', href: '/' },
+        { title: 'Episódios', href: '/episodios' },
+        { title: 'Criar', href: '/episodios/create' },
+    ];
+
     return (
-        <AppLayout>
-            <Head title="Novo episódio" />
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Episódios" />
 
             <div className="p-6">
-                <AppPageHeader title="Novo episódio" description="Selecione o doente e registe o episódio." />
+                <AppPageHeader
+                    title="Episódios"
+                    description="Gestão e consulta de episódios clínicos"
+                    action={
+                        <Button type="button" size="sm" variant="outline" onClick={() => router.get('/episodios')}>
+                            Voltar
+                        </Button>
+                    }
+                />
+                <div className="space-y-8">
+                    <AppWizard steps={steps} currentStep={currentStep}>
+                        {currentStep === 0 && (
+                            <StepDoente
+                                doentes={doentes}
+                                selectedDoente={selectedDoente}
+                                onSelect={selectDoente}
+                                onCreate={createDoente}
+                            />
+                        )}
 
-                <div className="mt-8">
-                    <EpisodioWizard doentes={doentes} episodios={episodios} />
+                        {currentStep === 1 && selectedDoente && (
+                            <EpisodiosStep
+                                doente={selectedDoente}
+                                episodios={episodios}
+                                onBack={backToDoente}
+                                onCreate={createEpisodio}
+                                onEdit={editEpisodio}
+                            />
+                        )}
+
+                        {currentStep === 2 && selectedDoente && (
+                            <CreateOrUpdateEpisodio
+                                profissionais={users}
+                                doenteId={selectedDoente.id}
+                                episodio={selectedEpisodio}
+                                onClose={backToEpisodios}
+                            />
+                        )}
+                    </AppWizard>
                 </div>
             </div>
         </AppLayout>

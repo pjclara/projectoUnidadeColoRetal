@@ -146,3 +146,16 @@ export type Sala = {
     designacao: string;
     ativa: boolean;
 };
+
+export type Filters = {
+    search: string;
+    sexo: string;
+};
+
+export type Sexo = {
+    id: number;
+    nome: string;
+};
+
+
+

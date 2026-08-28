@@ -1,0 +1,1 @@
+import{j as s,L as a}from"./app-BgmmWSPl.js";function o({casoPlaneado:e}){return s.jsxs(s.Fragment,{children:[s.jsx(a,{title:"CasoPlaneado"}),s.jsx("div",{className:"p-6",children:s.jsxs("h1",{className:"text-2xl font-semibold",children:["CasoPlaneado #",e.id]})})]})}export{o as default};

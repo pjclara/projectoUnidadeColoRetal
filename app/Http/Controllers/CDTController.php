@@ -52,7 +52,7 @@ class CDTController extends Controller
 
         $doente = $doenteId ? Doente::find($doenteId) : null;
 
-        return Inertia::render('CDTS/Wizard/CreateCDTWizard', [
+        return Inertia::render('CDTS/Create', [
             'doentes' => $doentes,
 
             'selectedDoente' => $doente

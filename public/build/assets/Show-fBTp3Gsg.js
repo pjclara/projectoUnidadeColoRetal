@@ -1,0 +1,1 @@
+import{j as s,L as e}from"./app-BgmmWSPl.js";function i({slot:t}){return s.jsxs(s.Fragment,{children:[s.jsx(e,{title:"Slot"}),s.jsx("div",{className:"p-6",children:s.jsxs("h1",{className:"text-2xl font-semibold",children:["Slot #",t.id]})})]})}export{i as default};

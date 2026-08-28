@@ -1,1 +1,0 @@
-import{j as s,L as e}from"./app-CKZbymEj.js";function i({casoPlaneado:a}){return s.jsxs(s.Fragment,{children:[s.jsx(e,{title:"Editar CasoPlaneado"}),s.jsx("div",{className:"p-6",children:s.jsxs("h1",{className:"text-2xl font-semibold",children:["Editar CasoPlaneado #",a.id]})})]})}export{i as default};
