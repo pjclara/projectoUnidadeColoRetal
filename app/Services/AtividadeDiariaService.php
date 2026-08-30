@@ -10,7 +10,7 @@ class AtividadeDiariaService
     public function paginate(int $perPage = 15): LengthAwarePaginator
     {
         return AtividadeDiaria::query()
-            ->latest()
+            ->orderBy('data', 'asc')
             ->paginate($perPage)
             ->withQueryString()->through(fn ($item) => [
                 'id' => $item->id,

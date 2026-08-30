@@ -44,7 +44,6 @@ export default function Index({ atividadeDiarias, poloOptions, userOptions, peri
     };
 
     const columns = [
-        { label: '#', key: 'id' },
         { label: 'Profissional', key: 'user' },
         { label: 'Data', key: 'data' },
         { label: 'Polo', key: 'polo' },
