@@ -405,3 +405,34 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:atividade-diarium.delete')
         ->name('atividade-diarias.destroy');
 });
+
+// Seguimento Module
+Route::middleware('auth')->group(function () {
+    Route::get('/seguimentos', [\App\Http\Controllers\SeguimentoController::class, 'index'])
+        ->middleware('can:seguimento.view')
+        ->name('seguimentos.index');
+
+    Route::get('/seguimentos/create', [\App\Http\Controllers\SeguimentoController::class, 'create'])
+        ->middleware('can:seguimento.create')
+        ->name('seguimentos.create');
+
+    Route::post('/seguimentos', [\App\Http\Controllers\SeguimentoController::class, 'store'])
+        ->middleware('can:seguimento.create')
+        ->name('seguimentos.store');
+
+    Route::get('/seguimentos/{seguimento}', [\App\Http\Controllers\SeguimentoController::class, 'show'])
+        ->middleware('can:seguimento.view')
+        ->name('seguimentos.show');
+
+    Route::get('/seguimentos/{seguimento}/edit', [\App\Http\Controllers\SeguimentoController::class, 'edit'])
+        ->middleware('can:seguimento.update')
+        ->name('seguimentos.edit');
+
+    Route::put('/seguimentos/{seguimento}', [\App\Http\Controllers\SeguimentoController::class, 'update'])
+        ->middleware('can:seguimento.update')
+        ->name('seguimentos.update');
+
+    Route::delete('/seguimentos/{seguimento}', [\App\Http\Controllers\SeguimentoController::class, 'destroy'])
+        ->middleware('can:seguimento.delete')
+        ->name('seguimentos.destroy');
+});
