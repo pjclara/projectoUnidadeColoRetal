@@ -6,22 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('seguimentos', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('episodios', function (Blueprint $table) {
+            $table->string('motivo', 255)->nullable()->after('doente_id');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('seguimentos');
+        Schema::table('episodios', function (Blueprint $table) {
+            $table->dropColumn('motivo');
+        });
     }
 };

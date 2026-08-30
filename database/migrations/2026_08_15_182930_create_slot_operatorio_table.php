@@ -26,7 +26,7 @@ return new class extends Migration
             $table->text('observacoes')->nullable();
             $table->timestamps();
 
-            $table->unique(['data', 'sala_id', 'periodo', 'hora_inicio'], 'data');
+            $table->unique(['data', 'sala_id', 'periodo', 'hora_inicio'], 'idx_slot_data_sala_periodo_hora');
             $table->index(['sala_id', 'periodo'], 'idx_slot_sala_periodo');
         });
     }

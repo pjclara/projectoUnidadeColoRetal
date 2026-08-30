@@ -12,6 +12,7 @@ import {
 type Episodio = {
     id: string | number;
     doente_id?: string | number | null;
+    motivo?: string | null;
     tipo?: string | null;
     diagnostico?: string | null;
     cid10?: string | null;
@@ -40,6 +41,7 @@ type Props = {
 };
 
 const emptyForm: EpisodioFormData = {
+    motivo: '',
     tipo: '',
     diagnostico: '',
     cid10: '',
@@ -78,6 +80,7 @@ export default function CreateOrUpdateEpisodio({
      */
     useEffect(() => {
         setForm({
+            motivo: episodio?.motivo ?? '',
             tipo: episodio?.tipo ?? '',
             diagnostico: episodio?.diagnostico ?? '',
             cid10: episodio?.cid10 ?? '',

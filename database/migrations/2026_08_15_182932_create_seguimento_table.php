@@ -21,7 +21,7 @@ return new class extends Migration
             $table->boolean('reoperacao')->nullable();
             $table->text('observacoes')->nullable();
             $table->timestamps();
-            $table->unique(['episodio_id', 'data_avaliacao'], 'episodio_id');
+            $table->unique(['episodio_id', 'data_avaliacao'], 'idx_seguimento_episodio_data_avaliacao');
             $table->index(['episodio_id', 'data_avaliacao'], 'idx_seg_ep_data');
         });
     }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('decisao')->nullable();
             $table->string('estadio_clinico', 40)->nullable();
 
-            $table->unique(['episodio_id', 'data_discussao'], 'episodio_id');
+            $table->unique(['episodio_id', 'data_discussao'], 'idx_cdt_episodio_data_discussao');
         });
     }
 

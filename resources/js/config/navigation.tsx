@@ -78,7 +78,7 @@ export const navigation: NavSection[] = [
                 title: 'Seguimento',
                 href: '/seguimentos',
                 icon: HeartPulse,
-                permission: 'seguimentos.view',
+                permission: 'seguimento.view',
             },
         ],
     },

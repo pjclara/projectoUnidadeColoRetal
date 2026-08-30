@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateSeguimentoRequest extends FormRequest
@@ -12,7 +11,7 @@ class UpdateSeguimentoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +22,13 @@ class UpdateSeguimentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'episodio_id' => ['required', 'integer', 'exists:episodios,id'],
+            'data_avaliacao' => ['required', 'date'],
+            'recidiva_local' => ['nullable', 'boolean'],
+            'estado_vital' => ['nullable', 'string', 'max:20'],
+            'readmissao' => ['nullable', 'boolean'],
+            'reoperacao' => ['nullable', 'boolean'],
+            'observacoes' => ['nullable', 'string'],
         ];
     }
 }

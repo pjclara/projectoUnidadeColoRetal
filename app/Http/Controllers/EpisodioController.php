@@ -119,7 +119,7 @@ public function index()
                     'estado' => $episodio->estado,
                     'motivo' => $episodio->motivo,
                     'observacoes' => $episodio->observacoes,
-                    'utilizador' => $episodio->utilizador?->name,
+                    'utilizador' => $episodio->user?->name,
                 ])
                 : null,
             'filters' => [
@@ -158,7 +158,9 @@ public function index()
      */
     public function show(Episodio $episodio)
     {
-        //
+        return Inertia::render('Episodios/Show', [
+            'episodio' => $this->service->serializeEpisodio($episodio),
+        ]);
     }
 
     /**
@@ -166,7 +168,9 @@ public function index()
      */
     public function edit(Episodio $episodio)
     {
-        //
+        return Inertia::render('Episodios/Show', [
+            'episodio' => $this->service->serializeEpisodio($episodio),
+        ]);
     }
 
     /**
@@ -186,7 +190,10 @@ public function index()
      */
     public function destroy(Episodio $episodio)
     {
-        //
+        $this->service->delete($episodio);
+
+        return redirect()->route('episodios.index')
+            ->with('success', 'Episódio eliminado com sucesso.');
     }
 
     private function serializeDoente(Doente $doente): array

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('fonte', 80)->nullable();
             $table->timestamps();
 
-            $table->unique(['data', 'user_id', 'tipo', 'periodo'], 'data');
+            $table->unique(['data', 'user_id', 'tipo', 'periodo'], 'idx_atividade_data_user_tipo_periodo');
         });
     }
 

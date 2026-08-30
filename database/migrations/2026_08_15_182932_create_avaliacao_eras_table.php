@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('fonte', 80)->nullable();
             $table->timestamps();
 
-            $table->unique(['episodio_id', 'data_consulta'], 'episodio_id');
+            $table->unique(['episodio_id', 'data_consulta'], 'idx_eras_episodio_data_consulta');
             $table->index(['episodio_id', 'data_consulta'], 'idx_eras_ep_data');
         });
     }

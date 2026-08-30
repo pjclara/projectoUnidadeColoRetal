@@ -4,6 +4,7 @@ import { AppSelectField } from '@/components/app/app-input-select';
 import { AppTextareaField } from '@/components/app/app-textarea-field';
 
 export type EpisodioFormData = {
+    motivo: string;
     tipo: string;
     diagnostico: string;
     cid10: string;
@@ -43,6 +44,15 @@ export function EpisodioForm({
         <div className="space-y-6">
 
             <div className="grid gap-6 md:grid-cols-2">
+
+                <AppInputField
+                    label="Motivo"
+                    value={form.motivo}
+                    error={errors.motivo}
+                    onChange={(value) =>
+                        onChange('motivo', String(value))
+                    }
+                />
 
                 <AppSelectField
                     label="Tipo"

@@ -39,6 +39,11 @@ class EpisodioService
 
         return $episodio->refresh();
     }
+
+    public function delete(Episodio $episodio): bool
+    {
+        return $episodio->delete();
+    }
     
     public function serializeEpisodio(Episodio $episodio): array
     {

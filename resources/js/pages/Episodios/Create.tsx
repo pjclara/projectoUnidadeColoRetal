@@ -131,11 +131,23 @@ export default function CreateEpisodioWizard({
                             />
                         )}
 
-                        {currentStep === 2 && selectedDoente && selectedEpisodio && (
-                            <ShowEpisodio
-                                doente={selectedDoente}
-                                episodio={selectedEpisodio}
-                            />
+                        {currentStep === 2 && selectedDoente && (
+                            selectedEpisodio ? (
+                                <ShowEpisodio
+                                    doente={selectedDoente}
+                                    episodio={selectedEpisodio}
+                                />
+                            ) : (
+                                <CreateOrUpdateEpisodio
+                                    doenteId={selectedDoente.id}
+                                    profissionais={users}
+                                    onClose={backToEpisodios}
+                                    onCreated={(episodio) => {
+                                        setSelectedEpisodio(episodio as Episodio);
+                                        setCurrentStep(1);
+                                    }}
+                                />
+                            )
                         )}
                     </AppWizard>
                 </div>
