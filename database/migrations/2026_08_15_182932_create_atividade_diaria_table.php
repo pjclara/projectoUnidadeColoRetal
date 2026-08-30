@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('atividade_diaria', function (Blueprint $table) {
+        Schema::create('atividade_diarias', function (Blueprint $table) {
             $table->id('id');
             $table->date('data')->index('idx_atividade_data');
-            $table->foreignId('profissional_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('tipo', 40);
             $table->string('polo', 30)->nullable();
             $table->string('periodo', 30)->nullable();
@@ -22,8 +22,7 @@ return new class extends Migration
             $table->string('fonte', 80)->nullable();
             $table->timestamps();
 
-
-            $table->unique(['data', 'profissional_id', 'tipo', 'periodo'], 'data');
+            $table->unique(['data', 'user_id', 'tipo', 'periodo'], 'data');
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('atividade_diaria');
+        Schema::dropIfExists('atividade_diarias');
     }
 };

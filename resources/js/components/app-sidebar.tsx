@@ -62,7 +62,7 @@ const clinicaNavItems: NavItem[] = [
     {
         title: 'Tratamentos',
         url: '/tratamentos',
-        icon: Activity,
+        icon: CalendarDays,
     },
     {
         title: 'Cirurgias',
@@ -102,7 +102,12 @@ const planeamentoNavItems: NavItem[] = [
         title: 'Slots',
         url: '/slots',
         icon: Folder,
-    }
+    },
+        {
+        title: 'Actividade diária',
+        url: '/atividade-diarias',
+        icon: CalendarDays,
+    },
 ];
 
 /*

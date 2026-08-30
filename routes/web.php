@@ -374,3 +374,34 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:avaliacao-era.delete')
         ->name('avaliacao-eras.destroy');
 });
+
+// AtividadeDiaria Module
+Route::middleware('auth')->group(function () {
+    Route::get('/atividade-diarias', [\App\Http\Controllers\AtividadeDiariaController::class, 'index'])
+        ->middleware('can:atividade-diarium.view')
+        ->name('atividade-diarias.index');
+
+    Route::get('/atividade-diarias/create', [\App\Http\Controllers\AtividadeDiariaController::class, 'create'])
+        ->middleware('can:atividade-diarium.create')
+        ->name('atividade-diarias.create');
+
+    Route::post('/atividade-diarias', [\App\Http\Controllers\AtividadeDiariaController::class, 'store'])
+        ->middleware('can:atividade-diarium.create')
+        ->name('atividade-diarias.store');
+
+    Route::get('/atividade-diarias/{atividadeDiaria}', [\App\Http\Controllers\AtividadeDiariaController::class, 'show'])
+        ->middleware('can:atividade-diarium.view')
+        ->name('atividade-diarias.show');
+
+    Route::get('/atividade-diarias/{atividadeDiaria}/edit', [\App\Http\Controllers\AtividadeDiariaController::class, 'edit'])
+        ->middleware('can:atividade-diarium.update')
+        ->name('atividade-diarias.edit');
+
+    Route::put('/atividade-diarias/{atividadeDiaria}', [\App\Http\Controllers\AtividadeDiariaController::class, 'update'])
+        ->middleware('can:atividade-diarium.update')
+        ->name('atividade-diarias.update');
+
+    Route::delete('/atividade-diarias/{atividadeDiaria}', [\App\Http\Controllers\AtividadeDiariaController::class, 'destroy'])
+        ->middleware('can:atividade-diarium.delete')
+        ->name('atividade-diarias.destroy');
+});

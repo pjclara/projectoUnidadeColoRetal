@@ -5,10 +5,12 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
-import { StepDoente } from '../Doentes/StepDoente';
 import type { Doente, Episodio, Pagination, User } from '../../types/types';
 import CreateOrUpdateEpisodio from './CreateOrUpdateEpisodio';
-import { EpisodiosStep } from './StepEpisodio';
+import { StepDoente } from '../Doentes/StepDoente';
+import { StepEpisodio } from './StepEpisodio';
+import Show from '../AvaliacaoEras/Show';
+import ShowEpisodio from './ShowEpisodio';
 
 type Props = {
     doentes: Pagination<Doente>;
@@ -37,6 +39,11 @@ export default function CreateEpisodioWizard({
             id: 'episodios',
             title: 'Episódios',
             description: 'Histórico',
+        },
+        {
+            id: 'episodio',
+            title: 'Dados do Episódio',
+            description: 'Editar o episódio',
         },
      
     ];
@@ -75,11 +82,17 @@ export default function CreateEpisodioWizard({
         setCurrentStep(1);
     };
 
+    const goToNextStep = () => {
+        setCurrentStep((prevStep) => prevStep + 1);
+    };
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Home', href: '/' },
         { title: 'Episódios', href: '/episodios' },
         { title: 'Criar', href: '/episodios/create' },
     ];
+
+    console.log({ currentStep, selectedDoente, selectedEpisodio });
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -107,21 +120,21 @@ export default function CreateEpisodioWizard({
                         )}
 
                         {currentStep === 1 && selectedDoente && (
-                            <EpisodiosStep
+                            <StepEpisodio
                                 doente={selectedDoente}
+                                setSelectedEpisodio={setSelectedEpisodio}
                                 episodios={episodios}
                                 onBack={backToDoente}
                                 onCreate={createEpisodio}
                                 onEdit={editEpisodio}
+                                continue={goToNextStep}
                             />
                         )}
 
-                        {currentStep === 2 && selectedDoente && (
-                            <CreateOrUpdateEpisodio
-                                profissionais={users}
-                                doenteId={selectedDoente.id}
+                        {currentStep === 2 && selectedDoente && selectedEpisodio && (
+                            <ShowEpisodio
+                                doente={selectedDoente}
                                 episodio={selectedEpisodio}
-                                onClose={backToEpisodios}
                             />
                         )}
                     </AppWizard>

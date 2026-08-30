@@ -113,6 +113,7 @@ public function index()
                 ->through(fn($episodio) => [
                     'id' => $episodio->id,
                     'doente_id' => $episodio->doente_id,
+                    'diagnostico' => $episodio->diagnostico,
                     'data_diagnostico' => $episodio->data_diagnostico?->format('Y-m-d'),
                     'tipo' => $episodio->tipo,
                     'estado' => $episodio->estado,

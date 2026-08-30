@@ -5,32 +5,48 @@ import { AppTable, AppTableColumn } from '@/components/app/app-table';
 
 type Props = {
     doente: Doente;
+    setSelectedEpisodio: (episodio: Episodio) => void;
     users?: User[] | null;
     episodios?: Episodio[] | Pagination<Episodio> | null;
     onBack: () => void;
     onCreate: () => void;
     onEdit: (episodio: Episodio) => void;
+    continue: () => void;
 };
 
-
-const columns = (onEdit: (episodio: Episodio) => void): AppTableColumn<Doente>[] => [
-    { label: 'Id', key: 'id' },
-    { label: 'Motivo', key: 'motivo' },
-    { label: 'Diagnostico', key: 'diagnostico' },
-    
-];
-
 export function StepEpisodio({
+    setSelectedEpisodio,
     doente,
     users,
     episodios,
     onBack,
     onCreate,
     onEdit,
+    continue: goToNextStep,
 }: Props) {
     const episodiosList = Array.isArray(episodios)
         ? episodios
         : episodios?.data ?? [];
+
+    const columns: AppTableColumn<Episodio>[] = [
+        { label: 'Tipo', key: 'tipo' },
+        { label: 'Diagnóstico', key: 'diagnostico' },
+        {
+            label: 'Ações',
+            key: 'actions',
+            render: (episodio: Episodio) => (
+                <Button
+                    variant="outline"
+                    onClick={() => {
+                        setSelectedEpisodio(episodio);
+                        goToNextStep();
+                    }}
+                >
+                    Selecionar
+                </Button>
+            ),
+        },
+    ];
 
     return (
         <div className="space-y-6">
@@ -41,9 +57,12 @@ export function StepEpisodio({
                     { label: 'Nome', value: doente.nome },
                     { label: 'PU', value: doente.pu },
                 ]}
-                actions={{
-                    editLabel: 'Alterar doente',
-                }}                
+                action={[
+                    <Button key="back" variant="outline" onClick={onBack}>
+                        Voltar
+                    </Button>,
+                ]}
+                             
             />
 
             {/* Header */}
@@ -79,7 +98,7 @@ export function StepEpisodio({
                 </div>
             ) : (
                 <AppTable
-                    columns={columns(onEdit)}
+                    columns={columns}
                     data={episodiosList}
                 />
             )}
