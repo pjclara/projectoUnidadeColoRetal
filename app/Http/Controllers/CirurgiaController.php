@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Enums\PoloEnum;
 use App\Http\Controllers\Controller;
-use App\Models\AvaliacaoEras;
+use App\Http\Requests\StoreCirurgiaRequest;
+use App\Http\Requests\UpdateCirurgiaRequest;
+use App\Models\CasoPlaneado;
 use App\Models\Cirurgia;
 use App\Models\Doente;
 use App\Models\Episodio;
@@ -65,10 +67,18 @@ class CirurgiaController extends Controller
                 ->through(fn(Episodio $episodio) => $this->episodioService->serializeEpisodio($episodio))
                 : null,
 
-            'cirurgias' => fn() => $request->integer('episodio_id')
-                ? $this->service->forEpisodio($request->integer('episodio_id'))
-                ->through(fn(Cirurgia $cirurgia) => (new CirurgiaViewModel($cirurgia))->toArray())
-                : null,
+            'casosPlaneados' => $doente
+                ? CasoPlaneado::query()
+                    ->whereHas('episodio', fn ($query) => $query->where('doente_id', $doente->id))
+                    ->orderByDesc('id')
+                    ->get(['id', 'episodio_id', 'ordem', 'procedimento_previsto'])
+                    ->map(fn (CasoPlaneado $casoPlaneado) => [
+                        'id' => $casoPlaneado->id,
+                        'episodio_id' => $casoPlaneado->episodio_id,
+                        'ordem' => $casoPlaneado->ordem,
+                        'procedimento_previsto' => $casoPlaneado->procedimento_previsto,
+                    ])
+                : [],
             'users' => User::query()->select('id', 'name')->orderBy('name')->get(),
 
             'poloOptions' => PoloEnum::options(),
@@ -80,9 +90,13 @@ class CirurgiaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCirurgiaRequest $request)
     {
-        //
+        $cirurgia = $this->service->create($request->validated());
+
+        return back()
+            ->with('success', 'Cirurgia criada com sucesso.')
+            ->with('created_cirurgia', (new CirurgiaViewModel($cirurgia))->toArray());
     }
 
     /**
@@ -90,7 +104,9 @@ class CirurgiaController extends Controller
      */
     public function show(Cirurgia $cirurgia)
     {
-        //
+        return Inertia::render('Cirurgias/Show', [
+            'cirurgia' => (new CirurgiaViewModel($cirurgia))->toArray(),
+        ]);
     }
 
     /**
@@ -104,9 +120,13 @@ class CirurgiaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cirurgia $cirurgia)
+    public function update(UpdateCirurgiaRequest $request, Cirurgia $cirurgia)
     {
-        //
+        $cirurgia = $this->service->update($cirurgia, $request->validated());
+
+        return back()
+            ->with('success', 'Cirurgia atualizada com sucesso.')
+            ->with('updated_cirurgia', (new CirurgiaViewModel($cirurgia))->toArray());
     }
 
     /**
@@ -114,6 +134,9 @@ class CirurgiaController extends Controller
      */
     public function destroy(Cirurgia $cirurgia)
     {
-        //
+        $this->service->delete($cirurgia);
+
+        return redirect()->route('cirurgias.index')
+            ->with('success', 'Cirurgia eliminada com sucesso.');
     }
 }

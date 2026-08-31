@@ -128,6 +128,7 @@ export default function CreateEpisodioWizard({
                                 onCreate={createEpisodio}
                                 onEdit={editEpisodio}
                                 continue={goToNextStep}
+                                users={users}
                             />
                         )}
 

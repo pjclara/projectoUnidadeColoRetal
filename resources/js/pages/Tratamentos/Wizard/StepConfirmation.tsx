@@ -38,9 +38,10 @@ export function StepConfirmation({ doente, episodio, tratamento }: Props) {
             <AppEntitySummary
                 title="Tratamento"
                 fields={[
-                    { label: 'Data do pedido', value: tratamento?.data_pedido },
-                    { label: 'Data da discussão', value: tratamento?.data_discussao },
-                    { label: 'Estádio clínico', value: tratamento?.estadio_clinico },
+                    { label: 'Tipo', value: tratamento?.tipo },
+                    { label: 'Data proposta', value: tratamento?.data_proposta },
+                    { label: 'Data de início', value: tratamento?.data_inicio },
+                    { label: 'Intenção', value: tratamento?.intencao },
                 ]}
             />
 

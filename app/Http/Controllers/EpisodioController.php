@@ -9,6 +9,7 @@ use App\Services\EncryptionService;
 use App\Http\Requests\StoreEpisodioRequest;
 use App\Http\Requests\UpdateEpisodioRequest;
 use App\Models\Episodio;
+use App\Models\User;
 use App\Services\EpisodioService;
 use Inertia\Inertia;
 
@@ -128,6 +129,7 @@ public function index()
                 'nome' => $nome,
                 'data_nascimento' => $dataNascimento,
             ],
+            'users' => User::pluck('id', 'name'),
         ]);
     }
 

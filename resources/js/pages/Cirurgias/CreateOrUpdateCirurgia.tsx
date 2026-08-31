@@ -24,7 +24,7 @@ export type Cirurgia = {
     caso_planeado_id?: number | string | null;
     procedimento?: string | null;
     abordagem?: string | null;
-    urgencia?: string | null;
+    urgencia?: boolean | null;
     reto?: boolean | null;
     terc_inferior_reto?: boolean | null;
     excisao_mesorrecto?: boolean | null;
@@ -51,7 +51,7 @@ type FormData = {
     caso_planeado_id: number | string;
     procedimento: string;
     abordagem: string;
-    urgencia: string;
+    urgencia: boolean;
     reto: boolean;
     terc_inferior_reto: boolean;
     excisao_mesorrecto: boolean;
@@ -69,7 +69,7 @@ const emptyForm = (
     caso_planeado_id: casoPlaneado?.id ?? '',
     procedimento: casoPlaneado?.procedimento_previsto ?? '',
     abordagem: '',
-    urgencia: '',
+    urgencia: false,
     reto: false,
     terc_inferior_reto: false,
     excisao_mesorrecto: false,
@@ -115,7 +115,7 @@ export default function CreateOrUpdateCirurgia({
 
                 abordagem: cirurgia.abordagem ?? '',
 
-                urgencia: cirurgia.urgencia ?? '',
+                urgencia: Boolean(cirurgia.urgencia),
 
                 reto: Boolean(cirurgia.reto),
 
@@ -353,34 +353,16 @@ export default function CreateOrUpdateCirurgia({
                         ]}
                     />
 
-                    <AppSelectField
+                    <AppCheckboxField
                         label="Urgência"
-                        value={form.urgencia}
+                        checked={form.urgencia}
                         onChange={(value) =>
                             updateField(
                                 'urgencia',
-                                String(value),
+                                Boolean(value),
                             )
                         }
                         error={errors.urgencia}
-                        options={[
-                            {
-                                value: '',
-                                label: 'Selecionar',
-                            },
-                            {
-                                value: 'ELETIVA',
-                                label: 'Eletiva',
-                            },
-                            {
-                                value: 'URGENTE',
-                                label: 'Urgente',
-                            },
-                            {
-                                value: 'EMERGENCIA',
-                                label: 'Emergência',
-                            },
-                        ]}
                     />
                 </div>
 

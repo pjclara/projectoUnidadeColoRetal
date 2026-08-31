@@ -1,12 +1,12 @@
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
-import type { AvaliacaoEras, Cirurgia, Doente, DoenteFilters, Episodio, Pagination, Tratamento, User } from '../../types/types';
+import type { CasoPlaneado, Cirurgia, Doente, DoenteFilters, Episodio, Pagination, User } from '../../types/types';
 
+import { AppEntitySummary } from '@/components/app/app-entity-summary';
 import { AppPageHeader } from '@/components/app/app-page-header';
 import { AppWizard, type AppWizardStep } from '@/components/app/app-wizard';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { StepConfirmation } from '../Tratamentos/Wizard/StepConfirmation';
 import { StepDoente } from '../Tratamentos/Wizard/StepDoente';
 import { StepEpisodio } from '../Tratamentos/Wizard/StepEpisodio';
 import StepCirurgia from './StepCirurgia';
@@ -15,10 +15,9 @@ type Props = {
     doentes: Pagination<Doente>;
     selectedDoente: Doente | null;
     episodios: Pagination<Episodio> | null;
-    selectedEpisodio: Episodio | null;
+    casosPlaneados: CasoPlaneado[];
     filters: DoenteFilters;
     users: User[];
-    poloOptions: { value: string; label: string }[];
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -37,6 +36,7 @@ export default function CreateCirurgiaWizard({
     doentes,
     selectedDoente: initialDoente,
     episodios,
+    casosPlaneados,
     users,
     filters,
 }: Props) {
@@ -108,15 +108,25 @@ export default function CreateCirurgiaWizard({
                         <StepCirurgia
                             doente={doente}
                             episodio={episodio}
-                            cirurgias={null}
+                            casosPlaneados={casosPlaneados}
                             onBack={backToEpisodio}
-                            onContinue={() => {}}
-                            url="/cirurgias/create"
                             onSuccess={finishCirurgia}
-                            poloOptions={[]}
                         />
                     )}
-                    {currentStep === 3 && doente && episodio && cirurgia && <StepConfirmation doente={doente} episodio={episodio}  />}
+                    {currentStep === 3 && doente && episodio && cirurgia && (
+                        <div className="space-y-6">
+                            <div className="rounded-xl border border-green-200 bg-green-50 p-6 text-center dark:border-green-900 dark:bg-green-950">
+                                <p className="text-lg font-semibold text-green-700 dark:text-green-400">Cirurgia criada com sucesso.</p>
+                            </div>
+                            <AppEntitySummary
+                                title="Cirurgia"
+                                fields={[
+                                    { label: 'Procedimento', value: cirurgia.procedimento },
+                                    { label: 'Abordagem', value: cirurgia.abordagem },
+                                ]}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </AppLayout>

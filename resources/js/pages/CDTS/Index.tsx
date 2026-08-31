@@ -151,7 +151,7 @@ export default function Index({ cdts }: Props) {
                         Ver
                     </Button>
 
-                    <Button size="sm" variant="destructive" onClick={() => console.log('TODO: delete')}>
+                    <Button size="sm" variant="destructive" onClick={() => router.delete(`/cdts/${cdt.id}`)}>
                         Eliminar
                     </Button>
                 </div>

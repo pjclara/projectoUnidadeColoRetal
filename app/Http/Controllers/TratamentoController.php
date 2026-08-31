@@ -74,8 +74,9 @@ class TratamentoController extends Controller
     {
         $tratamento = $this->service->create($request->validated());
 
-         return redirect()->route('tratamentos.index')
-            ->with('success', 'Tratamento criado com sucesso.');
+        return back()
+            ->with('success', 'Tratamento criado com sucesso.')
+            ->with('created_tratamento', $this->serializeTratamento($tratamento));
     }
 
     /**
@@ -110,6 +111,23 @@ class TratamentoController extends Controller
      */
     public function destroy(Tratamento $tratamento)
     {
-        //
+        $this->service->delete($tratamento);
+
+        return redirect()->route('tratamentos.index')
+            ->with('success', 'Tratamento eliminado com sucesso.');
+    }
+
+    private function serializeTratamento(Tratamento $tratamento): array
+    {
+        return [
+            'id' => $tratamento->id,
+            'episodio_id' => $tratamento->episodio_id,
+            'tipo' => $tratamento->tipo,
+            'data_proposta' => $tratamento->data_proposta?->format('Y-m-d'),
+            'data_inicio' => $tratamento->data_inicio?->format('Y-m-d'),
+            'data_fim' => $tratamento->data_fim?->format('Y-m-d'),
+            'intencao' => $tratamento->intencao,
+            'observacoes' => $tratamento->observacoes,
+        ];
     }
 }

@@ -13,12 +13,13 @@ class AvaliacaoErasService
     public function paginate(int $perPage = 15): LengthAwarePaginator
     {
         return AvaliacaoEras::query()
+            ->with('episodio.doente')
             ->latest()
             ->paginate($perPage)->through(function ($slot) {
                 return [
                     'id' => $slot->id,
                     'episodio_id' => $slot->episodio_id,
-                    'data_consulta' => $slot->data_consulta->format('Y-m-d'),
+                    'data_consulta' => $slot->data_consulta?->format('Y-m-d'),
                     'aptidao' => $slot->aptidao,
                     'asa' => $slot->asa,
                     'polo_recomendado' => $slot->polo_recomendado,
@@ -33,8 +34,8 @@ class AvaliacaoErasService
                     'episodio' => $slot->episodio
                         ? [
                             'id' => $slot->episodio->id,
-                            'data_entrada' => $slot->episodio->data_entrada?->format('Y-m-d'),
-                            'data_saida' => $slot->episodio->data_saida?->format('Y-m-d'),
+                            'diagnostico' => $slot->episodio->diagnostico,
+                            'data_diagnostico' => $slot->episodio->data_diagnostico?->format('Y-m-d'),
                         ]
                         : null,
                 ];
@@ -76,5 +77,10 @@ class AvaliacaoErasService
     {
         $avaliacao->update($data);
         return $avaliacao;
+    }
+
+    public function delete(AvaliacaoEras $avaliacao): bool
+    {
+        return $avaliacao->delete();
     }
 }

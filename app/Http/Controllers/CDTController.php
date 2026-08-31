@@ -149,7 +149,10 @@ class CDTController extends Controller
      */
     public function destroy(CDT $cDT)
     {
-        //
+        $this->service->delete($cDT);
+
+        return redirect()->route('cdts.index')
+            ->with('success', 'CDT eliminada com sucesso.');
     }
 
     private function serializeEpisodio(Episodio $episodio): array

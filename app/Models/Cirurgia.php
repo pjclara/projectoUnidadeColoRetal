@@ -24,6 +24,16 @@ class Cirurgia extends Model
         'observacoes',
     ];
 
+    protected $casts = [
+        'urgencia' => 'boolean',
+        'reto' => 'boolean',
+        'terc_inferior_reto' => 'boolean',
+        'excisao_mesorrecto' => 'boolean',
+        'ressecao_curativa' => 'boolean',
+        'colostomia_definitiva' => 'boolean',
+        'anastomose' => 'boolean',
+    ];
+
     /** @use HasFactory<\Database\Factories\CirurgiaFactory> */
     use HasFactory;
 

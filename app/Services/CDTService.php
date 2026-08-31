@@ -14,13 +14,13 @@ class CDTService
 
     public function paginate(int $perPage = 15): LengthAwarePaginator
     {
-        return CDT::with('doente')
+        return CDT::with('episodio.doente')
             ->latest('id')
             ->paginate($perPage)->through(function (CDT $cdt) {
                 return [
                     'id' => $cdt->id,
-                    'doente' => $cdt->doente
-                        ? (new DoenteViewModel($cdt->doente, $this->encryptionService))->toArray()
+                    'doente' => $cdt->episodio?->doente
+                        ? (new DoenteViewModel($cdt->episodio->doente, $this->encryptionService))->toArray()
                         : null,
                     'episodio_id' => $cdt->episodio_id,
                     'data_pedido' => $cdt->data_pedido?->format('Y-m-d'),
@@ -41,5 +41,10 @@ class CDTService
         $cdt->update($data);
 
         return $cdt->refresh();
+    }
+
+    public function delete(CDT $cdt): bool
+    {
+        return $cdt->delete();
     }
 }

@@ -84,8 +84,9 @@ class AvaliacaoErasController extends Controller
     {
         $avaliacaoEras = $this->service->create($request->validated());
 
-        return redirect()->route('avaliacao-eras.create', ['doente_id' => $avaliacaoEras->episodio->doente_id])
-            ->with('success', 'Avaliação ERAS criada com sucesso.');
+        return back()
+            ->with('success', 'Avaliação ERAS criada com sucesso.')
+            ->with('created_avaliacao_eras', $this->service->serializeAvaliacaoEras($avaliacaoEras));
     }
 
     /**
@@ -120,6 +121,9 @@ class AvaliacaoErasController extends Controller
      */
     public function destroy(AvaliacaoEras $avaliacaoEras)
     {
-        //
+        $this->service->delete($avaliacaoEras);
+
+        return redirect()->route('avaliacao-eras.index')
+            ->with('success', 'Avaliação ERAS eliminada com sucesso.');
     }
 }

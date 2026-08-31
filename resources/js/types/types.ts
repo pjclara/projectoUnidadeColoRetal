@@ -77,12 +77,13 @@ export type CDTFilters = {
 
 export type Tratamento = {
     id: number;
-    doente_id: number;
     episodio_id: number;
-    data_pedido?: string | null;
-    data_discussao?: string | null;
-    decisao?: string | null;
-    estadio_clinico?: string | null;
+    tipo: string;
+    data_proposta?: string | null;
+    data_inicio?: string | null;
+    data_fim?: string | null;
+    intencao?: string | null;
+    observacoes?: string | null;
 };
 
 export type DoenteFilters = {

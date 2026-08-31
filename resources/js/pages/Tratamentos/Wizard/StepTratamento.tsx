@@ -110,7 +110,7 @@ export function StepTratamento({ doente, episodio, onBack, onSuccess }: Props) {
                     type="text"
                     value={form.tipo}
                     onChange={(value) => updateField('tipo', value)}
-                    error={errors.tipo_tratamento}
+                    error={errors.tipo}
                 />
                 <AppInputField
                     label="Data proposta"
