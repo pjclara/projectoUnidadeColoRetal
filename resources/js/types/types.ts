@@ -59,7 +59,7 @@ export type CDT = {
 export type User = {
     id: number;
     name: string;
-    email: string;
+    email?: string;
 };
 
 export type CasoEquipa = {

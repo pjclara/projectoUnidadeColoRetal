@@ -99,9 +99,7 @@ class DoenteController extends Controller
             $request->validated()
         );
 
-        return redirect()
-            ->route('doentes.index')
-            ->with('success', 'Doente criado com sucesso.');
+        return back()->with('success', 'Doente criado com sucesso.');
     }
 
     public function show(Doente $doente)

@@ -129,7 +129,10 @@ public function index()
                 'nome' => $nome,
                 'data_nascimento' => $dataNascimento,
             ],
-            'users' => User::pluck('id', 'name'),
+             'users' => User::query()->select('id', 'name')->orderBy('name')->get()->map(fn($user) => [
+                 'value' => $user->id,
+                 'label' => $user->name,
+             ]),
         ]);
     }
 

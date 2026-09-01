@@ -2,19 +2,16 @@
 
 namespace App\Enums;
 
-enum TipoActividadeDiariaEnum:string
+enum PerfilUtilizadorEnum: string
 {
-    case RESIDENCIA_HG = 'residencia_hg';
-    case URGENCIA_UCCI = 'urgencia_ucci';
-    case VISITA_HUC = 'visita_huc';
-    case VISITA_HG = 'visita_hg';
-    case RDT_CDT = 'rdt_cdt';
-    case REUNIAO = 'reuniao';
-    case FERIAS_AUSENCIA = 'ferias_ausencia';
-    case CONSULTA = 'consulta';
-    case BOC = 'boc';
-    case UCA = 'uca';
-    case ADICIONAL = 'adicional';
+    case ADMINISTRADOR_FUNCIONAL = 'administrador_funcional';
+    case COORDENACAO_UNIDADE = 'coordenacao_unidade';
+    case GESTAO_CLIENTE_CIRURGICO = 'gestao_cliente_cirurgico';
+    case CLINICO = 'clinico';
+    case ENFERMAGEM_ERAS = 'enfermagem_eras';
+    case QUALIDADE_AUDITORIA = 'qualidade_auditoria';
+    case ANALISTA = 'analista';
+    case INTEGRACAO = 'integracao';
 
     public static function values(): array
     {

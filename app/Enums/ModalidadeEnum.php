@@ -4,18 +4,17 @@ namespace App\Enums;
 
 enum ModalidadeEnum: string
 {
-    case AMBULATORIO = 'Ambulatório';
-    case PROGRAMADO = 'Programado';
+    case INTERNAMENTO = 'Internamento';
+    case UCA = 'UCA';
     case ADICIONAL = 'Adicional';
-    case URGENCIA = 'Urgência';
+
 
     public function label(): string
     {
         return match ($this) {
-            self::AMBULATORIO => 'Ambulatório',
-            self::PROGRAMADO => 'Programado',
+            self::INTERNAMENTO => 'Internamento',
+            self::UCA => 'UCA',
             self::ADICIONAL => 'Adicional',
-            self::URGENCIA => 'Urgência',
         };
     }
 
@@ -23,20 +22,16 @@ enum ModalidadeEnum: string
     {
         return [
             [
-                'value' => self::AMBULATORIO->value,
-                'label' => self::AMBULATORIO->label(),
+                'value' => self::INTERNAMENTO->value,
+                'label' => self::INTERNAMENTO->label(),
             ],
             [
-                'value' => self::PROGRAMADO->value,
-                'label' => self::PROGRAMADO->label(),
+                'value' => self::UCA->value,
+                'label' => self::UCA->label(),
             ],
             [
                 'value' => self::ADICIONAL->value,
                 'label' => self::ADICIONAL->label(),
-            ],
-            [
-                'value' => self::URGENCIA->value,
-                'label' => self::URGENCIA->label(),
             ],
         ];
     }

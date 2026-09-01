@@ -92,7 +92,7 @@ export default function CreateEpisodioWizard({
         { title: 'Criar', href: '/episodios/create' },
     ];
 
-    console.log({ currentStep, selectedDoente, selectedEpisodio });
+    console.log({ currentStep, selectedDoente, selectedEpisodio , users });
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

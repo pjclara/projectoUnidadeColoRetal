@@ -1,3 +1,4 @@
+import { AppFormField } from '@/components/app/app-form-field';
 import { AppInputField } from '@/components/app/app-input-field';
 import { AppSelectField } from '@/components/app/app-input-select';
 import { AppModalForm } from '@/components/app/app-modal-form';
@@ -14,15 +15,17 @@ interface User {
     categoria?: string | null;
     especialidade?: string | null;
     ativo: boolean;
+    roles: { id: string; name: string }[];
 }
 
 interface Props {
     open: boolean;
     onClose: () => void;
     user?: User | null;
+    roles: { value: string; label: string }[];
 }
 
-interface FormData extends Record<string, string | boolean> {
+interface FormData extends Record<string, string | boolean | string[]> {
     abreviatura: string;
     name: string;
     email: string;
@@ -31,6 +34,7 @@ interface FormData extends Record<string, string | boolean> {
     especialidade: string;
     ativo: boolean;
     password: string;
+    roles: string[];
 }
 
 const emptyForm: FormData = {
@@ -42,9 +46,10 @@ const emptyForm: FormData = {
     especialidade: '',
     ativo: true,
     password: '',
+    roles: [],
 };
 
-export default function CreateOrUpdateUserModal({ open, onClose, user }: Props) {
+export default function CreateOrUpdateUserModal({ open, onClose, user, roles }: Props) {
     const isEdit = user !== null && user !== undefined;
 
     const [form, setForm] = useState<FormData>(emptyForm);
@@ -66,6 +71,7 @@ export default function CreateOrUpdateUserModal({ open, onClose, user }: Props) 
                 especialidade: user.especialidade ?? '',
                 ativo: user.ativo ?? true,
                 password: '',
+                roles: user.roles ? user.roles.map(role => role.id) : [],
             });
         } else {
             setForm({ ...emptyForm });
@@ -179,7 +185,6 @@ export default function CreateOrUpdateUserModal({ open, onClose, user }: Props) 
                     onChange={(value: string | number) => updateField('categoria', String(value))}
                     error={errors.categoria}
                     options={[
-                        { value: '', label: 'Selecionar' },
                         { value: 'Medico', label: 'Médico' },
                         { value: 'Enfermeiro', label: 'Enfermeiro' },
                         { value: 'Administrativo', label: 'Administrativo' },
@@ -193,12 +198,33 @@ export default function CreateOrUpdateUserModal({ open, onClose, user }: Props) 
                     onChange={(value: string | number) => updateField('especialidade', String(value))}
                     error={errors.especialidade}
                     options={[
-                        { value: '', label: 'Selecionar' },
                         { value: 'Cirurgia', label: 'Cirurgia' },
                         { value: 'Anestesista', label: 'Anestesista' },
                         { value: 'Outro', label: 'Outro' },
                     ]}
                 />
+
+                <AppFormField label="Função" error={errors.roles}>
+                    <div className="flex flex-col gap-2 rounded-lg border border-neutral-300 p-3 dark:border-neutral-700">
+                        {roles.map((role) => (
+                            <label key={role.value} className="flex items-center gap-2 text-sm">
+                                <input
+                                    type="checkbox"
+                                    checked={form.roles.includes(role.value)}
+                                    onChange={(event) =>
+                                        updateField(
+                                            'roles',
+                                            event.target.checked
+                                                ? [...form.roles, role.value]
+                                                : form.roles.filter((value) => value !== role.value)
+                                        )
+                                    }
+                                />
+                                {role.label}
+                            </label>
+                        ))}
+                    </div>
+                </AppFormField>
             </div>
         </AppModalForm>
     );

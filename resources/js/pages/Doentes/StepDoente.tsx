@@ -45,11 +45,6 @@ export function StepDoente({ doentes, selectedDoente, onSelect, onCreate }: Prop
             preserveScroll: true,
 
             onSuccess: (page) => {
-                /*
-                 * Idealmente o backend devolve o doente criado.
-                 * Na primeira versão podemos atualizar a página
-                 * e posteriormente otimizar este fluxo.
-                 */
                 setLoading(false);
                 setShowCreate(false);
             },

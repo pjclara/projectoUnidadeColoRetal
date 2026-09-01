@@ -137,7 +137,7 @@ export default function Index({ episodios, filters: initialFilters, sexos, tipos
                     title="Episódios"
                     description="Gestão e consulta de episódios clínicos"
                     action={
-                        <Button type="button" size="sm" variant="outline" onClick={() => router.get('/episodios/create')}>
+                        <Button type="button" size="sm" onClick={() => router.get('/episodios/create')}>
                             Novo episódio
                         </Button>
                     }

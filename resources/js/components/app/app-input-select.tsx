@@ -17,9 +17,10 @@ type Props = {
     className?: string;
     error?: string;
     label: string;
+    multiple?: boolean;
 };
 
-export function AppSelectField({ id, value, onChange, options, error, placeholder = 'Selecione...', disabled, required, className = '', label }: Props) {
+export function AppSelectField({ id, value, onChange, options, error, placeholder = 'Selecione...', disabled, required, className = '', label, multiple }: Props) {
     return (
         <AppFormField label={label} error={error}>
             <select
@@ -28,6 +29,7 @@ export function AppSelectField({ id, value, onChange, options, error, placeholde
                 onChange={(e) => onChange(e.target.value as string | number)}
                 disabled={disabled}
                 required={required}
+                multiple={multiple}
                 className={`w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900 ${className}`}
             >
                 <option value="">{placeholder}</option>

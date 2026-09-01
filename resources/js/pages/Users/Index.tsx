@@ -19,12 +19,14 @@ type Props = {
             categoria?: string | null;
             especialidade?: string | null;
             ativo: boolean;
+            roles: { id: string; name: string }[];
         }[];
         links: any[];
         from?: number | null;
         to?: number | null;
         total?: number | null;
     };
+    roles: { value: string; label: string }[];
 };
 
 type User = {
@@ -36,6 +38,7 @@ type User = {
     categoria?: string | null;
     especialidade?: string | null;
     ativo: boolean;
+    roles: { id: string; name: string }[];
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -45,7 +48,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function UsersIndex({ users }: Props) {
+export default function UsersIndex({ users, roles }: Props) {
     const [showModal, setShowModal] = useState(false);
     const [editing, setEditing] = useState<User | null>(null);
     const [deleting, setDeleting] = useState<User | null>(null);
@@ -60,6 +63,11 @@ export default function UsersIndex({ users }: Props) {
         {
             key: 'email',
             label: 'Email',
+        },
+        {
+            key: 'roles',
+            label: 'Funções',
+            render: (user) => user.roles.map(role => role.name).join(', '),
         },
         {
             key: 'ativo',
@@ -115,7 +123,7 @@ export default function UsersIndex({ users }: Props) {
                 <AppPagination links={users.links} from={users.from ?? undefined} to={users.to ?? undefined} total={users.total ?? undefined} />
             </div>
 
-            <CreateOrUpdateUserModal open={openModal} onClose={() => setOpenModal(false)} user={editing} />
+            <CreateOrUpdateUserModal open={openModal} onClose={() => setOpenModal(false)} user={editing} roles={roles} />
         </AppLayout>
     );
 }

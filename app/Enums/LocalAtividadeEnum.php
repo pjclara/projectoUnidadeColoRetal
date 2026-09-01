@@ -2,20 +2,12 @@
 
 namespace App\Enums;
 
-enum TipoActividadeDiariaEnum:string
+enum LocalAtividadeEnum: string
 {
-    case RESIDENCIA_HG = 'residencia_hg';
-    case URGENCIA_UCCI = 'urgencia_ucci';
-    case VISITA_HUC = 'visita_huc';
-    case VISITA_HG = 'visita_hg';
-    case RDT_CDT = 'rdt_cdt';
-    case REUNIAO = 'reuniao';
-    case FERIAS_AUSENCIA = 'ferias_ausencia';
-    case CONSULTA = 'consulta';
-    case BOC = 'boc';
-    case UCA = 'uca';
-    case ADICIONAL = 'adicional';
-
+    case HUC = 'huc';
+    case HG = 'hg';
+    case EXTERNO = 'externo';
+    case NAO_APLICAVEL = 'nao_aplicavel';
     public static function values(): array
     {
         return array_column(self::cases(), 'value');

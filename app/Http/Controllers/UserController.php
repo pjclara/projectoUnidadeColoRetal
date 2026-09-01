@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,10 +16,13 @@ class UserController extends Controller
     {
         // $this->authorize('users.viewAny');
 
-        $users = User::paginate(15);
+        $users = User::with('roles')->paginate(15);
 
         return Inertia::render('Users/Index', [
             'users' => $users,
+            'roles' => Role::all()->map(function($role) {
+                return ['value' => $role->id, 'label' => ucfirst($role->name)];
+            }),
         ]);
     }
 
@@ -35,6 +39,8 @@ class UserController extends Controller
             'categoria' => 'nullable|string|max:80',
             'especialidade' => 'nullable|string|max:100',
             'ativo' => 'nullable|boolean',
+            'roles' => 'nullable|array',
+            'roles.*' => 'integer|exists:roles,id',
         ]);
 
         // password is optional, if not provided, set a default password
@@ -45,6 +51,9 @@ class UserController extends Controller
         }
 
         $user = User::create($validatedData);
+        if (isset($validatedData['roles'])) {
+            $user->roles()->sync($validatedData['roles']);
+        }
 
         return redirect()->route('users.index', $user)->with('success', 'User created successfully.');
     }
@@ -59,9 +68,14 @@ class UserController extends Controller
             'categoria' => 'nullable|string|max:80',
             'especialidade' => 'nullable|string|max:100',
             'ativo' => 'nullable|boolean',
+            'roles' => 'nullable|array',
+            'roles.*' => 'integer|exists:roles,id',
         ]);
 
         $user->update($validatedData);
+        if (isset($validatedData['roles'])) {
+            $user->roles()->sync($validatedData['roles']);
+        }
 
         return redirect()->route('users.index', $user)->with('success', 'User updated successfully.');
     }
