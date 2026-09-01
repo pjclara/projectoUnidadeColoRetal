@@ -24,4 +24,9 @@ class SalaService
         $sala->update($data);
         return $sala;
     }
+
+    public function delete(Sala $sala): void
+    {
+        $sala->delete();
+    }
 }

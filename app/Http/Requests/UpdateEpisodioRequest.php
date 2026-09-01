@@ -22,9 +22,9 @@ class UpdateEpisodioRequest extends StoreEpisodioRequest
          return [
             'tipo' => ['required', 'string', 'max:100'],
             'estado' => ['required', 'string', 'max:30'],
-            'motivo' => ['nullable', 'string', 'max:255'],
+            'motivo' => ['required', 'string', 'max:255'],
             'observacoes' => ['nullable', 'string'],
-            'diagnostico' => ['nullable', 'string', 'max:255'],
+            'diagnostico' => ['required', 'string', 'max:255'],
             'cid10' => ['nullable', 'string', 'max:10'],
             'data_diagnostico' => ['nullable', 'date'],
             'centro_referencia' => ['nullable', 'boolean'],

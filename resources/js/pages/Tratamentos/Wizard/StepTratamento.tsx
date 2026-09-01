@@ -7,7 +7,8 @@ import { AppInputField } from '@/components/app/app-input-field';
 import { AppModalForm } from '@/components/app/app-modal-form';
 import { AppTextareaField } from '@/components/app/app-textarea-field';
 
-import type { Tratamento, Doente, Episodio } from '../../../types/types';
+import type { Doente, Episodio, Tratamento } from '../../../types/types';
+import { AppSelectField } from '@/components/app/app-input-select';
 
 type Props = {
     doente: Doente;
@@ -72,8 +73,6 @@ export function StepTratamento({ doente, episodio, onBack, onSuccess }: Props) {
         });
     };
 
-    const maskedPu = doente.pu.length > 3 ? `********${doente.pu.slice(-3)}` : '********';
-
     return (
         <AppModalForm
             open
@@ -89,7 +88,7 @@ export function StepTratamento({ doente, episodio, onBack, onSuccess }: Props) {
                 title="Doente"
                 fields={[
                     { label: 'Nome', value: doente.nome },
-                    { label: 'PU', value: maskedPu },
+                    { label: 'PU', value: doente.pu },
                 ]}
             />
 
@@ -104,45 +103,57 @@ export function StepTratamento({ doente, episodio, onBack, onSuccess }: Props) {
                 ]}
             />
 
-            <div className="grid gap-6 md:grid-cols-2">
-                <AppInputField
-                    label="Tipo de tratamento"
-                    type="text"
-                    value={form.tipo}
-                    onChange={(value) => updateField('tipo', value)}
-                    error={errors.tipo}
-                />
-                <AppInputField
-                    label="Data proposta"
-                    type="date"
-                    value={form.data_proposta}
-                    onChange={(value) => updateField('data_proposta', value)}
-                    error={errors.data_proposta}
-                />
-                <AppInputField
-                    label="Data início"
-                    type="date"
-                    value={form.data_inicio}
-                    onChange={(value) => updateField('data_inicio', value)}
-                    error={errors.data_inicio}
-                />
-                <AppInputField
-                    label="Data fim"
-                    type="date"
-                    value={form.data_fim}
-                    onChange={(value) => updateField('data_fim', value)}
-                    error={errors.data_fim}
-                />
-                <AppInputField
-                    label="Intenção"
-                    type="text"
-                    value={form.intencao}
-                    onChange={(value) => updateField('intencao', value)}
-                    error={errors.intencao}
-                />
-                <AppInputField
+            <div className="space-y-6">
+                <div className="grid gap-6 md:grid-cols-3">
+                    <AppSelectField
+                        label="Tipo"
+                        value={form.tipo}
+                        onChange={(value) => updateField('tipo', String(value))}
+                        error={errors.tipo}
+                        options={[
+                            { label: 'Quimioterapia', value: 'quimioterapia' },
+                            { label: 'Radioterapia', value: 'radioterapia' },
+                            { label: 'Imunoterapia', value: 'imunoterapia' },
+                            { label: 'Cirurgia', value: 'cirurgia' },
+                        ]}
+                    />
+                    <AppInputField
+                        label="Data da proposta"
+                        type="date"
+                        value={form.data_proposta}
+                        onChange={(value) => updateField('data_proposta', value)}
+                        error={errors.data_proposta}
+                    />
+
+                    <AppInputField
+                        label="Data de início"
+                        type="date"
+                        value={form.data_inicio}
+                        onChange={(value) => updateField('data_inicio', value)}
+                        error={errors.data_inicio}
+                    />
+
+                    <AppInputField
+                        label="Data de fim"
+                        type="date"
+                        value={form.data_fim}
+                        onChange={(value) => updateField('data_fim', value)}
+                        error={errors.data_fim}
+                    />
+                    <AppSelectField
+                        label="Intenção"
+                        value={form.intencao}
+                        onChange={(value) => updateField('intencao', String(value))}
+                        error={errors.intencao}
+                        options={[
+                            { label: 'Curativo', value: 'curativo' },
+                            { label: 'Paliativo', value: 'paliativo' },
+                        ]}
+                    />
+                </div>
+
+                <AppTextareaField
                     label="Observações"
-                    type="text"
                     value={form.observacoes}
                     onChange={(value) => updateField('observacoes', value)}
                     error={errors.observacoes}
@@ -151,4 +162,3 @@ export function StepTratamento({ doente, episodio, onBack, onSuccess }: Props) {
         </AppModalForm>
     );
 }
-

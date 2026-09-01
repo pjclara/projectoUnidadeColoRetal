@@ -83,7 +83,9 @@ export default function ModalEditTratamento({
                         value={form.intencao}
                         onChange={(value) => updateField('intencao',  String(value))}
                         error={errors.intencao}
-                        options={[{ label: 'Curativo', value: 'curativo' }]}
+                        options={[{ label: 'Curativo', value: 'curativo' },
+                            { label: 'Paliativo', value: 'paliativo' },
+                        ]}
                     />
                 </div>
 

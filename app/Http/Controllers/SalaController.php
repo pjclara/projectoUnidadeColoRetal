@@ -33,7 +33,7 @@ class SalaController extends Controller
     {
         $sala = $this->service->create($request->validated());
 
-        return redirect()->route('salas.index')
+        return back()
             ->with('success', 'Sala criada com sucesso.');
     }
 
@@ -44,7 +44,7 @@ class SalaController extends Controller
     {
         $sala = $this->service->update($sala, $request->validated());
 
-        return redirect()->route('salas.index')
+        return back()
             ->with('success', 'Sala atualizada com sucesso.');
     }
 
@@ -53,6 +53,9 @@ class SalaController extends Controller
      */
     public function destroy(Sala $sala)
     {
-        //
+        $this->service->delete($sala);
+
+        return back()
+            ->with('success', 'Sala removida com sucesso.');
     }
 }

@@ -77,7 +77,10 @@ export default function Index({ atividadeDiarias, poloOptions, userOptions, peri
 
             <CreateOrUpdateAtividadeDiaria
                 open={isOpen}
-                onClose={() => setIsOpen(false)}
+                onClose={() => {
+                    setEditingItem(null);
+                    setIsOpen(false);
+                }}
                 atividade={editingItem}
                 poloOptions={poloOptions}
                 userOptions={[

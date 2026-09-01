@@ -73,68 +73,70 @@ export default function CreateOrUpdateAtividadeDiaria({ open, onClose, atividade
             loading={loading}
             submitLabel={atividade ? 'Atualizar Actividade Diária' : 'Criar Actividade Diária'}
         >
-            <AppSelectField
-                label="Polo"
-                value={form.polo}
-                onChange={(v) => handleChange('polo', String(v))}
-                error={errors.polo ?? ''}
-                placeholder="Selecione o polo"
-                options={poloOptions}
-            />
+            <div className="grid gap-6 md:grid-cols-2">
+                <AppSelectField
+                    label="Polo"
+                    value={form.polo}
+                    onChange={(v) => handleChange('polo', String(v))}
+                    error={errors.polo ?? ''}
+                    placeholder="Selecione o polo"
+                    options={poloOptions}
+                />
 
-            <AppSelectField
-                label="Usuário"
-                value={form.user_id}
-                onChange={(v) => handleChange('user_id', String(v))}
-                error={errors.user_id ?? ''}
-                placeholder="Selecione o usuário"
-                options={userOptions}
-            />
+                <AppSelectField
+                    label="Usuário"
+                    value={form.user_id}
+                    onChange={(v) => handleChange('user_id', String(v))}
+                    error={errors.user_id ?? ''}
+                    placeholder="Selecione o usuário"
+                    options={userOptions}
+                />
 
-            <AppInputField
-                label="Data"
-                value={form.data}
-                onChange={(v) => handleChange('data', String(v))}
-                error={errors.data ?? ''}
-                placeholder="Digite a data"
-                type="date"
-            />
+                <AppInputField
+                    label="Data"
+                    value={form.data}
+                    onChange={(v) => handleChange('data', String(v))}
+                    error={errors.data ?? ''}
+                    placeholder="Digite a data"
+                    type="date"
+                />
 
-            <AppSelectField
-                label="Período"
-                value={form.periodo}
-                onChange={(v) => handleChange('periodo', String(v))}
-                error={errors.periodo ?? ''}
-                placeholder="Selecione o período"
-                options={periodoOptions}
-            />
+                <AppSelectField
+                    label="Período"
+                    value={form.periodo}
+                    onChange={(v) => handleChange('periodo', String(v))}
+                    error={errors.periodo ?? ''}
+                    placeholder="Selecione o período"
+                    options={periodoOptions}
+                />
 
-            <AppSelectField
-                label="Tipo"
-                value={form.tipo}
-                onChange={(v) => handleChange('tipo', String(v))}
-                error={errors.tipo ?? ''}
-                placeholder="Selecione o tipo"
-                options={tipoOptions}
-            />
+                <AppSelectField
+                    label="Tipo"
+                    value={form.tipo}
+                    onChange={(v) => handleChange('tipo', String(v))}
+                    error={errors.tipo ?? ''}
+                    placeholder="Selecione o tipo"
+                    options={tipoOptions}
+                />
 
-            <AppInputField
-                label="Detalhe"
-                value={form.detalhe}
-                onChange={(v) => handleChange('detalhe', String(v))}
-                error={errors.detalhe ?? ''}
-                placeholder="Digite o detalhe"
-                type="text"
-            />
+                <AppInputField
+                    label="Detalhe"
+                    value={form.detalhe}
+                    onChange={(v) => handleChange('detalhe', String(v))}
+                    error={errors.detalhe ?? ''}
+                    placeholder="Digite o detalhe"
+                    type="text"
+                />
 
-            <AppInputField
-                label="Fonte"
-                value={form.fonte}
-                onChange={(v) => handleChange('fonte', String(v))}
-                error={errors.fonte ?? ''}
-                placeholder="Digite a fonte"
-                type="text"
-            />
+                <AppInputField
+                    label="Fonte"
+                    value={form.fonte}
+                    onChange={(v) => handleChange('fonte', String(v))}
+                    error={errors.fonte ?? ''}
+                    placeholder="Digite a fonte"
+                    type="text"
+                />
+            </div>
         </AppModalForm>
     );
 }
