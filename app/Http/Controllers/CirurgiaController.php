@@ -15,6 +15,7 @@ use App\Services\CirurgiaService;
 use App\Services\DoenteService;
 use App\Services\EncryptionService;
 use App\Services\EpisodioService;
+use App\Services\SlotService;
 use App\ViewModels\CirurgiaViewModel;
 use App\ViewModels\DoenteViewModel;
 use Illuminate\Http\Request;
@@ -26,7 +27,8 @@ class CirurgiaController extends Controller
         private CirurgiaService $service,
         private DoenteService $doenteService,
         private EpisodioService $episodioService,
-        private EncryptionService $encryptionService
+        private EncryptionService $encryptionService,
+        private SlotService $slotService
     ) {}
     /**
      * Display a listing of the resource.
@@ -82,6 +84,8 @@ class CirurgiaController extends Controller
             'users' => User::query()->select('id', 'name')->orderBy('name')->get(),
 
             'poloOptions' => PoloEnum::options(),
+
+            'slots' => $this->slotService->all(),
 
             'filters' => $request->only(['search', 'pu', 'nome', 'data_nascimento']),
         ]);

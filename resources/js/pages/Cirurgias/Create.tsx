@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
-import type { CasoPlaneado, Cirurgia, Doente, DoenteFilters, Episodio, Pagination, User } from '../../types/types';
+import type { CasoPlaneado, Cirurgia, Doente, DoenteFilters, Episodio, Pagination, Slot, User } from '../../types/types';
 
 import { AppEntitySummary } from '@/components/app/app-entity-summary';
 import { AppPageHeader } from '@/components/app/app-page-header';
@@ -18,6 +18,7 @@ type Props = {
     casosPlaneados: CasoPlaneado[];
     filters: DoenteFilters;
     users: User[];
+    slots: Slot[];
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -32,14 +33,7 @@ const steps: AppWizardStep[] = [
     { id: 'confirmacao', title: 'Confirmação', description: 'Concluído' },
 ];
 
-export default function CreateCirurgiaWizard({
-    doentes,
-    selectedDoente: initialDoente,
-    episodios,
-    casosPlaneados,
-    users,
-    filters,
-}: Props) {
+export default function CreateCirurgiaWizard({ doentes, selectedDoente: initialDoente, episodios, casosPlaneados, users, filters, slots }: Props) {
     const [currentStep, setCurrentStep] = useState(initialDoente ? 1 : 0);
     const [doente, setDoente] = useState<Doente | null>(initialDoente);
     const [episodio, setEpisodio] = useState<Episodio | null>(null);
@@ -106,6 +100,8 @@ export default function CreateCirurgiaWizard({
 
                     {currentStep === 2 && doente && episodio && (
                         <StepCirurgia
+                            users={users}
+                            slots={slots}
                             doente={doente}
                             episodio={episodio}
                             casosPlaneados={casosPlaneados}

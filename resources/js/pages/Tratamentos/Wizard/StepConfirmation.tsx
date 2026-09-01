@@ -47,7 +47,7 @@ export function StepConfirmation({ doente, episodio, tratamento }: Props) {
 
             <div className="flex justify-end gap-3 border-t border-neutral-200 pt-5 dark:border-neutral-800">
                 <Button type="button" variant="outline" onClick={() => router.get('/tratamentos')}>
-                    Voltar aos Tratamentos
+                    Voltar
                 </Button>
 
                 {tratamento && (

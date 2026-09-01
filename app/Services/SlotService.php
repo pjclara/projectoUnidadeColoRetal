@@ -39,6 +39,13 @@ class SlotService
             ->get();
     }
 
+    public function all()
+    {
+        return Slot::query()
+            ->latest()
+            ->get();
+    }
+
     public function create(array $data): Slot
     {
         return Slot::create($data);

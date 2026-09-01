@@ -109,7 +109,7 @@ class CasoPlaneadoController extends Controller
     {
         $casoPlaneado = $this->service->create($request->validated());
 
-        return redirect()->route('caso-planeados.index', ['doente_id' => $casoPlaneado->episodio->doente_id])
+        return back()
             ->with('success', 'Caso Planeado criado com sucesso.');
     }
 
@@ -136,7 +136,7 @@ class CasoPlaneadoController extends Controller
     {
         $this->service->update($casoPlaneado, $request->validated());
 
-        return redirect()->route('caso-planeados.index', ['doente_id' => $casoPlaneado->episodio->doente_id])
+        return back()
             ->with('success', 'Caso Planeado atualizado com sucesso.');
     }
 
