@@ -187,7 +187,7 @@ export default function StepSlot({
                     }}
                     estados={estadoOptions}
                     sala={sala}
-                    salas={salas}
+                    salas={Array.isArray(salas) ? salas : salas.data}
                     origems={origemOptions}
                     periodos={periodoOptions}
                     modalidades={modalidadeOptions}

@@ -13,6 +13,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -45,10 +46,11 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        // by default, assign the "user" role to the newly registered user
-        $user->assignRole('user');
+        // Todo o utilizador registado recebe a role base, mesmo em instalações sem seeders.
+        $user->assignRole(Role::findOrCreate('user'));
 
         Auth::login($user);
+        $request->session()->regenerate();
 
         return to_route('dashboard');
     }

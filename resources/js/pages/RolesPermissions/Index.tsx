@@ -6,11 +6,15 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import type { FormEvent } from 'react';
 
+type Permission = { id: number; name: string };
+type Role = { id: number; name: string; permissions: Permission[] };
+type RolesPermissionsPageProps = Record<string, unknown> & {
+    roles: Role[];
+    permissions: Permission[];
+};
+
 export default function RolesPermissionsIndex() {
-    const { roles, permissions } = usePage().props as {
-        roles: Array<{ id: number; name: string; permissions: Array<{ id: number; name: string }> }>;
-        permissions: Array<{ id: number; name: string }>;
-    };
+    const { roles, permissions } = usePage<RolesPermissionsPageProps>().props;
 
     const createRoleForm = useForm({
         name: '',

@@ -8,10 +8,12 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import type { CasoPlaneado, Pagination, Slot, User } from './../../types/types';
 
+type SlotOption = Pick<Slot, 'id' | 'nome_slot'>;
+
 type Props = {
     episodio?: { id: number } | null;
     users: User[];
-    slots: Pagination<Slot> | Slot[];
+    slots: Pagination<SlotOption> | SlotOption[];
     casoPlaneado?: CasoPlaneado | null;
     onClose: () => void;
     onCreated: (casoPlaneado: CasoPlaneado) => void;

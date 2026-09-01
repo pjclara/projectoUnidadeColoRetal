@@ -1,8 +1,7 @@
 import { AppInputField } from '@/components/app/app-input-field';
 import { AppSelectField } from '@/components/app/app-input-select';
-import { AppModal } from '@/components/app/app-modal';
+import { AppModalForm } from '@/components/app/app-modal-form';
 import { AppTextareaField } from '@/components/app/app-textarea-field';
-import { Button } from '@/components/ui/button';
 
 type FormData = {
     id: number;
@@ -33,7 +32,15 @@ export default function ModalEditTratamento({
     saving: boolean; // <-- ADICIONADO
 }) {
     return (
-        <AppModal open={open} onClose={onClose} title="Editar Tratamento" maxWidth="5xl">
+        <AppModalForm
+            open={open}
+            onClose={onClose}
+            onSubmit={(event) => { event.preventDefault(); submitEdit(); }}
+            loading={saving}
+            title="Editar Tratamento"
+            maxWidth="5xl"
+            submitLabel="Guardar alterações"
+        >
             <div className="space-y-6">
                 <div className="grid gap-6 md:grid-cols-3">
                     <AppSelectField
@@ -87,16 +94,7 @@ export default function ModalEditTratamento({
                     error={errors.observacoes}
                 />
 
-                <div className="flex justify-end gap-3 border-t pt-6">
-                    <Button type="button" variant="outline" onClick={onClose} disabled={saving}>
-                        Cancelar
-                    </Button>
-
-                    <Button type="button" onClick={submitEdit} disabled={saving} className="bg-blue-600 text-white hover:bg-blue-700">
-                        {saving ? 'A guardar...' : 'Guardar alterações'}
-                    </Button>
-                </div>
             </div>
-        </AppModal>
+        </AppModalForm>
     );
 }

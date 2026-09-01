@@ -3,42 +3,15 @@ import { AppEntitySummary } from '@/components/app/app-entity-summary';
 import { AppInputField } from '@/components/app/app-input-field';
 import { AppModalForm } from '@/components/app/app-modal-form';
 import { AppSelectField } from '@/components/app/app-input-select';
+import type { AvaliacaoEras, CasoPlaneado, Cirurgia } from '@/types/types';
 import { router } from '@inertiajs/react';
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-type CasoPlaneado = {
-    id: number | string;
-    procedimento_previsto?: string | null;
-    episodio_id?: number | string | null;
-};
-
-type AvaliacaoEras = {
-    id: number | string;
-    data_consulta?: string | null;
-    aptidao?: string | null;
-};
-
-export type Cirurgia = {
-    id: number | string;
-    caso_planeado_id?: number | string | null;
-    procedimento?: string | null;
-    abordagem?: string | null;
-    urgencia?: boolean | null;
-    reto?: boolean | null;
-    terc_inferior_reto?: boolean | null;
-    excisao_mesorrecto?: boolean | null;
-    ressecao_curativa?: boolean | null;
-    colostomia_definitiva?: boolean | null;
-    anastomose?: boolean | null;
-    eras_id?: number | string | null;
-    observacoes?: string | null;
-};
-
 type Props = {
-    casoPlaneado: CasoPlaneado | null;
+    casoPlaneado: Pick<CasoPlaneado, 'id' | 'procedimento_previsto'> | null;
 
-    avaliacaoEras?: AvaliacaoEras | null;
+    avaliacaoEras?: Pick<AvaliacaoEras, 'id' | 'data_consulta' | 'aptidao'> | null;
 
     cirurgia?: Cirurgia | null;
 
@@ -48,7 +21,7 @@ type Props = {
 };
 
 type FormData = {
-    caso_planeado_id: number | string;
+    caso_planeado_id: number | '';
     procedimento: string;
     abordagem: string;
     urgencia: boolean;
@@ -58,13 +31,13 @@ type FormData = {
     ressecao_curativa: boolean;
     colostomia_definitiva: boolean;
     anastomose: boolean;
-    eras_id: number | string;
+    eras_id: number | '';
     observacoes: string;
 };
 
 const emptyForm = (
-    casoPlaneado?: CasoPlaneado | null,
-    avaliacaoEras?: AvaliacaoEras | null,
+    casoPlaneado?: Pick<CasoPlaneado, 'id' | 'procedimento_previsto'> | null,
+    avaliacaoEras?: Pick<AvaliacaoEras, 'id' | 'data_consulta' | 'aptidao'> | null,
 ): FormData => ({
     caso_planeado_id: casoPlaneado?.id ?? '',
     procedimento: casoPlaneado?.procedimento_previsto ?? '',

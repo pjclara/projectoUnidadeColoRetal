@@ -1,9 +1,8 @@
 import { AppInputField } from '@/components/app/app-input-field';
 import { AppSelectField } from '@/components/app/app-input-select';
 import { AppModalForm } from '@/components/app/app-modal-form';
-import { router } from '@inertiajs/react';
-import { FormEvent, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import { useCrudForm } from '@/hooks/use-crud-form';
+import { FormEvent, useEffect } from 'react';
 
 type Option = { label: string; value: string };
 
@@ -27,7 +26,7 @@ type Props = {
 };
 
 export default function CreateOrUpdateAtividadeDiaria({ open, onClose, atividade, poloOptions, userOptions, periodoOptions, tipoOptions }: Props) {
-    const [form, setForm] = useState({
+    const initialForm = {
         polo: atividade?.polo ?? '',
         user_id: atividade?.user_id ?? '',
         data: atividade?.data ?? '',
@@ -35,7 +34,9 @@ export default function CreateOrUpdateAtividadeDiaria({ open, onClose, atividade
         detalhe: atividade?.detalhe ?? '',
         fonte: atividade?.fonte ?? '',
         tipo: atividade?.tipo ?? '',
-    });
+    };
+
+    const { form, errors, loading, setForm, submit: submitCrud, updateField } = useCrudForm(initialForm);
 
     useEffect(() => {
         setForm({
@@ -49,44 +50,17 @@ export default function CreateOrUpdateAtividadeDiaria({ open, onClose, atividade
         });
     }, [atividade]);
 
-    const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
-
     const handleChange = (field: keyof typeof form, value: string) => {
-        setForm((prev) => ({ ...prev, [field]: value }));
+        updateField(field, value);
     };
 
     const submit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        setLoading(true);
-        setErrors({});
-
-        const payload = { ...form };
-
-        const options = {
-            onSuccess: () => {
-                setErrors({});
-
-                toast.success(atividade ? 'Actividade Diária atualizada com sucesso' : 'Actividade Diária criada com sucesso');
-
-                onClose();
-            },
-
-            onError: (errors: Record<string, string>) => {
-                setErrors(errors);
-            },
-
-            onFinish: () => {
-                setLoading(false);
-            },
-        };
-
-        if (atividade) {
-            router.put(`/atividade-diarias/${atividade.id}`, payload, options);
-        } else {
-            router.post('/atividade-diarias', payload, options);
-        }
+        submitCrud(event, {
+            method: atividade ? 'put' : 'post',
+            url: atividade ? `/atividade-diarias/${atividade.id}` : '/atividade-diarias',
+            successMessage: atividade ? 'Actividade Diária atualizada com sucesso' : 'Actividade Diária criada com sucesso',
+            onSuccess: onClose,
+        });
     };
 
     return (

@@ -3,9 +3,10 @@ import { AppTable, type AppTableColumn } from '@/components/app/app-table';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
+import type { Cirurgia } from '@/types/types';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
-import CreateOrUpdateCirurgia, { type Cirurgia } from './CreateOrUpdateCirurgia';
+import CreateOrUpdateCirurgia from './CreateOrUpdateCirurgia';
 
 type CirurgiaItem = Cirurgia & {
     id: number;
@@ -65,7 +66,7 @@ export default function Index({ cirurgias }: Props) {
 
             {editing && (
                 <CreateOrUpdateCirurgia
-                    casoPlaneado={editing.caso_planeado_id ? { id: editing.caso_planeado_id, procedimento_previsto: editing.procedimento } : null}
+                    casoPlaneado={editing.caso_planeado_id ? { id: editing.caso_planeado_id, procedimento_previsto: editing.procedimento ?? '' } : null}
                     cirurgia={editing}
                     onClose={() => setEditing(null)}
                     onSuccess={() => setEditing(null)}

@@ -97,7 +97,6 @@ export function StepEpisodio({ doente, episodios, profissionais, selectedEpisodi
 
             {showCreate && (
                 <CreateOrUpdateEpisodio
-                    doentes={[]}
                     profissionais={profissionais}
                     doenteId={doente.id}
                     onClose={() => setShowCreate(false)}

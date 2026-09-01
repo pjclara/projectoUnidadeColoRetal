@@ -1,8 +1,7 @@
 import { AppInputField } from '@/components/app/app-input-field';
 import { AppSelectField } from '@/components/app/app-input-select';
-import { AppModal } from '@/components/app/app-modal';
+import { AppModalForm } from '@/components/app/app-modal-form';
 import { AppTextareaField } from '@/components/app/app-textarea-field';
-import { Button } from '@/components/ui/button';
 
 type FormData = {
     id: number;
@@ -30,7 +29,15 @@ export default function ModalEditCDT({
     processing: boolean; // <-- ADICIONADO
 }) {
     return (
-        <AppModal open={open} onClose={onClose} title="Editar CDT" maxWidth="5xl">
+        <AppModalForm
+            open={open}
+            onClose={onClose}
+            onSubmit={(event) => { event.preventDefault(); onSubmit(); }}
+            loading={processing}
+            title="Editar CDT"
+            maxWidth="5xl"
+            submitLabel="Guardar alterações"
+        >
             <div className="space-y-6">
                 <div className="grid gap-6 md:grid-cols-3">
                     <AppInputField
@@ -65,16 +72,7 @@ export default function ModalEditCDT({
 
                 <AppTextareaField label="Decisão" value={cdt.decisao} onChange={(value) => onFieldChange('decisao', value)} error={errors.decisao} />
 
-                <div className="flex justify-end gap-3 border-t pt-6">
-                    <Button type="button" variant="outline" onClick={onClose} disabled={processing}>
-                        Cancelar
-                    </Button>
-
-                    <Button type="button" onClick={onSubmit} disabled={processing} className="bg-blue-600 text-white hover:bg-blue-700">
-                        {processing ? 'A guardar...' : 'Guardar alterações'}
-                    </Button>
-                </div>
             </div>
-        </AppModal>
+        </AppModalForm>
     );
 }

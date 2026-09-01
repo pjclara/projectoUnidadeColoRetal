@@ -1,8 +1,13 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link, usePage } from '@inertiajs/react';
+import type { SharedData, User } from '@/types';
+
+type WelcomePageProps = Omit<SharedData, 'auth'> & Record<string, unknown> & {
+    auth: { user: User | null };
+};
 
 export default function Welcome() {
-    const { auth } = usePage().props;
+    const { auth } = usePage<WelcomePageProps>().props;
 
     return (
 

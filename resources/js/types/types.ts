@@ -124,18 +124,17 @@ export type AvaliacaoEras = {
 
 export type Cirurgia = {
     id: number;
-    episodio_id: number;
-    caso_planeado_id: number;
-    procedimento: string;
-    abordagem: string;
-    urgencia: string;
-    reto: boolean;
-    terc_inferior_reto: boolean;
-    excisao_mesorrecto: boolean;
-    ressecao_curativa: boolean;
-    colostomia_definitiva: boolean;
-    anastomose: boolean;
-    eras_id: number;
+    caso_planeado_id: number | null;
+    procedimento?: string | null;
+    abordagem?: string | null;
+    urgencia?: boolean | null;
+    reto?: boolean | null;
+    terc_inferior_reto?: boolean | null;
+    excisao_mesorrecto?: boolean | null;
+    ressecao_curativa?: boolean | null;
+    colostomia_definitiva?: boolean | null;
+    anastomose?: boolean | null;
+    eras_id?: number | null;
     observacoes?: string | null;
 };
 

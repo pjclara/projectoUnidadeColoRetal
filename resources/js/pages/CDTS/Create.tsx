@@ -77,7 +77,7 @@ export default function CreateCDTWizard({ doentes, selectedDoente: initialDoente
                             doentes={doentes}
                             selectedDoente={doente}
                             onSelect={selectDoente}
-                            onContinue={goToEpisodio}
+                            onCreate={selectDoente}
                         />
                     )}
 
@@ -86,9 +86,11 @@ export default function CreateCDTWizard({ doentes, selectedDoente: initialDoente
                             doente={doente}
                             episodios={episodios}
                             users={users}
-                            onSelect={undefined}
+                            setSelectedEpisodio={setEpisodio}
                             onBack={backToDoente}
-                            onContinue={goToCDT}
+                            onCreate={() => {}}
+                            onEdit={() => {}}
+                            continue={goToCDT}
                         />
                     )}
 

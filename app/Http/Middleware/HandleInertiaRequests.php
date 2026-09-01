@@ -39,7 +39,6 @@ class HandleInertiaRequests extends Middleware
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
         return array_merge(parent::share($request), [
-            ...parent::share($request),
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
@@ -50,6 +49,10 @@ class HandleInertiaRequests extends Middleware
                 'created_doente' => fn () => $request->session()->get('created_doente'),
                 'created_episodio' => fn () => $request->session()->get('created_episodio'),
                 'created_cdt' => fn () => $request->session()->get('created_cdt'),
+                'created_tratamento' => fn () => $request->session()->get('created_tratamento'),
+                'created_avaliacao_eras' => fn () => $request->session()->get('created_avaliacao_eras'),
+                'created_cirurgia' => fn () => $request->session()->get('created_cirurgia'),
+                'updated_cirurgia' => fn () => $request->session()->get('updated_cirurgia'),
             ],
         ]);
     }

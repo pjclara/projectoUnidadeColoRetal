@@ -1,11 +1,9 @@
 import { AppCheckboxField } from '@/components/app/app-check-box-field';
 import { AppInputField } from '@/components/app/app-input-field';
 import { AppSelectField } from '@/components/app/app-input-select';
-import { AppModal } from '@/components/app/app-modal';
-import { Button } from '@/components/ui/button';
-import { router } from '@inertiajs/react';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
+import { AppModalForm } from '@/components/app/app-modal-form';
+import { useCrudForm } from '@/hooks/use-crud-form';
+import { type FormEvent, useEffect } from 'react';
 
 type Sala = {
     id: number;
@@ -24,53 +22,42 @@ type Props = {
 export function CreateOrEditSalaModal({ sala, poloOptions, onClose }: Props) {
     const editing = !!sala;
 
-    const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
-
-    const [form, setForm] = useState({
+    const initialForm = {
         polo: sala?.polo || '',
         codigo: sala?.codigo || '',
         designacao: sala?.designacao || '',
         ativa: sala?.ativa ?? true,
-    });
+    };
+    const { form, errors, loading, setForm, submit: submitCrud, updateField } = useCrudForm(initialForm);
 
-    const submit = () => {
-        setLoading(true);
-        setErrors({});
+    useEffect(() => {
+        setForm({
+            polo: sala?.polo || '',
+            codigo: sala?.codigo || '',
+            designacao: sala?.designacao || '',
+            ativa: sala?.ativa ?? true,
+        });
+    }, [sala]);
 
-        const payload = { ...form };
-
-        const options = {
-            preserveScroll: true,
-
-            onSuccess: () => {
-                toast.success(editing ? 'Sala atualizada com sucesso!' : 'Sala criada com sucesso!');
-                onClose();
-            },
-
-            onError: (validationErrors: Record<string, string>) => {
-                setErrors(validationErrors);
-                toast.error('Verifique os dados introduzidos.');
-            },
-
-            onFinish: () => {
-                setLoading(false);
-            },
-        };
-
-        if (editing) {
-            router.put(`/salas/${sala!.id}`, payload, options);
-        } else {
-            router.post('/salas', payload, options);
-        }
+    const submit = (event: FormEvent<HTMLFormElement>) => {
+        submitCrud(event, {
+            method: editing ? 'put' : 'post',
+            url: editing ? `/salas/${sala!.id}` : '/salas',
+            successMessage: editing ? 'Sala atualizada com sucesso!' : 'Sala criada com sucesso!',
+            onSuccess: onClose,
+        });
     };
 
     return (
-        <AppModal
+        <AppModalForm
             open
-            onClose={onClose}
             title={editing ? 'Editar Sala' : 'Criar Sala'}
+            description="Introduza os dados da sala."
+            onClose={onClose}
+            onSubmit={submit}
+            loading={loading}
             maxWidth="lg"
+            submitLabel={editing ? 'Guardar alterações' : 'Criar sala'}
         >
             <div className="space-y-4">
                 <AppSelectField
@@ -78,49 +65,29 @@ export function CreateOrEditSalaModal({ sala, poloOptions, onClose }: Props) {
                     value={form.polo}
                     error={errors.polo}
                     options={poloOptions}
-                    onChange={(value) => setForm({ ...form, polo: String(value) })}
+                    onChange={(value) => updateField('polo', String(value))}
                 />
 
                 <AppInputField
                     label="Código"
                     value={form.codigo}
                     error={errors.codigo}
-                    onChange={(value) => setForm({ ...form, codigo: String(value) })}
+                    onChange={(value) => updateField('codigo', String(value))}
                 />
 
                 <AppInputField
                     label="Designação"
                     value={form.designacao}
                     error={errors.designacao}
-                    onChange={(value) => setForm({ ...form, designacao: String(value) })}
+                    onChange={(value) => updateField('designacao', String(value))}
                 />
 
                 <AppCheckboxField
                     label="Ativa"
                     checked={form.ativa}
-                    onChange={(value) => setForm({ ...form, ativa: Boolean(value) })}
+                    onChange={(value) => updateField('ativa', Boolean(value))}
                 />
             </div>
-
-            <div className="flex justify-end gap-3 border-t pt-6">
-                <Button
-                    type="button"
-                    variant="outline"
-                    onClick={onClose}
-                    disabled={loading}
-                >
-                    Cancelar
-                </Button>
-
-                <Button
-                    type="button"
-                    onClick={submit}
-                    disabled={loading}
-                    className="bg-blue-600 text-white hover:bg-blue-700"
-                >
-                    {loading ? 'A guardar...' : editing ? 'Guardar alterações' : 'Criar sala'}
-                </Button>
-            </div>
-        </AppModal>
+        </AppModalForm>
     );
 }

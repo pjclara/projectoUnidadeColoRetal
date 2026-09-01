@@ -13,8 +13,10 @@ type Option = {
     label: string;
 };
 
+type EditableSlot = Pick<Slot, 'id'> & Partial<Pick<Slot, 'origem' | 'periodo' | 'modalidade' | 'data' | 'hora_inicio' | 'hora_fim_prevista' | 'sala_id' | 'estado' | 'observacoes'>>;
+
 type Props = {
-    slot?: Slot | null;
+    slot?: EditableSlot | null;
     onClose: () => void;
     estados: Option[];
     origems: Option[];
