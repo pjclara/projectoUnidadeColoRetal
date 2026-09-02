@@ -30,7 +30,7 @@ class StoreAtividadeDiariaRequest extends FormRequest
             'polo' => ['required', 'string',  new EnumRule(PoloEnum::class)],
             'user_id' => ['required', 'integer', 'exists:users,id'],
             'periodo' => ['required', 'string', new EnumRule(PeriodoEnum::class)],
-            'detalhe' => ['required', 'string', 'max:255'],
+            'detalhe' => ['nullable', 'string', 'max:255'],
             'data' => ['required', 'date','after_or_equal:today'],
             'tipo' => ['required', 'string', new EnumRule(TipoActividadeDiariaEnum::class)],
             'fonte' => ['nullable', 'string', 'max:255'],

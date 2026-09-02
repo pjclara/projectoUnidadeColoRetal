@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\AtividadeDiaria;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -11,9 +12,21 @@ class AtividadeDiariaService
     /** @return Collection<int, array<string, mixed>> */
     public function forMonth(string $month): Collection
     {
+        return $this->activitiesBetween("{$month}-01", Carbon::createFromFormat('Y-m', $month)->endOfMonth()->toDateString());
+    }
+
+    /** @return Collection<int, array<string, mixed>> */
+    public function forWeek(string $week): Collection
+    {
+        return $this->activitiesBetween($week, Carbon::parse($week)->endOfWeek()->toDateString());
+    }
+
+    /** @return Collection<int, array<string, mixed>> */
+    private function activitiesBetween(string $startDate, string $endDate): Collection
+    {
         return AtividadeDiaria::query()
-            ->with('user:id,name')
-            ->whereBetween('data', ["{$month}-01", now()->createFromFormat('Y-m', $month)->endOfMonth()->toDateString()])
+            ->with('user:id,name,abreviatura')
+            ->whereBetween('data', [$startDate, $endDate])
             ->orderBy('data')
             ->orderBy('tipo')
             ->orderBy('periodo')
@@ -21,7 +34,7 @@ class AtividadeDiariaService
             ->map(fn (AtividadeDiaria $item) => [
                 'id' => $item->id,
                 'polo' => $item->polo?->value,
-                'user' => $item->user?->name,
+                'user' => $item->user?->abreviatura,
                 'user_id' => $item->user_id,
                 'periodo' => $item->periodo?->value,
                 'detalhe' => $item->detalhe,
@@ -39,7 +52,7 @@ class AtividadeDiariaService
             ->withQueryString()->through(fn ($item) => [
                 'id' => $item->id,
                 'polo' => $item->polo,
-                'user' => $item->user?->name ?? null,
+                'user' => $item->user?->abreviatura ?? null,
                 'user_id' => $item->user_id,
                 'periodo' => $item->periodo,
                 'detalhe' => $item->detalhe,

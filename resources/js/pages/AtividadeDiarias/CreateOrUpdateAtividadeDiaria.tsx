@@ -5,7 +5,7 @@ import { useCrudForm } from '@/hooks/use-crud-form';
 import { FormEvent, useEffect } from 'react';
 
 type Option = { label: string; value: string };
-type ActivityDefaults = Partial<Pick<NonNullable<Props['atividade']>, 'data' | 'tipo'>>;
+type ActivityDefaults = Partial<Pick<NonNullable<Props['atividade']>, 'user_id' | 'data' | 'polo' | 'periodo' | 'detalhe' | 'fonte' | 'tipo'>>;
 
 type Props = {
     open: boolean;
@@ -29,12 +29,12 @@ type Props = {
 
 export default function CreateOrUpdateAtividadeDiaria({ open, onClose, atividade, poloOptions, userOptions, periodoOptions, tipoOptions, defaults }: Props) {
     const initialForm = {
-        polo: atividade?.polo ?? '',
-        user_id: atividade?.user_id ?? '',
+        polo: atividade?.polo ?? defaults?.polo ?? '',
+        user_id: atividade?.user_id ?? defaults?.user_id ?? '',
         data: atividade?.data ?? defaults?.data ?? '',
-        periodo: atividade?.periodo ?? '',
-        detalhe: atividade?.detalhe ?? '',
-        fonte: atividade?.fonte ?? '',
+        periodo: atividade?.periodo ?? defaults?.periodo ?? '',
+        detalhe: atividade?.detalhe ?? defaults?.detalhe ?? '',
+        fonte: atividade?.fonte ?? defaults?.fonte ?? '',
         tipo: atividade?.tipo ?? defaults?.tipo ?? '',
     };
 
@@ -42,12 +42,12 @@ export default function CreateOrUpdateAtividadeDiaria({ open, onClose, atividade
 
     useEffect(() => {
         setForm({
-            polo: atividade?.polo ?? '',
-            user_id: atividade?.user_id ?? '',
+            polo: atividade?.polo ?? defaults?.polo ?? '',
+            user_id: atividade?.user_id ?? defaults?.user_id ?? '',
             data: atividade?.data ?? defaults?.data ?? '',
-            periodo: atividade?.periodo ?? '',
-            detalhe: atividade?.detalhe ?? '',
-            fonte: atividade?.fonte ?? '',
+            periodo: atividade?.periodo ?? defaults?.periodo ?? '',
+            detalhe: atividade?.detalhe ?? defaults?.detalhe ?? '',
+            fonte: atividade?.fonte ?? defaults?.fonte ?? '',
             tipo: atividade?.tipo ?? defaults?.tipo ?? '',
         });
     }, [atividade, defaults]);

@@ -12,6 +12,7 @@ use App\Models\AtividadeDiaria;
 use App\Models\User;
 use App\Services\AtividadeDiariaService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AtividadeDiariaController extends Controller
 {
@@ -21,12 +22,23 @@ class AtividadeDiariaController extends Controller
      */
     public function index(Request $request)
     {
-        $request->validate(['month' => ['nullable', 'date_format:Y-m']]);
+        $request->validate([
+            'view' => ['nullable', Rule::in(['week', 'month'])],
+            'week' => ['nullable', 'date_format:Y-m-d'],
+            'month' => ['nullable', 'date_format:Y-m'],
+        ]);
+
+        
+
+        $view = $request->string('view')->toString() ?: 'week';
+        $week = $request->date('week')?->startOfWeek()->toDateString() ?? now()->startOfWeek()->toDateString();
         $month = $request->string('month')->toString() ?: now()->format('Y-m');
-        $atividadeDiarias = $this->service->forMonth($month);
+        $atividadeDiarias = $view === 'month' ? $this->service->forMonth($month) : $this->service->forWeek($week);
 
         return inertia('AtividadeDiarias/Index', [
             'atividadeDiarias' => $atividadeDiarias,
+            'viewMode' => $view,
+            'selectedWeek' => $week,
             'selectedMonth' => $month,
             'poloOptions' => PoloEnum::options(),
             'userOptions' => User::query()->select('id', 'name')->orderBy('name')->get(),
@@ -42,7 +54,7 @@ class AtividadeDiariaController extends Controller
     public function store(StoreAtividadeDiariaRequest $request)
     {
         $this->service->create($request->validated());
-        return redirect()->route('atividade-diarias.index');
+        return back();
     }
 
     /**
@@ -59,7 +71,7 @@ class AtividadeDiariaController extends Controller
     public function update(UpdateAtividadeDiariaRequest $request, AtividadeDiaria $atividadeDiaria)
     {
         $this->service->update($atividadeDiaria, $request->validated());
-        return redirect()->route('atividade-diarias.index');
+        return back();
     }
 
     /**

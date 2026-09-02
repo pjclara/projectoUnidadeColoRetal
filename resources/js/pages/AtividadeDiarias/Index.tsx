@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import type { User } from '@/types';
 import { Head, router } from '@inertiajs/react';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Copy, Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import CreateOrUpdateAtividadeDiaria from './CreateOrUpdateAtividadeDiaria';
 
@@ -21,6 +21,8 @@ type AtividadeDiariaItem = {
 
 type Props = {
     atividadeDiarias: AtividadeDiariaItem[];
+    viewMode: 'week' | 'month';
+    selectedWeek: string;
     selectedMonth: string;
     poloOptions: Array<{ label: string; value: string }>;
     userOptions: User[];
@@ -42,23 +44,36 @@ const activityLabels: Record<string, string> = {
     adicional: 'Adicional',
 };
 
-const weekdayLabels = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+const weekdayLabels = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'];
 
-export default function Index({ atividadeDiarias, selectedMonth, poloOptions, userOptions, periodoOptions, tipoOptions }: Props) {
+export default function Index({ atividadeDiarias, viewMode, selectedWeek, selectedMonth, poloOptions, userOptions, periodoOptions, tipoOptions }: Props) {
     const [isOpen, setIsOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<AtividadeDiariaItem | null>(null);
-    const [defaults, setDefaults] = useState<{ data?: string; tipo?: string }>({});
+    const [defaults, setDefaults] = useState<Partial<AtividadeDiariaItem>>({});
 
     const days = useMemo(() => {
-        const [year, month] = selectedMonth.split('-').map(Number);
-        const totalDays = new Date(year, month, 0).getDate();
+        if (viewMode === 'month') {
+            const [year, month] = selectedMonth.split('-').map(Number);
+            const totalDays = new Date(year, month, 0).getDate();
 
-        return Array.from({ length: totalDays }, (_, index) => {
-            const day = index + 1;
-            const data = `${selectedMonth}-${String(day).padStart(2, '0')}`;
-            return { data, day, weekday: weekdayLabels[new Date(`${data}T00:00:00`).getDay()] };
+            return Array.from({ length: totalDays }, (_, index) => {
+                const day = index + 1;
+                const data = `${selectedMonth}-${String(day).padStart(2, '0')}`;
+                const dayOfWeek = new Date(year, month - 1, day).getDay();
+                return { data, day, weekday: weekdayLabels[(dayOfWeek + 6) % 7] };
+            });
+        }
+
+        const [year, month, day] = selectedWeek.split('-').map(Number);
+        const startDate = new Date(year, month - 1, day);
+
+        return Array.from({ length: 7 }, (_, index) => {
+            const date = new Date(startDate);
+            date.setDate(startDate.getDate() + index);
+            const data = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            return { data, day: date.getDate(), weekday: weekdayLabels[index] };
         });
-    }, [selectedMonth]);
+    }, [selectedMonth, selectedWeek, viewMode]);
 
     const activitiesByCell = useMemo(() => {
         return atividadeDiarias.reduce<Record<string, AtividadeDiariaItem[]>>((activities, activity) => {
@@ -69,7 +84,7 @@ export default function Index({ atividadeDiarias, selectedMonth, poloOptions, us
         }, {});
     }, [atividadeDiarias]);
 
-    const openCreate = (newDefaults: { data?: string; tipo?: string } = {}) => {
+    const openCreate = (newDefaults: Partial<AtividadeDiariaItem> = {}) => {
         setEditingItem(null);
         setDefaults(newDefaults);
         setIsOpen(true);
@@ -81,7 +96,31 @@ export default function Index({ atividadeDiarias, selectedMonth, poloOptions, us
         setIsOpen(true);
     };
 
-    const changeMonth = (month: string) => router.get('/atividade-diarias', { month }, { preserveState: true, replace: true });
+    const duplicateActivity = (activity: AtividadeDiariaItem) => {
+        openCreate({
+            user_id: activity.user_id,
+            data: activity.data,
+            polo: activity.polo,
+            periodo: activity.periodo,
+            detalhe: activity.detalhe,
+            fonte: activity.fonte,
+            tipo: activity.tipo,
+        });
+    };
+
+    const navigate = (params: Record<string, string>) => router.get('/atividade-diarias', { view: viewMode, ...params }, { preserveState: true, replace: true });
+
+    const changeWeek = (week: string) => navigate({ week });
+
+    const changeMonth = (month: string) => navigate({ month });
+
+    const changeView = (mode: 'week' | 'month') => router.get('/atividade-diarias', mode === 'week' ? { view: mode, week: selectedWeek } : { view: mode, month: selectedMonth }, { preserveState: true, replace: true });
+
+    const moveWeek = (offset: number) => {
+        const [year, month, day] = selectedWeek.split('-').map(Number);
+        const targetDate = new Date(year, month - 1, day + offset * 7);
+        changeWeek(`${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`);
+    };
 
     const moveMonth = (offset: number) => {
         const [year, month] = selectedMonth.split('-').map(Number);
@@ -97,19 +136,27 @@ export default function Index({ atividadeDiarias, selectedMonth, poloOptions, us
 
                 <div className="space-y-6 p-6">
                     <AppPageHeader
-                        title="Programação mensal de atividade"
+                        title={`Programação ${viewMode === 'week' ? 'semanal' : 'mensal'} de atividade`}
                         description="Planeie e consulte a atividade da equipa por dia e área funcional."
                         action={<Button onClick={() => openCreate()}><Plus /> Nova atividade</Button>}
                     />
 
                     <section className="rounded-lg border border-border bg-card shadow-sm">
                         <div className="flex flex-col gap-4 border-b border-border p-4 sm:flex-row sm:items-center sm:justify-between">
-                            <div className="flex items-center gap-2">
-                                <Button type="button" variant="outline" size="icon" aria-label="Mês anterior" onClick={() => moveMonth(-1)}><ChevronLeft /></Button>
-                                <input aria-label="Selecionar mês" type="month" value={selectedMonth} onChange={(event) => changeMonth(event.target.value)} className="h-10 rounded-md border border-input bg-background px-3 text-sm font-semibold capitalize" />
-                                <Button type="button" variant="outline" size="icon" aria-label="Mês seguinte" onClick={() => moveMonth(1)}><ChevronRight /></Button>
+                            <div className="flex flex-wrap items-center gap-2">
+                                <div className="flex rounded-md border border-input p-1">
+                                    <Button type="button" size="sm" variant={viewMode === 'week' ? 'secondary' : 'ghost'} onClick={() => changeView('week')}>Semanal</Button>
+                                    <Button type="button" size="sm" variant={viewMode === 'month' ? 'secondary' : 'ghost'} onClick={() => changeView('month')}>Mensal</Button>
+                                </div>
+                                <Button type="button" variant="outline" size="icon" aria-label={viewMode === 'week' ? 'Semana anterior' : 'Mês anterior'} onClick={() => viewMode === 'week' ? moveWeek(-1) : moveMonth(-1)}><ChevronLeft /></Button>
+                                {viewMode === 'week' ? (
+                                    <input aria-label="Selecionar semana" type="date" value={selectedWeek} onChange={(event) => changeWeek(event.target.value)} className="h-10 rounded-md border border-input bg-background px-3 text-sm font-semibold" />
+                                ) : (
+                                    <input aria-label="Selecionar mês" type="month" value={selectedMonth} onChange={(event) => changeMonth(event.target.value)} className="h-10 rounded-md border border-input bg-background px-3 text-sm font-semibold" />
+                                )}
+                                <Button type="button" variant="outline" size="icon" aria-label={viewMode === 'week' ? 'Semana seguinte' : 'Mês seguinte'} onClick={() => viewMode === 'week' ? moveWeek(1) : moveMonth(1)}><ChevronRight /></Button>
                             </div>
-                            <p className="text-sm text-muted-foreground">Clique numa célula para programar uma atividade.</p>
+                            <p className="text-sm text-muted-foreground">Clique numa célula para programar ou use o ícone para duplicar.</p>
                         </div>
 
                         <div className="overflow-x-auto">
@@ -129,12 +176,22 @@ export default function Index({ atividadeDiarias, selectedMonth, poloOptions, us
                                             {tipoOptions.map((type) => {
                                                 const cellActivities = activitiesByCell[`${data}-${type.value}`] ?? [];
                                                 return (
-                                                    <td key={type.value} onClick={() => openCreate({ data, tipo: type.value })} className="h-12 border border-border p-1 align-top hover:bg-primary/5">
+                                                    <td
+                                                        key={type.value}
+                                                        onClick={() => openCreate({ data, tipo: type.value })}
+                                                        className="h-12 border border-border p-1 align-top hover:bg-primary/5"
+                                                    >
                                                         <div className="space-y-1">
                                                             {cellActivities.map((activity) => (
-                                                                <button key={activity.id} type="button" onClick={(event) => { event.stopPropagation(); openEdit(activity); }} className="block w-full rounded bg-primary/10 px-1.5 py-1 text-left text-xs leading-tight text-primary hover:bg-primary/20" title="Editar atividade">
-                                                                    <span className="font-semibold">{activity.user ?? 'Sem profissional'}</span>{activity.periodo ? ` · ${activity.periodo}` : ''}{activity.detalhe ? ` — ${activity.detalhe}` : ''}
-                                                                </button>
+                                                                <div
+                                                                    key={activity.id}
+                                                                    className="flex items-start gap-1 rounded bg-primary/10 px-1.5 py-1 text-xs leading-tight text-primary hover:bg-primary/20"
+                                                                >
+                                                                    <button type="button" onClick={(event) => { event.stopPropagation(); openEdit(activity); }} className="min-w-0 flex-1 text-left">
+                                                                        <span className="font-semibold">{activity.user ?? 'Sem profissional'}</span>{activity.periodo ? ` · ${activity.periodo}` : ''}{activity.detalhe ? ` — ${activity.detalhe}` : ''}
+                                                                    </button>
+                                                                    <button type="button" onClick={(event) => { event.stopPropagation(); duplicateActivity(activity); }} className="shrink-0 rounded p-0.5 hover:bg-primary/20" aria-label="Duplicar atividade" title="Duplicar atividade"><Copy className="size-3" /></button>
+                                                                </div>
                                                             ))}
                                                         </div>
                                                     </td>
