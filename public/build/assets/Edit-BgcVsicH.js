@@ -1,1 +1,0 @@
-import{j as e,L as s}from"./app-BcNEL0K2.js";function r({seguimento:t}){return e.jsxs(e.Fragment,{children:[e.jsx(s,{title:"Editar Seguimento"}),e.jsx("div",{className:"p-6",children:e.jsxs("h1",{className:"text-2xl font-semibold",children:["Editar Seguimento #",t.id]})})]})}export{r as default};

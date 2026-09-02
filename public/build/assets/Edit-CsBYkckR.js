@@ -1,0 +1,1 @@
+import{j as i,L as s}from"./app-DO_L-whB.js";function e({cirurgia:r}){return i.jsxs(i.Fragment,{children:[i.jsx(s,{title:"Editar Cirurgia"}),i.jsx("div",{className:"p-6",children:i.jsxs("h1",{className:"text-2xl font-semibold",children:["Editar Cirurgia #",r.id]})})]})}export{e as default};

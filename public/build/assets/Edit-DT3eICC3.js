@@ -1,1 +1,0 @@
-import{j as t,L as e}from"./app-BcNEL0K2.js";function r({slot:s}){return t.jsxs(t.Fragment,{children:[t.jsx(e,{title:"Editar Slot"}),t.jsx("div",{className:"p-6",children:t.jsxs("h1",{className:"text-2xl font-semibold",children:["Editar Slot #",s.id]})})]})}export{r as default};

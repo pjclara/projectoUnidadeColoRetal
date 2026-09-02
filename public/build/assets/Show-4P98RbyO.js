@@ -1,0 +1,1 @@
+import{j as e,L as t}from"./app-DO_L-whB.js";function n({seguimento:s}){return e.jsxs(e.Fragment,{children:[e.jsx(t,{title:"Seguimento"}),e.jsx("div",{className:"p-6",children:e.jsxs("h1",{className:"text-2xl font-semibold",children:["Seguimento #",s.id]})})]})}export{n as default};
