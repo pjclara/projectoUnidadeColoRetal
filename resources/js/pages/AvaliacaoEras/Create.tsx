@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
-import type { AvaliacaoEras, Doente, DoenteFilters, Episodio, Pagination, Tratamento, User } from '../../types/types';
+import type { AvaliacaoEras, Doente, DoenteFilters, Episodio, Pagination, User } from '../../types/types';
 
 import { AppPageHeader } from '@/components/app/app-page-header';
 import { AppWizard, type AppWizardStep } from '@/components/app/app-wizard';
@@ -37,12 +37,12 @@ export default function CreateAvaliacaoErasWizard({ doentes, selectedDoente: ini
     const [currentStep, setCurrentStep] = useState(initialDoente ? 1 : 0);
     const [doente, setDoente] = useState<Doente | null>(initialDoente);
     const [episodio, setEpisodio] = useState<Episodio | null>(null);
-    const [tratamento, setTratamento] = useState<Tratamento | null>(null);
     const [avaliacaoEra, setAvaliacaoEra] = useState<AvaliacaoEras | null>(null);
 
     const selectDoente = (selected: Doente) => {
         setDoente(selected);
         setEpisodio(null);
+        setCurrentStep(1);
 
         router.get('/avaliacao-eras/create', { doente_id: selected.id }, { preserveState: true, preserveScroll: true, replace: true });
     };
@@ -54,7 +54,7 @@ export default function CreateAvaliacaoErasWizard({ doentes, selectedDoente: ini
         setCurrentStep(0);
     };
 
-    const goToTratamento = () => setCurrentStep(2);
+    const goToAvaliacao = () => setCurrentStep(2);
 
     const backToEpisodio = () => setCurrentStep(1);
 
@@ -94,7 +94,7 @@ export default function CreateAvaliacaoErasWizard({ doentes, selectedDoente: ini
                             selectedEpisodio={episodio}
                             onSelect={setEpisodio}
                             onBack={backToDoente}
-                            onContinue={goToTratamento}
+                            onContinue={goToAvaliacao}
                             url="/avaliacao-eras/create"
                         />
                     )}
@@ -106,9 +106,8 @@ export default function CreateAvaliacaoErasWizard({ doentes, selectedDoente: ini
                         doente={doente} 
                         episodio={episodio} 
                         onBack={backToEpisodio} 
-                        onSuccess={finishAvaliacaoEra} 
-                        onContinue={goToTratamento}
-                        url="/avaliacao-eras/create"
+                        onSuccess={finishAvaliacaoEra}
+                        onContinue={finishAvaliacaoEra}
                         />
                     )}
 

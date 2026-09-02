@@ -1,0 +1,1 @@
+import{j as s,L as a}from"./app-C9ZTbfXJ.js";function i({casoEquipa:e}){return s.jsxs(s.Fragment,{children:[s.jsx(a,{title:"CasoEquipa"}),s.jsx("div",{className:"p-6",children:s.jsxs("h1",{className:"text-2xl font-semibold",children:["CasoEquipa #",e.id]})})]})}export{i as default};

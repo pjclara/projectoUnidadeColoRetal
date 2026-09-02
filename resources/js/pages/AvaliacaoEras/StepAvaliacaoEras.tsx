@@ -12,16 +12,15 @@ type Props = {
     episodio: Episodio;
     avaliacaoEras: Pagination<AvaliacaoEras> | null;
     onBack: () => void;
-    onContinue: () => void;
-    url: string;
+    onContinue: (avaliacaoEras: AvaliacaoEras) => void;
     onSuccess: (avaliacaoEras: AvaliacaoEras) => void;
     poloOptions: { value: string; label: string }[];
 };
 
-export default function StepAvaliacaoEras({ doente, episodio, avaliacaoEras, onBack, onSuccess, onContinue, url, poloOptions }: Props) {
+export default function StepAvaliacaoEras({ doente, episodio, avaliacaoEras, onBack, onSuccess, onContinue, poloOptions }: Props) {
     const [showCreate, setShowCreate] = useState(false);
 
-    const avaliacaoErasList = avaliacaoEras?.data ?? [];
+    const avaliacaoErasList = (avaliacaoEras?.data ?? []).filter((avaliacao) => avaliacao.episodio_id === episodio.id);
 
     const columns: AppTableColumn<AvaliacaoEras>[] = [
         { key: 'data_consulta', label: 'Data' },
@@ -30,6 +29,16 @@ export default function StepAvaliacaoEras({ doente, episodio, avaliacaoEras, onB
         { key: 'polo_recomendado', label: 'Polo recomendado' },
         { key: 'mfr', label: 'MFR' },
         { key: 'dias_prehabilitacao', label: 'Dias de pré-habilitação' },
+        {
+            key: 'actions',
+            label: 'Ações',
+            className: 'text-right',
+            render: (avaliacao) => (
+                <Button type="button" onClick={() => onContinue(avaliacao)}>
+                    Continuar
+                </Button>
+            ),
+        },
     ];
 
     return (
@@ -52,9 +61,10 @@ export default function StepAvaliacaoEras({ doente, episodio, avaliacaoEras, onB
             <AppEntitySummary
                 title="Episódio selecionado"
                 fields={[
-                    { label: 'Data Início', value: episodio.diagnostico },
-                    { label: 'Data Fim', value: episodio.pai_entrada },
-                    { label: 'Descrição', value: episodio.data_diagnostico },
+                    { label: 'Tipo', value: episodio.tipo },
+                    { label: 'Diagnóstico', value: episodio.diagnostico },
+                    { label: 'CID10', value: episodio.cid10 },
+                    { label: 'Data diagnóstico', value: episodio.data_diagnostico },
                     { label: 'Estado', value: episodio.estado },
                 ]}
                 action={
@@ -84,13 +94,9 @@ export default function StepAvaliacaoEras({ doente, episodio, avaliacaoEras, onB
                 <AppTable columns={columns} data={avaliacaoErasList} rowKey={(avaliacao) => avaliacao.id} />
             )}
 
-            <div className="flex justify-between border-t border-neutral-200 pt-5 dark:border-neutral-800">
+            <div className="flex justify-start border-t border-neutral-200 pt-5 dark:border-neutral-800">
                 <Button type="button" variant="outline" onClick={onBack}>
                     Voltar
-                </Button>
-
-                <Button type="button" disabled={!episodio} onClick={onContinue}>
-                    Continuar
                 </Button>
             </div>
 
