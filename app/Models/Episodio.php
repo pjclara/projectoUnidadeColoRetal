@@ -51,4 +51,9 @@ class Episodio extends Model
     {
         return $this->hasMany(CDT::class);
     }
+
+    public function tratamentos()
+    {
+        return $this->hasMany(Tratamento::class);
+    }
 }

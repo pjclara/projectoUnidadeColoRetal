@@ -52,7 +52,7 @@ export function StepConfirmation({ doente, episodio, successMessage, sections = 
             ))}
 
             <div className="flex justify-end gap-3 border-t border-neutral-200 pt-5 dark:border-neutral-800">
-                <Button type="button" variant="outline" onClick={() => router.get(backUrl)}>
+                <Button type="button"  onClick={() => router.get(backUrl)}>
                     {backLabel}
                 </Button>
 

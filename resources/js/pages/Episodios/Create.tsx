@@ -6,11 +6,10 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 import type { Doente, Episodio, Pagination, User } from '../../types/types';
-import CreateOrUpdateEpisodio from './CreateOrUpdateEpisodio';
 import { StepDoente } from '../Doentes/StepDoente';
+import { StepConfirmation } from '../Tratamentos/Wizard/StepConfirmation';
+import CreateOrUpdateEpisodio from './CreateOrUpdateEpisodio';
 import { StepEpisodio } from './StepEpisodio';
-import Show from '../AvaliacaoEras/Show';
-import ShowEpisodio from './ShowEpisodio';
 
 type Props = {
     doentes: Pagination<Doente>;
@@ -19,12 +18,7 @@ type Props = {
     users?: User[];
 };
 
-export default function CreateEpisodioWizard({
-    doentes,
-    selectedDoente: initialDoente = null,
-    episodios = null,
-    users = [],
-}: Props) {
+export default function CreateEpisodioWizard({ doentes, selectedDoente: initialDoente = null, episodios = null, users = [] }: Props) {
     const [currentStep, setCurrentStep] = useState(initialDoente ? 1 : 0);
     const [selectedDoente, setSelectedDoente] = useState<Doente | null>(initialDoente);
     const [selectedEpisodio, setSelectedEpisodio] = useState<Episodio | null>(null);
@@ -45,7 +39,6 @@ export default function CreateEpisodioWizard({
             title: 'Dados do Episódio',
             description: 'Editar o episódio',
         },
-     
     ];
 
     const selectDoente = (doente: Doente) => {
@@ -92,7 +85,7 @@ export default function CreateEpisodioWizard({
         { title: 'Criar', href: '/episodios/create' },
     ];
 
-    console.log({ currentStep, selectedDoente, selectedEpisodio , users });
+    console.log({ currentStep, selectedDoente, selectedEpisodio, users });
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -111,12 +104,7 @@ export default function CreateEpisodioWizard({
                 <div className="space-y-8">
                     <AppWizard steps={steps} currentStep={currentStep}>
                         {currentStep === 0 && (
-                            <StepDoente
-                                doentes={doentes}
-                                selectedDoente={selectedDoente}
-                                onSelect={selectDoente}
-                                onCreate={createDoente}
-                            />
+                            <StepDoente doentes={doentes} selectedDoente={selectedDoente} onSelect={selectDoente} onCreate={createDoente} />
                         )}
 
                         {currentStep === 1 && selectedDoente && (
@@ -132,11 +120,26 @@ export default function CreateEpisodioWizard({
                             />
                         )}
 
-                        {currentStep === 2 && selectedDoente && (
-                            selectedEpisodio ? (
-                                <ShowEpisodio
+                        {currentStep === 2 &&
+                            selectedDoente &&
+                            (selectedEpisodio ? (
+                                <StepConfirmation
                                     doente={selectedDoente}
                                     episodio={selectedEpisodio}
+                                    successMessage="Dados do episódio selecionado!"
+                                    backLabel="Voltar aos episódios"
+                                    backUrl="/episodios"
+                                    viewLabel="Ver episódio"
+                                    sections={[
+                                        {
+                                            title: 'CDT',
+                                            fields: [
+                                                { label: 'Tipo', value: selectedEpisodio.tipo },
+                                                { label: 'Diagnóstico', value: selectedEpisodio.diagnostico },
+                                                { label: 'Estado', value: selectedEpisodio.estado },
+                                            ],
+                                        },
+                                    ]}
                                 />
                             ) : (
                                 <CreateOrUpdateEpisodio
@@ -148,8 +151,7 @@ export default function CreateEpisodioWizard({
                                         setCurrentStep(1);
                                     }}
                                 />
-                            )
-                        )}
+                            ))}
                     </AppWizard>
                 </div>
             </div>

@@ -1,14 +1,14 @@
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
-import type { Doente, Episodio, Pagination, User, Tratamento, DoenteFilters } from '../../types/types';
+import type { Doente, Episodio, Pagination, User, Tratamento } from '../../types/types';
 
 import { AppPageHeader } from '@/components/app/app-page-header';
 import { AppWizard, type AppWizardStep } from '@/components/app/app-wizard';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
+import { StepDoente } from '../Doentes/StepDoente';
+import { StepEpisodio } from '../Episodios/StepEpisodio';
 import { StepConfirmation } from './Wizard/StepConfirmation';
-import { StepDoente } from './Wizard/StepDoente';
-import { StepEpisodio } from './Wizard/StepEpisodio';
 import { StepTratamento } from './Wizard/StepTratamento';
 
 type Props = {
@@ -16,7 +16,6 @@ type Props = {
     selectedDoente: Doente | null;
     episodios: Pagination<Episodio> | null;
     users: User[];
-    filters:DoenteFilters
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -31,29 +30,29 @@ const steps: AppWizardStep[] = [
     { id: 'confirmacao', title: 'Confirmação', description: 'Concluído' },
 ];
 
-export default function CreateTratamentoWizard({ doentes, selectedDoente: initialDoente, episodios, users, filters }: Props) {
+export default function CreateTratamentoWizard({ doentes, selectedDoente: initialDoente, episodios, users }: Props) {
     const [currentStep, setCurrentStep] = useState(initialDoente ? 1 : 0);
     const [doente, setDoente] = useState<Doente | null>(initialDoente);
     const [episodio, setEpisodio] = useState<Episodio | null>(null);
     const [tratamento, setTratamento] = useState<Tratamento | null>(null);
+    const messagem = 'Tratamento criado com sucesso.';
 
     const selectDoente = (selected: Doente) => {
         setDoente(selected);
         setEpisodio(null);
+        setCurrentStep(1);
 
         router.get('/tratamentos/create', { doente_id: selected.id }, { preserveState: true, preserveScroll: true, replace: true });
-    };
-
-    const goToEpisodio = () => setCurrentStep(1);
-
-    const backToDoente = () => {
-        setEpisodio(null);
-        setCurrentStep(0);
     };
 
     const goToTratamento = () => setCurrentStep(2);
 
     const backToEpisodio = () => setCurrentStep(1);
+
+    const backToDoente = () => {
+        setEpisodio(null);
+        setCurrentStep(0);
+    };
 
     const finishTratamento = (createdTratamento: Tratamento) => {
         setTratamento(createdTratamento);
@@ -70,59 +69,49 @@ export default function CreateTratamentoWizard({ doentes, selectedDoente: initia
                 <div className="mx-auto max-w-6xl space-y-8">
                     <AppWizard steps={steps} currentStep={currentStep} />
 
-                    {currentStep === 0 && (
-                        <StepDoente
-                            doentes={doentes}
-                            filters={filters}
-                            selectedDoente={doente}
-                            onSelect={selectDoente}
-                            onBack={() => {}}
-                            onContinue={goToEpisodio}
-                            url="/tratamentos/create"
-                        />
-                    )}
+                    {currentStep === 0 && <StepDoente doentes={doentes} selectedDoente={doente} onSelect={selectDoente} onCreate={selectDoente} />}
 
                     {currentStep === 1 && doente && (
                         <StepEpisodio
                             doente={doente}
                             episodios={episodios}
-                            profissionais={users}
-                            selectedEpisodio={episodio}
-                            onSelect={setEpisodio}
+                            users={users}
+                            setSelectedEpisodio={setEpisodio}
                             onBack={backToDoente}
-                            onContinue={goToTratamento}
-                            url="/tratamentos/create"
+                            onCreate={() => {}}
+                            onEdit={() => {}}
+                            continue={goToTratamento}
                         />
                     )}
 
                     {currentStep === 2 && doente && episodio && (
-                        <StepTratamento doente={doente} episodio={episodio} onBack={backToEpisodio} onSuccess={finishTratamento} />
+                        <StepTratamento
+                            doente={doente}
+                            episodio={episodio}
+                            onBack={backToEpisodio}
+                            onSuccess={finishTratamento}
+                            onContinue={finishTratamento}
+                        />
                     )}
 
                     {currentStep === 3 && doente && episodio && tratamento && (
                         <StepConfirmation
                             doente={doente}
                             episodio={episodio}
-                            successMessage="Tratamento criado com sucesso."
+                            successMessage={messagem}
                             backLabel="Voltar"
                             backUrl="/tratamentos"
-                            viewLabel="Ver Tratamento"
-                            viewUrl={tratamento ? `/tratamentos/${tratamento.id}` : undefined}
-                            sections={
-                                tratamento
-                                    ? [
-                                          {
-                                              title: 'Tratamento',
-                                              fields: [
-                                                  { label: 'Tipo', value: tratamento.tipo },
-                                                  { label: 'Data proposta', value: tratamento.data_proposta },
-                                                  { label: 'Data de início', value: tratamento.data_inicio },
-                                                  { label: 'Intenção', value: tratamento.intencao },
-                                              ],
-                                          },
-                                      ]
-                                    : []
-                            }
+                            sections={[
+                                {
+                                    title: 'Tratamento',
+                                    fields: [
+                                        { label: 'Tipo', value: tratamento.tipo },
+                                        { label: 'Data proposta', value: tratamento.data_proposta },
+                                        { label: 'Data de início', value: tratamento.data_inicio },
+                                        { label: 'Intenção', value: tratamento.intencao },
+                                    ],
+                                },
+                            ]}
                         />
                     )}
                 </div>

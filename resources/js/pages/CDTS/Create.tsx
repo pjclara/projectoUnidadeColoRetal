@@ -100,7 +100,6 @@ export default function CreateCDTWizard({ doentes, selectedDoente: initialDoente
                             backLabel="Voltar às CDT"
                             backUrl="/cdts"
                             viewLabel="Ver CDT"
-                            viewUrl={`/cdts/${cdt.id}`}
                             sections={[
                                 {
                                     title: 'CDT',

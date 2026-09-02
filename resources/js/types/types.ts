@@ -45,6 +45,7 @@ export type Episodio = {
     estado: string;
     pai_entrada?: string | null;
     pai_saida?: string | null;
+    tratamentos?: Tratamento[];
 };
 
 export type CDT = {

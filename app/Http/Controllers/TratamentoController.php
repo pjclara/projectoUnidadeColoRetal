@@ -58,7 +58,7 @@ class TratamentoController extends Controller
 
             'episodios' => fn() => $doente
                 ? $this->episodioService->forDoente($doente->id)
-                ->through(fn(Episodio $episodio) => $this->episodioService->serializeEpisodio($episodio))
+                ->through(fn(Episodio $episodio) => $this->serializeEpisodio($episodio))
                 : null,
 
             'users' => User::query()->select('id', 'name')->orderBy('name')->get(),
@@ -128,6 +128,20 @@ class TratamentoController extends Controller
             'data_fim' => $tratamento->data_fim?->format('Y-m-d'),
             'intencao' => $tratamento->intencao,
             'observacoes' => $tratamento->observacoes,
+        ];
+    }
+
+    private function serializeEpisodio(Episodio $episodio): array
+    {
+        return [
+            'id' => $episodio->id,
+            'doente_id' => $episodio->doente_id,
+            'tipo' => $episodio->tipo,
+            'diagnostico' => $episodio->diagnostico,
+            'cid10' => $episodio->cid10,
+            'data_diagnostico' => $episodio->data_diagnostico?->format('Y-m-d'),
+            'estado' => $episodio->estado,
+            'tratamentos' => $episodio->tratamentos->map(fn (Tratamento $tratamento) => $this->serializeTratamento($tratamento)),
         ];
     }
 }

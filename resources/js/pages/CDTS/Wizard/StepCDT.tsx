@@ -5,9 +5,12 @@ import toast from 'react-hot-toast';
 import { AppEntitySummary } from '@/components/app/app-entity-summary';
 
 import { AppEmptyState } from '@/components/app/app-empty-state';
-import type { CDT, Doente, Episodio } from './types';
-import { Button } from '@/components/ui/button';
 import { AppTable, AppTableColumn } from '@/components/app/app-table';
+import { Button } from '@/components/ui/button';
+import type { CDT, Doente, Episodio } from './types';
+import { AppModalForm } from '@/components/app/app-modal-form';
+import { AppInputField } from '@/components/app/app-input-field';
+import { AppTextareaField } from '@/components/app/app-textarea-field';
 
 type Props = {
     doente: Doente;
@@ -71,9 +74,9 @@ export function StepCDT({ doente, episodio, onBack, onSuccess, onContinue }: Pro
                     Continuar
                 </Button>
             ),
-        }
+        },
     ];
-        
+
     const submit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
@@ -141,16 +144,78 @@ export function StepCDT({ doente, episodio, onBack, onSuccess, onContinue }: Pro
             {cdtsList.length === 0 ? (
                 <AppEmptyState title="Este doente ainda não possui CDTs." action={{ label: 'Criar novo CDT', onClick: () => setShowCreate(true) }} />
             ) : (
-               <AppTable columns={columns} data={cdtsList} rowKey={(cdt) => cdt.id} />
+                <AppTable columns={columns} data={cdtsList} rowKey={(cdt) => cdt.id} />
             )}
             <div className="flex justify-between border-t border-neutral-200 pt-5 dark:border-neutral-800">
-                <Button type="button" variant="outline" onClick={onBack}>
+                <Button type="button"  onClick={onBack}>
                     Voltar
                 </Button>
-
             </div>
 
-            {showCreate && <span>teste</span>}
+            {showCreate && (
+                <AppModalForm
+                    open
+                    title="Nova CDT"
+                    description="Preencha os dados da discussão de caso."
+                    onClose={() => setShowCreate(false)}
+                    onSubmit={submit}
+                    loading={loading}
+                    maxWidth="3xl"
+                    submitLabel="Criar CDT"
+                >
+                    <AppEntitySummary
+                        title="Doente"
+                        fields={[
+                            { label: 'Nome', value: doente.nome },
+                            { label: 'PU', value: doente.pu },
+                        ]}
+                    />
+
+                    <AppEntitySummary
+                        title="Episódio"
+                        fields={[
+                            { label: 'Tipo', value: episodio.tipo },
+                            { label: 'Diagnóstico', value: episodio.diagnostico },
+                            { label: 'CID10', value: episodio.cid10 },
+                            { label: 'Data diagnóstico', value: episodio.data_diagnostico },
+                            { label: 'Estado', value: episodio.estado },
+                        ]}
+                    />
+
+                    <div className="grid gap-6 md:grid-cols-2">
+                        <AppInputField
+                            label="Data do pedido"
+                            type="date"
+                            value={form.data_pedido}
+                            onChange={(value) => updateField('data_pedido', value)}
+                            error={errors.data_pedido}
+                        />
+
+                        <AppInputField
+                            label="Data da discussão"
+                            type="date"
+                            value={form.data_discussao}
+                            onChange={(value) => updateField('data_discussao', value)}
+                            error={errors.data_discussao}
+                        />
+
+                        <AppInputField
+                            label="Estádio clínico"
+                            value={form.estadio_clinico}
+                            onChange={(value) => updateField('estadio_clinico', value)}
+                            error={errors.estadio_clinico}
+                            placeholder="Ex.: II"
+                        />
+                    </div>
+
+                    <AppTextareaField
+                        label="Decisão"
+                        value={form.decisao}
+                        onChange={(value) => updateField('decisao', value)}
+                        error={errors.decisao}
+                    />
+                </AppModalForm>
+            )}
         </div>
     );
 }

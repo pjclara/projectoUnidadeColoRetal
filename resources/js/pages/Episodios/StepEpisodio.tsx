@@ -36,7 +36,6 @@ export function StepEpisodio({
             key: 'actions',
             render: (episodio: Episodio) => (
                 <Button
-                    variant="outline"
                     onClick={() => {
                         setSelectedEpisodio(episodio);
                         goToNextStep();
