@@ -114,7 +114,7 @@ const planeamentoNavItems: NavItem[] = [
 |--------------------------------------------------------------------------
 | Qualidade
 |--------------------------------------------------------------------------
-*/
+
 
 const qualidadeNavItems: NavItem[] = [
     {
@@ -128,7 +128,7 @@ const qualidadeNavItems: NavItem[] = [
         icon: ShieldCheck,
     },
 ];
-
+*/
 /*
 |--------------------------------------------------------------------------
 | Administração
@@ -177,9 +177,9 @@ export function AppSidebar() {
                 {/* Planeamento */}
                 <NavMain title="Planeamento" items={planeamentoNavItems} />
 
-                {/* Qualidade */}
+                {/* Qualidade
                 <NavMain title="Qualidade" items={qualidadeNavItems} />
-
+ */}
                 {/* Administração */}
                 <NavMain title="Administração" items={administracaoNavItems} />
             </SidebarContent>

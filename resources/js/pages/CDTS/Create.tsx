@@ -8,9 +8,9 @@ import { type BreadcrumbItem } from '@/types';
 
 import type { CDT, CDTFilters, Doente, Episodio, Pagination, User } from '@/types/types';
 import { StepDoente } from '../Doentes/StepDoente';
-import { StepCDT } from './Wizard/StepCDT';
-import { StepConfirmation } from './Wizard/StepConfirmation';
 import { StepEpisodio } from '../Episodios/StepEpisodio';
+import { StepConfirmation } from '../Tratamentos/Wizard/StepConfirmation';
+import { StepCDT } from './Wizard/StepCDT';
 
 type Props = {
     doentes: Pagination<Doente>;
@@ -37,6 +37,7 @@ export default function CreateCDTWizard({ doentes, selectedDoente: initialDoente
     const [doente, setDoente] = useState<Doente | null>(initialDoente);
     const [episodio, setEpisodio] = useState<Episodio | null>(null);
     const [cdt, setCdt] = useState<CDT | null>(null);
+    const messagem = "Discussão de caso registada com sucesso.";
 
     const selectDoente = (selected: Doente) => {
         setDoente(selected);
@@ -72,14 +73,7 @@ export default function CreateCDTWizard({ doentes, selectedDoente: initialDoente
                 <div className="mx-auto max-w-6xl space-y-8">
                     <AppWizard steps={steps} currentStep={currentStep} />
 
-                    {currentStep === 0 && (
-                        <StepDoente
-                            doentes={doentes}
-                            selectedDoente={doente}
-                            onSelect={selectDoente}
-                            onCreate={selectDoente}
-                        />
-                    )}
+                    {currentStep === 0 && <StepDoente doentes={doentes} selectedDoente={doente} onSelect={selectDoente} onCreate={selectDoente} />}
 
                     {currentStep === 1 && doente && (
                         <StepEpisodio
@@ -95,11 +89,29 @@ export default function CreateCDTWizard({ doentes, selectedDoente: initialDoente
                     )}
 
                     {currentStep === 2 && doente && episodio && (
-                        <StepCDT doente={doente} episodio={episodio} onBack={backToEpisodio} onSuccess={finishCDT} />
+                        <StepCDT doente={doente} episodio={episodio} onBack={backToEpisodio} onSuccess={(createdCdt) => finishCDT(createdCdt)} onContinue={finishCDT} />
                     )}
 
                     {currentStep === 3 && doente && episodio && cdt && (
-                        <StepConfirmation doente={doente} episodio={episodio} cdt={cdt} />
+                        <StepConfirmation
+                            doente={doente}
+                            episodio={episodio}
+                            successMessage={messagem}
+                            backLabel="Voltar às CDT"
+                            backUrl="/cdts"
+                            viewLabel="Ver CDT"
+                            viewUrl={`/cdts/${cdt.id}`}
+                            sections={[
+                                {
+                                    title: 'CDT',
+                                    fields: [
+                                        { label: 'Data do pedido', value: cdt.data_pedido },
+                                        { label: 'Data da discussão', value: cdt.data_discussao },
+                                        { label: 'Estádio clínico', value: cdt.estadio_clinico },
+                                    ],
+                                },
+                            ]}
+                        />
                     )}
                 </div>
             </div>

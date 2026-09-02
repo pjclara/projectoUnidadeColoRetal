@@ -165,6 +165,15 @@ class CDTController extends Controller
             'cid10' => $episodio->cid10,
             'data_diagnostico' => $episodio->data_diagnostico?->format('Y-m-d'),
             'estado' => $episodio->estado,
+            'cdts' => $episodio->cdts->map(function ($cdt) {
+                return [
+                    'id' => $cdt->id,
+                    'data_pedido' => $cdt->data_pedido?->format('Y-m-d'),
+                    'data_discussao' => $cdt->data_discussao?->format('Y-m-d'),
+                    'decisao' => $cdt->decisao,
+                    'estadio_clinico' => $cdt->estadio_clinico,
+                ];
+            }),
         ];
     }
 }

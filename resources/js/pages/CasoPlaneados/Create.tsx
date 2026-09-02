@@ -160,7 +160,13 @@ export default function CreateCasoPlaneadoWizard({ doentes, selectedDoente: init
                     )}
 
                     {currentStep === 5 && doente && episodio && sala && slot && (
-                        <StepConfirmation doente={doente} episodio={episodio}  />
+                        <StepConfirmation
+                            doente={doente}
+                            episodio={episodio}
+                            successMessage="Caso Planeado criado com sucesso."
+                            backLabel="Voltar aos Casos Planeados"
+                            backUrl="/caso-planeados"
+                        />
                     )}
                 </div>
             </div>

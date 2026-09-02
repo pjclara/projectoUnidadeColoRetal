@@ -112,7 +112,17 @@ export default function CreateAvaliacaoErasWizard({ doentes, selectedDoente: ini
                         />
                     )}
 
-                    {currentStep === 3 && doente && episodio && avaliacaoEra && <StepConfirmation doente={doente} episodio={episodio} />}
+                    {currentStep === 3 && doente && episodio && avaliacaoEra && (
+                        <StepConfirmation
+                            doente={doente}
+                            episodio={episodio}
+                            successMessage="Avaliação ERAS criada com sucesso."
+                            backLabel="Voltar às Avaliações ERAS"
+                            backUrl="/avaliacao-eras"
+                            viewLabel="Ver Avaliação ERAS"
+                            viewUrl={`/avaliacao-eras/${avaliacaoEra.id}`}
+                        />
+                    )}
                 </div>
             </div>
         </AppLayout>

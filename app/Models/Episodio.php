@@ -46,4 +46,9 @@ class Episodio extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function cdts()
+    {
+        return $this->hasMany(CDT::class);
+    }
 }

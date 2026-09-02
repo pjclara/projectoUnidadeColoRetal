@@ -28,6 +28,7 @@ export type Episodio = {
     cid10?: string | null;
     data_diagnostico?: string | null;
     estado: string;
+    cdts?: CDT[];
 };
 
 export type CDT = {

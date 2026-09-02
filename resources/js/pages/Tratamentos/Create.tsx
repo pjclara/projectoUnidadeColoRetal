@@ -100,7 +100,30 @@ export default function CreateTratamentoWizard({ doentes, selectedDoente: initia
                     )}
 
                     {currentStep === 3 && doente && episodio && tratamento && (
-                        <StepConfirmation doente={doente} episodio={episodio} tratamento={tratamento} />
+                        <StepConfirmation
+                            doente={doente}
+                            episodio={episodio}
+                            successMessage="Tratamento criado com sucesso."
+                            backLabel="Voltar"
+                            backUrl="/tratamentos"
+                            viewLabel="Ver Tratamento"
+                            viewUrl={tratamento ? `/tratamentos/${tratamento.id}` : undefined}
+                            sections={
+                                tratamento
+                                    ? [
+                                          {
+                                              title: 'Tratamento',
+                                              fields: [
+                                                  { label: 'Tipo', value: tratamento.tipo },
+                                                  { label: 'Data proposta', value: tratamento.data_proposta },
+                                                  { label: 'Data de início', value: tratamento.data_inicio },
+                                                  { label: 'Intenção', value: tratamento.intencao },
+                                              ],
+                                          },
+                                      ]
+                                    : []
+                            }
+                        />
                     )}
                 </div>
             </div>
