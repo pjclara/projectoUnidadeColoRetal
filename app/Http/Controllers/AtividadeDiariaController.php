@@ -19,12 +19,15 @@ class AtividadeDiariaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $atividadeDiarias = $this->service->paginate(10);
+        $request->validate(['month' => ['nullable', 'date_format:Y-m']]);
+        $month = $request->string('month')->toString() ?: now()->format('Y-m');
+        $atividadeDiarias = $this->service->forMonth($month);
 
         return inertia('AtividadeDiarias/Index', [
             'atividadeDiarias' => $atividadeDiarias,
+            'selectedMonth' => $month,
             'poloOptions' => PoloEnum::options(),
             'userOptions' => User::query()->select('id', 'name')->orderBy('name')->get(),
             'periodoOptions' => PeriodoEnum::options(),

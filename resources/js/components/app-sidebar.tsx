@@ -102,13 +102,24 @@ const planeamentoNavItems: NavItem[] = [
         title: 'Slots',
         url: '/slots',
         icon: Folder,
-    },
-        {
+    }
+];
+
+
+/*
+|--------------------------------------------------------------------------
+| Actividade Diária
+|--------------------------------------------------------------------------
+*/
+
+const actividadeDiariaNavItems: NavItem[] = [
+    {
         title: 'Actividade diária',
         url: '/atividade-diarias',
         icon: CalendarDays,
     },
 ];
+
 
 /*
 |--------------------------------------------------------------------------
@@ -170,6 +181,9 @@ export function AppSidebar() {
             <SidebarContent>
                 {/* Dashboard */}
                 <NavMain title="Dashboard" items={dashboardNavItems} />
+
+                {/* Actividade Diária */}
+                <NavMain title="Actividade Diária" items={actividadeDiariaNavItems} />
 
                 {/* Clínica */}
                 <NavMain title="Clínica" items={clinicaNavItems} />

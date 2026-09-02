@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum PeriodoEnum: string
 {
-    case P_0_14 = '0/14';
+    case P_08_14 = '08/14';
     case P_14_20 = '14/20';
     case DIA = 'Dia';
     case NOITE = 'Noite';
@@ -13,7 +13,7 @@ enum PeriodoEnum: string
     public function label(): string
     {
         return match ($this) {
-            self::P_0_14 => '08–14',
+            self::P_08_14 => '08–14',
             self::P_14_20 => '14–20',
             self::DIA => 'Dia',
             self::NOITE => 'Noite',
@@ -25,8 +25,8 @@ enum PeriodoEnum: string
     {
         return [
             [
-                'value' => self::P_0_14->value,
-                'label' => self::P_0_14->label(),
+                'value' => self::P_08_14->value,
+                'label' => self::P_08_14->label(),
             ],
             [
                 'value' => self::P_14_20->value,

@@ -5,6 +5,7 @@ import { useCrudForm } from '@/hooks/use-crud-form';
 import { FormEvent, useEffect } from 'react';
 
 type Option = { label: string; value: string };
+type ActivityDefaults = Partial<Pick<NonNullable<Props['atividade']>, 'data' | 'tipo'>>;
 
 type Props = {
     open: boolean;
@@ -23,17 +24,18 @@ type Props = {
     userOptions: Option[];
     periodoOptions: Option[];
     tipoOptions: Option[];
+    defaults?: ActivityDefaults;
 };
 
-export default function CreateOrUpdateAtividadeDiaria({ open, onClose, atividade, poloOptions, userOptions, periodoOptions, tipoOptions }: Props) {
+export default function CreateOrUpdateAtividadeDiaria({ open, onClose, atividade, poloOptions, userOptions, periodoOptions, tipoOptions, defaults }: Props) {
     const initialForm = {
         polo: atividade?.polo ?? '',
         user_id: atividade?.user_id ?? '',
-        data: atividade?.data ?? '',
+        data: atividade?.data ?? defaults?.data ?? '',
         periodo: atividade?.periodo ?? '',
         detalhe: atividade?.detalhe ?? '',
         fonte: atividade?.fonte ?? '',
-        tipo: atividade?.tipo ?? '',
+        tipo: atividade?.tipo ?? defaults?.tipo ?? '',
     };
 
     const { form, errors, loading, setForm, submit: submitCrud, updateField } = useCrudForm(initialForm);
@@ -42,13 +44,13 @@ export default function CreateOrUpdateAtividadeDiaria({ open, onClose, atividade
         setForm({
             polo: atividade?.polo ?? '',
             user_id: atividade?.user_id ?? '',
-            data: atividade?.data ?? '',
+            data: atividade?.data ?? defaults?.data ?? '',
             periodo: atividade?.periodo ?? '',
             detalhe: atividade?.detalhe ?? '',
             fonte: atividade?.fonte ?? '',
-            tipo: atividade?.tipo ?? '',
+            tipo: atividade?.tipo ?? defaults?.tipo ?? '',
         });
-    }, [atividade]);
+    }, [atividade, defaults]);
 
     const handleChange = (field: keyof typeof form, value: string) => {
         updateField(field, value);

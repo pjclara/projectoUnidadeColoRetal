@@ -1,1 +1,0 @@
-import{j as s,L as e}from"./app-C9ZTbfXJ.js";function i({avaliacaoEras:a}){return s.jsxs(s.Fragment,{children:[s.jsx(e,{title:"AvaliacaoEras"}),s.jsx("div",{className:"p-6",children:s.jsxs("h1",{className:"text-2xl font-semibold",children:["AvaliacaoEras #",a.id]})})]})}export{i as default};

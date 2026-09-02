@@ -1,0 +1,1 @@
+import{j as i,L as s}from"./app-BvOmhKJp.js";function t({atividadeDiaria:e}){return i.jsxs(i.Fragment,{children:[i.jsx(s,{title:"AtividadeDiaria"}),i.jsx("div",{className:"p-6",children:i.jsxs("h1",{className:"text-2xl font-semibold",children:["AtividadeDiaria #",e.id]})})]})}export{t as default};
